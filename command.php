@@ -1,5 +1,5 @@
 <?php 
-header("Location: html/index.php");
+// header("Location: html/index.php");
 
 function bdd_connection(string $user="root",string $pass=""){
     try {
