@@ -7,7 +7,7 @@ $bdd=bdd_connection();
 if(isset($_POST["user"])){
     if(isset($_POST["pass"])){
         $pass=hash("sha256",$_POST["pass"]);
-        if($rep=$bdd->query("select name from staff where name = ".$_POST["user"]." and password = $pass")){
+        if($rep=$bdd->query("select name from staff where name = '".$_POST["user"]."' and password = '".$pass."'")){
             if(!empty($rep)){
                 $_SESSION["connection"]=true;
                 $_SESSION["token"]["name"]=$rep["name"];
