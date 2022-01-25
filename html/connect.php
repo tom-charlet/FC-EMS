@@ -7,15 +7,15 @@ $bdd=bdd_connection();
 if(isset($_POST["user"])){
     if(isset($_POST["pass"])){
         $pass=hash("sha256",$_POST["pass"]);
-        if($rep=$bdd->query("select name from staff where name = '".$_POST["user"]."' and password = '".$pass."'")){
-            if(!empty($rep)){
-                $_SESSION["connection"]=true;
-                $_SESSION["token"]["name"]=$rep["name"];
-                $_SESSION["token"]["pass"]=$pass;
-                header("Location: ../private/index.php");
-            } else {
-                echo '<div id="error">Votre identifiant / mot de passe est incorrect</div>';
-            }
+        $rep=$bdd->query("select name from staff where name = '".$_POST["user"]."' and password = '".$pass."'")->fetch();
+        var_dump($rep);
+        if(!empty($rep)){
+            $_SESSION["connection"]=true;
+            $_SESSION["token"]["name"]=$rep["name"];
+            $_SESSION["token"]["pass"]=$pass;
+            header("Location: ../private/index.php");
+        } else {
+            echo '<div id="error">Votre identifiant / mot de passe est incorrect</div>';
         }
     } else {
         // manque le mdp (gerer l erreur)
