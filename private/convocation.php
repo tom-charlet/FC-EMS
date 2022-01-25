@@ -16,7 +16,7 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===True)&&(isset($_SE
 }
 if(isset($_POST["joueur"])){
     $joueur=$bdd->query("select joueur.id-joueur from (convocation inner join joueur on convocation.joueur = joueur.id-joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
-    $insert=$bdd->query("INSERT INTO `convocation`(`joueur`, `categorie`, `date`) VALUES ('".$joueur["id-joueur"]."','".$_POST["team"]."','[value-4]')")
+    $insert=$bdd->query("INSERT INTO `convocation`(`joueur`, `categorie`, `date`) VALUES ('".$joueur["id-joueur"]."','".$_POST["team"]."','[value-4]')");
 }
 
 ?>
@@ -56,6 +56,7 @@ if(isset($_POST["joueur"])){
                 </form>
             </div>';
         }
+    }
     ?>
 </body>
 </html>
