@@ -9,8 +9,9 @@ $bdd=bdd_connection();
 if(isset($_POST["user"])){
     if(isset($_POST["pass"])){
         $pass=hash("sha256",$_POST["pass"]);
-        $rep=$bdd->query("select name from staff where name = '".$_POST["user"]."' and password = '".$pass."'")->fetch();
+        $rep=$bdd->query("select name from staff where name = '".$_POST["user"]."' and password = '".$pass."'")->fetch(PDO::FETCH_ASSOC);
         var_dump($rep);
+        // echo hash("sha256",$_POST["pass"]);
         if(!empty($rep)){
             $_SESSION["connection"]=true;
             $_SESSION["token"]["name"]=$rep["name"];
