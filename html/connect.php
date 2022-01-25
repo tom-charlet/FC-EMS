@@ -44,6 +44,7 @@ if(isset($_POST["user"])){
             <label for="pass">Password</label>
             <input type='text' name='pass' id ='pass' size='25' required>
         </p>
+        <input type="submit" value="connect">
     </form>
 </body>
 </html>
