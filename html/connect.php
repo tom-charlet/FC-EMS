@@ -1,5 +1,7 @@
 <?php
+if(isset($_SESSION)){
 session_destroy();
+}
 session_start();
 include "../command.php";
 $bdd=bdd_connection();
