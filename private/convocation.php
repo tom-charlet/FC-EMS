@@ -14,7 +14,10 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===True)&&(isset($_SE
     session_destroy();
     header("Location: ../html/connect.php");
 }
-
+if(isset($_POST["joueur"])){
+    $joueur=$bdd->query("select joueur.id-joueur from (convocation inner join joueur on convocation.joueur = joueur.id-joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
+    $insert=$bdd->query("INSERT INTO `convocation`(`joueur`, `categorie`, `date`) VALUES ('".$joueur["id-joueur"]."','".$_POST["team"]."','[value-4]')")
+}
 
 ?>
 <!DOCTYPE html>
@@ -43,11 +46,12 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===True)&&(isset($_SE
         }
         if(isset($_POST["equipe"])){
             //$team=$bdd->query("select equipe from categorie where")->fetch();
-            $joueur=$bdd->query("select joueur.id,joueur.nom,joueur.prenom from (convocation inner join joueur on convocation.joueur = joueur.id-joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
+            $joueur=$bdd->query("select categorie.id,joueur.id-joueur,joueur.nom,joueur.prenom from (convocation inner join joueur on convocation.joueur = joueur.id-joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
             foreach ($joueur as $key => $value) {
                 echo '<div class="player">
                 <form action="" method="POST">
-                    <input type="hidden" name="joueur" value="'.$joueur[$key]["id"].'">
+                    <input id="team" name="team" type="hidden" value="'.$joueur[$key]["id"].'">
+                    <input type="hidden" name="joueur" value="'.$joueur[$key]["id-joueur"].'">
                     <input type="submit" value="'.strtoupper($joueur[$key]["nom"]).' '.ucfirst($joueur[$key]["prenom"]).'">
                 </form>
             </div>';
