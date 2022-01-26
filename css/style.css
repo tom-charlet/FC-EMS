@@ -10,12 +10,19 @@
     --font-title: 'Roboto Condensed', sans-serif;
     --font-subtitle: 'Roboto', sans-serif;
     --font-text: 'Roboto', sans-serif;
+    --font-size-h1: 1rem;
+    --font-size-title: 2.2rem;
+    --font-size-subtitle: 1.6rem;
+    --font-size-widget: 1.2rem;
+    --font-size-nav: 1.2rem;
     --font-bol: 700;
     --font-med: 500;
     --font-reg: 400;
     --font-lig: 300;
-    --color-dark-blue: #24354D;
-    --color-light-blue: #6CB6D3;
+    --color-dark-blue: #0A314E;
+    --color-blue: #003259;
+    --color-light-blue: #5B93B3;
+    --color-flash-blue: #8BC4E5;
     --color-white: #FEFEFE;
     --color-white-blue: #F4F7F9;
     --color-light-grey: #E7EBEE;
@@ -44,7 +51,7 @@ header{
 /* --- HEADER TOP ---*/
 
 .header-top{
-    background-color: var(--color-light-blue);
+    background-color: var(--color-flash-blue);
     height: 140px;
     display: flex;
     flex-direction: column;
@@ -56,7 +63,7 @@ header{
     color: var(--color-white-blue);
     font-family: var(--font-title);
     font-weight: var(--font-bol);
-    font-size: 14px;
+    font-size: var(--font-size-h1);
 }
 .header-logo{
     width: 70px;
@@ -83,7 +90,7 @@ header{
     position: relative;
     list-style: none;
     font-weight: var(--font-reg);
-    font-size: 18px;
+    font-size: var(--font-size-nav);
     text-transform: uppercase;
 }
 .header-nav ul li a{
@@ -147,7 +154,7 @@ header{
     color: var(--color-dark-blue);
 }
 .header-nav-active::after{
-    background-color: var(--color-light-blue);
+    background-color: var(--color-flash-blue);
     position: absolute;
     left: 0;
     bottom: 0;
@@ -166,13 +173,30 @@ header{
     padding: 20px;
 }
 .sec-title{
+    color: var(--color-dark-blue);
     font-family: var(--font-title);
     font-size: 2.2rem;
     text-transform: uppercase;
     margin: 20px 0;
 }
+.widget-title{
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-family: var(--font-title);
+    font-weight: var(--font-bol);
+}
+.widget-icon{
+    width: 25px;
+    aspect-ratio: 1;
+    display: flex;
+}
+.widget-icon img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
-/* ACTU */
+/* --- ACTU --- */
 
 .main-home .actu-container{
     display: flex;
@@ -181,13 +205,13 @@ header{
     gap: 20px;
 }
 
-/* ACTU-CLUB */
+/* --- ACTU-CLUB --- */
 
 .main-home .actu-club-container{
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 270px);
+    grid-template-rows: repeat(2, 260px);
     gap: 20px;
 }
 .main-home .actu-club-article{
@@ -196,6 +220,7 @@ header{
     width: 100%;
     border-radius: var(--border-raduis-general);
     overflow: hidden;
+    min-width: 260px;
 }
 .main-home .actu-club-article:first-child,
 .main-home .actu-club-article:last-child{
@@ -237,28 +262,148 @@ header{
 }
 
 
-/* ACTU-FOOT */
+/* --- ACTU-FOOT --- */
 
 .main-home .actu-foot-container{
-    width: 400px;
-    min-height: 560px;
-    background-color: var(--color-grey);
+    width: 100%;
+    max-width: 260px;
+    height: 540px;
+    position: relative;
+}
+.main-home .actu-foot-header{
+    width: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 15px;
+    background-color: var(--color-light-grey);
+    border-radius: 4px 4px 0 0;
+    box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px, rgba(0, 0, 0, 0.1) 0px 2px 8px -2px;
+}
+.main-home .actu-foot-article-container::-webkit-scrollbar {
+    width: 0px;
+}
+.main-home .actu-foot-article-container{
+    padding: 15px;
+    width: 100%;
+    height: 435px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 22px;
+    background-color: var(--color-light-grey);
+}
+.main-home .actu-foot-article{
+    width: 100%;
+    max-width: 260px;
+    flex-shrink: 0;
+}
+.main-home .actu-foot-article-link{
+    text-decoration: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+}
+.main-home .actu-foot-article-img{
+    flex-shrink: 0;
+    width: 70px;
+    aspect-ratio: 1;
+    background-color: var(--color-dark-grey);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.main-home .actu-foot-article-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.main-home .actu-foot-article-info{
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.main-home .actu-foot-article-title{
+    color: var(--color-light-blue);
+    height: 16px;
+    text-transform: uppercase;
+    overflow: hidden;
+    font-size: .8em;
+    font-weight: var(--font-med);
+}
+.main-home .actu-foot-article-desc{
+    height: 30px;
+    font-size: .7em;
+    color: var(--color-dark-blue);
+    overflow: hidden;
+    font-weight: var(--font-reg);
+}
+.main-home .actu-foot-article-date{
+    margin-top: 5px;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: .7em;
+    font-weight: var(--font-reg);
+}
+.main-home .actu-foot-ctc{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-light-grey);
+    display: flex;
+    border-radius: 0 0 4px 4px;
+    box-shadow: rgba(33, 35, 38, 0.1) 0px -10px 10px -10px, rgba(0, 0, 0, 0.1) 0px -2px 8px -2px;
+}
+.main-home .actu-foot-ctc a{
+    color: var(--color-dark-blue);
+    font-weight: var(--font-med);
+    text-decoration: none;
+    display: block;
+    padding: 15px;
+    font-size: .7rem;
 }
 
-/* MEDIA QUERIES */
+/* --- MEDIA QUERIES --- */
+
+
+/* --- SMALL COMPUTER SCREEN --- */
 
 @media screen and (max-width: 993px){
-    .main-home .actu-club-article{
-        grid-column: span 1!important;
+    
+    .main-home .actu-container{
+        flex-direction: column;
     }
-    .main-home .actu-club-container{
-        grid-template-columns: repeat(2, 1fr);
+
+    .main-home .actu-foot-container{
+        max-width: inherit;
+        height: calc(400px - 10vmin);
+        background-color: var(--color-grey);
     }
 }
+
+/* --- TABLETTE SCREEN --- */
 
 @media screen and (max-width: 780px){
 
+    .main-home .actu-club-article{
+        grid-column: span 1!important;
+        min-width: inherit;
+    }
+    .main-home .actu-club-container{
+        grid-template-columns: repeat(2,1fr);
+        grid-template-rows: repeat(2, 1fr);
+    }
+}
+
+/* --- MOBILE SCREEN --- */
+
+@media screen and (max-width: 570px){
     .main-home .actu-club-container{
         grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 0.9fr);
     }
+
 }
