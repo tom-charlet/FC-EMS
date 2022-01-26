@@ -1,9 +1,11 @@
-<?php // test de validitée de connection
+<?php 
 
-if(isset($_SESSION["connection"])&&($_SESSION["connection"]===True)&&(isset($_SESSION["token"]["pass"]))&&(isset($_SESSION["token"]["name"]))){
+// test de validitée de connection
+session_start();
+if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SESSION["token"]["pass"]))&&(isset($_SESSION["token"]["name"]))){
     include "../command.php";
     $bdd=bdd_connection();
-    $rep=$bdd->query("select name from staff where password = '".$_SESSION["token"]["pass"]."'")->fetch();
+    $rep=$bdd->query("select name,type from staff where password = '".$_SESSION["token"]["pass"]."'")->fetch();
     if($rep["name"]===$_SESSION["token"]["name"]){
         $rep=$bdd->query("select * from staff where name = '".$_SESSION["token"]["name"]."'")->fetch();
     } else {
@@ -14,6 +16,8 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===True)&&(isset($_SE
     session_destroy();
     header("Location: ../html/connect.php");
 }
+
+
 if(isset($_POST["joueur"])){
     $joueur=$bdd->query("select joueur.id-joueur from (convocation inner join joueur on convocation.joueur = joueur.id-joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
     $insert=$bdd->query("INSERT INTO `convocation`(`joueur`, `categorie`, `date`) VALUES ('".$joueur["id-joueur"]."','".$_POST["team"]."','[value-4]')");
