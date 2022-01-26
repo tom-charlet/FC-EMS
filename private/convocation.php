@@ -43,7 +43,7 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===True)&&(isset($_SE
         }
         if(isset($_POST["equipe"])){
             //$team=$bdd->query("select equipe from categorie where")->fetch();
-            $joueur=$bdd->query("select joueur.id,joueur.nom,joueur.prenom from (convocation inner join joueur on convocation.joueur = joueur.id-joueur) Inner join categorie on categorie.id = convocation.categorie   where categorie.categorie = ".$_POST["equipe"]."", PDO::FETCH_ASSOC);
+            $joueur=$bdd->query("select joueur.id,joueur.nom,joueur.prenom from (convocation inner join joueur on convocation.joueur = joueur.id-joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
             foreach ($joueur as $key => $value) {
                 echo '<div class="player">
                 <form action="" method="POST">
