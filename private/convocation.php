@@ -34,7 +34,7 @@ if(isset($_POST["joueur"])){
 </head>
 <body>
     <?php 
-        $team=$bdd->query("select equipe.nom,categorie.categorie from categorie INNER JOIN equipe on equipe.id-equipe = categorie.equipe ", PDO::FETCH_ASSOC);
+        $team=$bdd->query("select equipe.nom,categorie.categorie from categorie INNER JOIN equipe on equipe.id-equipe = categorie.equipe ")->fetchAll();
         foreach ($team as $key => $value) {
             if (isset($_POST["equipe"])&&$team[$key]===$_POST["equipe"]) {
                 $select="selected";
