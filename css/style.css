@@ -54,10 +54,17 @@ header{
     background-color: var(--color-flash-blue);
     height: 140px;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+.header-top .header-link{
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
 }
 .header-top h1{
     color: var(--color-white-blue);
@@ -65,14 +72,21 @@ header{
     font-weight: var(--font-bol);
     font-size: var(--font-size-h1);
 }
-.header-logo{
+.header-top .header-logo{
     width: 70px;
     aspect-ratio: 1;
+    height: 70px;
 }
-.header-logo a img{
+.header-top .header-logo img{
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+.header-burger-icon{
+    width: 25px;
+    aspect-ratio: 1;
+    position: relative;
 }
 
 /* --- HEADER NAV ---*/
@@ -268,9 +282,11 @@ header{
     width: 100%;
     max-width: 260px;
     height: 540px;
-    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 .main-home .actu-foot-header{
+    flex-grow: 0;
     width: auto;
     display: flex;
     justify-content: flex-start;
@@ -279,7 +295,6 @@ header{
     padding: 20px 15px;
     background-color: var(--color-light-grey);
     border-radius: 4px 4px 0 0;
-    box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px, rgba(0, 0, 0, 0.1) 0px 2px 8px -2px;
 }
 .main-home .actu-foot-article-container::-webkit-scrollbar {
     width: 0px;
@@ -287,7 +302,7 @@ header{
 .main-home .actu-foot-article-container{
     padding: 15px;
     width: 100%;
-    height: 435px;
+    flex-grow: 1;
     overflow-x: hidden;
     overflow-y: scroll;
     display: flex;
@@ -348,14 +363,12 @@ header{
     font-weight: var(--font-reg);
 }
 .main-home .actu-foot-ctc{
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
     background-color: var(--color-light-grey);
     display: flex;
     border-radius: 0 0 4px 4px;
     box-shadow: rgba(33, 35, 38, 0.1) 0px -10px 10px -10px, rgba(0, 0, 0, 0.1) 0px -2px 8px -2px;
+    z-index: 3;
 }
 .main-home .actu-foot-ctc a{
     color: var(--color-dark-blue);
@@ -373,14 +386,38 @@ header{
 
 @media screen and (max-width: 993px){
     
+    .header-top{
+        height: 100px;
+        justify-content: space-between;
+    }
+    .header-top .header-link{
+        flex-direction: row;
+    }
+    .header-top .header-logo{
+        width: 45px;
+    }
+    .header-top .header-title{
+        width: 140px;
+        font-size: 1rem;
+    }
+
+    .header-nav{
+        display: none;
+    }
+
     .main-home .actu-container{
         flex-direction: column;
     }
 
     .main-home .actu-foot-container{
         max-width: inherit;
-        height: calc(400px - 10vmin);
-        background-color: var(--color-grey);
+        height: calc(400px);
+    }
+    .main-home .actu-foot-article-container{
+        flex-flow: row wrap;
+    }
+    .main-home .actu-foot-article{
+        flex: 1 0 50%;
     }
 }
 
