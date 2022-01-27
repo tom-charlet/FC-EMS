@@ -50,6 +50,7 @@ if(isset($_POST["joueur"])){
         }
         if(isset($_POST["equipe"])){
             //$team=$bdd->query("select equipe from categorie where")->fetch();
+            $date=$bdd->query("");
             $joueur=$bdd->query("select categorie.id,joueur.id-joueur,joueur.nom,joueur.prenom from (convocation inner join joueur on convocation.joueur = joueur.id-joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
             foreach ($joueur as $key => $value) {
                 echo '<div class="player">
