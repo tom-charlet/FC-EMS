@@ -1,5 +1,13 @@
 <?php 
 
+// 
+// 
+// Code a finir
+// 
+// 
+// 
+
+
 // test de validitée de connection
 session_start();
 if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SESSION["token"]["pass"]))&&(isset($_SESSION["token"]["name"]))){
