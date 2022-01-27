@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : Dim 23 jan. 2022 à 20:43
+-- Généré le : jeu. 27 jan. 2022 à 21:05
 -- Version du serveur :  10.4.17-MariaDB
 -- Version de PHP : 8.0.0
 
@@ -68,7 +68,7 @@ CREATE TABLE `convocation` (
   `id-convocation` int(10) UNSIGNED NOT NULL,
   `joueur` int(10) UNSIGNED NOT NULL,
   `categorie` tinyint(3) UNSIGNED NOT NULL,
-  `date` tinytext NOT NULL
+  `id-rencontre` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -143,6 +143,21 @@ CREATE TABLE `palmares` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `rencontre`
+--
+
+CREATE TABLE `rencontre` (
+  `id-rencontre` int(10) UNSIGNED NOT NULL,
+  `nom` varchar(50) NOT NULL,
+  `date` varchar(40) NOT NULL,
+  `equipe-ems` tinyint(3) UNSIGNED NOT NULL,
+  `equipe-ext` varchar(50) NOT NULL,
+  `score` varchar(12) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `settings`
 --
 
@@ -193,7 +208,7 @@ CREATE TABLE `staff` (
 --
 
 INSERT INTO `staff` (`id-staff`, `nom`, `prenom`, `type`, `infos`, `name`, `password`) VALUES
-(1, 'Caillot', 'Antoine', 'admin', 'fsefsfqd', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');
+(1, 'Caillot', 'Antoine', 'admin', 'fsefsfqd', 'ad', 'fc8252c8dc55839967c58b9ad755a59b61b67c13227ddae4bd3f78a38bf394f7');
 
 --
 -- Index pour les tables déchargées
@@ -219,7 +234,8 @@ ALTER TABLE `categorie`
 ALTER TABLE `convocation`
   ADD PRIMARY KEY (`id-convocation`),
   ADD KEY `joueur` (`joueur`) USING BTREE,
-  ADD KEY `categorie` (`categorie`);
+  ADD KEY `categorie` (`categorie`),
+  ADD KEY `id-rencontre` (`id-rencontre`);
 
 --
 -- Index pour la table `equipe`
@@ -249,6 +265,13 @@ ALTER TABLE `media`
 ALTER TABLE `palmares`
   ADD PRIMARY KEY (`id-palmares`),
   ADD KEY `equipe` (`equipe`);
+
+--
+-- Index pour la table `rencontre`
+--
+ALTER TABLE `rencontre`
+  ADD PRIMARY KEY (`id-rencontre`),
+  ADD KEY `equipe-ems` (`equipe-ems`);
 
 --
 -- Index pour la table `settings`
@@ -315,6 +338,12 @@ ALTER TABLE `palmares`
   MODIFY `id-palmares` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT pour la table `rencontre`
+--
+ALTER TABLE `rencontre`
+  MODIFY `id-rencontre` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT pour la table `settings`
 --
 ALTER TABLE `settings`
@@ -347,7 +376,8 @@ ALTER TABLE `categorie`
 --
 ALTER TABLE `convocation`
   ADD CONSTRAINT `convocation_ibfk_1` FOREIGN KEY (`joueur`) REFERENCES `joueur` (`id-joueur`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `convocation_ibfk_2` FOREIGN KEY (`categorie`) REFERENCES `categorie` (`id`);
+  ADD CONSTRAINT `convocation_ibfk_2` FOREIGN KEY (`categorie`) REFERENCES `categorie` (`id`),
+  ADD CONSTRAINT `convocation_ibfk_3` FOREIGN KEY (`id-rencontre`) REFERENCES `rencontre` (`id-rencontre`);
 
 --
 -- Contraintes pour la table `joueur`
@@ -367,6 +397,12 @@ ALTER TABLE `media`
 --
 ALTER TABLE `palmares`
   ADD CONSTRAINT `palmares_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id-equipe`) ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `rencontre`
+--
+ALTER TABLE `rencontre`
+  ADD CONSTRAINT `rencontre_ibfk_1` FOREIGN KEY (`equipe-ems`) REFERENCES `categorie` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
