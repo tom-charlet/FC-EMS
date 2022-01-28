@@ -45,9 +45,13 @@ $bdd=bdd_connection();
         <td>".$article[$key]["date"]."</td>
         <td>".$article[$key]["keyword"]."</td>
         <td>
-        <form>
-            <input type='hidden' name='delete' value=".$team[$key]["categorie"].">
-            <input type='submit' value='del'>
+        <form id='form".$article[$key]["id-article"]."-delete'>
+            <input type='hidden' name='delete' value='".$article[$key]["id-article"]."'>
+            <button type='submit' form='form".$article[$key]["id-article"]."-delete'><img src='../icon/seo-social-web-network-internet_262_icon-icons.com_61518.svg' alt='poubelle'></button>
+        </form>
+        <form id='form".$article[$key]["id-article"]."-edit'>
+            <input type='hidden' name='delete' value='".$article[$key]["id-article"]."'>
+            <button type='submit' form='form".$article[$key]["id-article"]."-edit'><img src='../icon/' alt=''></button>
         </form>
         </td>
         </tr>";
