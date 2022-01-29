@@ -93,12 +93,13 @@ header{
 
 .header-nav{
     background-color: var(--color-white);
+    overflow-wrap: break-word;
 }
+
 .header-nav ul{
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
 }
 .header-nav ul > *{
     position: relative;
@@ -106,6 +107,7 @@ header{
     font-weight: var(--font-reg);
     font-size: var(--font-size-nav);
     text-transform: uppercase;
+    flex-shrink: 0;
 }
 .header-nav ul li a{
     display: block;
@@ -280,7 +282,7 @@ header{
 
 .main-home .actu-foot-container{
     width: 100%;
-    max-width: 260px;
+    max-width: 290px;
     height: 540px;
     display: flex;
     flex-direction: column;
@@ -305,15 +307,14 @@ header{
     flex-grow: 1;
     overflow-x: hidden;
     overflow-y: scroll;
-    display: flex;
-    flex-flow: column nowrap;
+    display: grid;
+    grid-template-columns: 100%;
     gap: 22px;
     background-color: var(--color-light-grey);
 }
 .main-home .actu-foot-article{
     width: 100%;
-    max-width: 260px;
-    flex-shrink: 0;
+    max-width: 290px;
 }
 .main-home .actu-foot-article-link{
     text-decoration: none;
@@ -385,25 +386,6 @@ header{
 /* --- SMALL COMPUTER SCREEN --- */
 
 @media screen and (max-width: 993px){
-    
-    .header-top{
-        height: 100px;
-        justify-content: space-between;
-    }
-    .header-top .header-link{
-        flex-direction: row;
-    }
-    .header-top .header-logo{
-        width: 45px;
-    }
-    .header-top .header-title{
-        width: 140px;
-        font-size: 1rem;
-    }
-
-    .header-nav{
-        display: none;
-    }
 
     .main-home .actu-container{
         flex-direction: column;
@@ -414,7 +396,8 @@ header{
         height: calc(400px);
     }
     .main-home .actu-foot-article-container{
-        flex-flow: row wrap;
+        grid-template-columns: repeat(3, 1fr);
+        overflow-y: hidden;
     }
     .main-home .actu-foot-article{
         flex: 1 0 50%;
@@ -433,6 +416,9 @@ header{
         grid-template-columns: repeat(2,1fr);
         grid-template-rows: repeat(2, 1fr);
     }
+    .main-home .actu-foot-article-container{
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* --- MOBILE SCREEN --- */
@@ -440,7 +426,9 @@ header{
 @media screen and (max-width: 570px){
     .main-home .actu-club-container{
         grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, 0.9fr);
+        grid-template-rows: repeat(4, calc(100px + 30vmin));
     }
-
+    .main-home .actu-foot-article-container{
+        grid-template-columns: 100%;
+    }
 }
