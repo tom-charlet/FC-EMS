@@ -58,5 +58,53 @@ $bdd=bdd_connection();
     }
     ?>
     </table>
+    <div class="button">
+        <p>Ajouter un article</p>
+    </div>
+    <div id="form-article">
+        <form action="" method="post">
+            <div id="part1">
+                <label for="type1"><img src="../icon/form1.jpg" alt="template d article 1" srcset=""></label>
+                <input type="radio" name="type" id="type1" value="type1">
+                <label for="type2"><img src="../icon/form2.jpg" alt="template d article 2" srcset=""></label>
+                <input type="radio" name="type" id="type2" value="type2">
+                <label for="type3"><img src="../icon/form3.jpg" alt="template d article 3" srcset=""></label>
+                <input type="radio" name="type" id="type3" value="type3">
+            </div>
+            <div id="part2">
+                
+                <!-- form a gerer en js -->
+                <!-- type1 -->
+                <p>
+                    <label for="titre">Titre</label>
+                    <input type='text' name='user' id ='user' maxlength="80" required>
+                </p>
+                <p>
+                    <label for="sub">Phrase d accroche</label>
+                    <textarea id="sub" name="sub" rows="10" cols="33" maxlength="500" required> 
+                    </textarea>
+                </p>
+                <p>
+                    <label for="upload">Photo</label>
+                    <input type="file" name="upload" id="upload" >
+                    <label for="pic-desc">Description photo</label>
+                    <input type='text' name='pic-desc' id ='pic-desc' size='25' maxlength="80" required>
+                </p>
+                <p>
+                    <label for="texte">Phrase d accroche</label>
+                    <textarea id="texte" name="texte" rows="10" cols="33" maxlength="500" required> 
+                    </textarea>
+                </p>
+                <p>
+                    <label for="keyword">Mots clefs (séparé par des ";")</label>
+                    <input type='text' name='keyword' id ='keyword' maxlength="100" required>
+                </p>
+
+                <!-- type 2 -->
+            </div>
+            <button type="submit">Ajouter l article</button>
+        </form>
+    </div>
+    <script src="admin.js"></script>
 </body>
 </html>
