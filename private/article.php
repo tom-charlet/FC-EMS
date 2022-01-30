@@ -17,7 +17,7 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
 $bdd=bdd_connection();
 
 if(isset($_POST["delete"])){
-    $bdd->query("'delete from article where id=".$_POST["delete"]."'");
+    $bdd->query("'delete from article where id = ".$_POST["delete"]."'");
     $image=$bdd->query("'select nom,id-media from media where artcile = ".$_POST["delete"]."'")->fetchAll();
     foreach ($image as $key => $value) {
         if(unlink("../img/".explode("|",$image[$key]["nom"])[0])){
@@ -34,6 +34,17 @@ if(isset($_POST["delete"])){
     echo "supr termine";
 }
 
+
+//  A finir
+
+if(isset($_POST)){
+    $rep=$bdd->query("select name from staff where name = '".$_POST["user"]."' and password = '".$pass."'")->fetch();
+        if(empty($rep)){
+            
+        } else {
+            echo '<div id="error">Le titre existe deja</div>';
+        }
+}
 
 ?>
 <!DOCTYPE html>
@@ -70,7 +81,7 @@ if(isset($_POST["delete"])){
             <button type='submit' form='form".$article[$key]["id-article"]."-delete'><img src='../icon/seo-social-web-network-internet_262_icon-icons.com_61518.svg' alt='poubelle'></button>
         </form>
         <form id='form".$article[$key]["id-article"]."-edit'>
-            <input type='hidden' name='delete' value='".$article[$key]["id-article"]."'>
+            <input type='hidden' name='edit' value='".$article[$key]["id-article"]."'>
             <button type='submit' form='form".$article[$key]["id-article"]."-edit'><img src='../icon/' alt=''></button>
         </form>
         </td>
@@ -81,15 +92,16 @@ if(isset($_POST["delete"])){
     <div class="button">
         <p>Ajouter un article</p>
     </div>
+    <?php if(isset($_POST["edit"])){$_SESSION["article"]=$bdd->query("select * form article where id-article = ".$_POST["edit"]."")->fetch();} ?>
     <div id="form-article">
         <form action="" method="post">
             <div id="part1">
                 <label for="type1"><img src="../icon/form1.jpg" alt="template d article 1" srcset=""></label>
-                <input type="radio" name="type" id="type1" value="type1">
+                <input type="radio" name="type" id="type1" value="type1" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]===1){echo 'checked="checked"';} ?>>
                 <label for="type2"><img src="../icon/form2.jpg" alt="template d article 2" srcset=""></label>
-                <input type="radio" name="type" id="type2" value="type2">
+                <input type="radio" name="type" id="type2" value="type2" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]===2){echo 'checked="checked"';} ?>>
                 <label for="type3"><img src="../icon/form3.jpg" alt="template d article 3" srcset=""></label>
-                <input type="radio" name="type" id="type3" value="type3">
+                <input type="radio" name="type" id="type3" value="type3" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]===3){echo 'checked="checked"';} ?>>
             </div>
             <div id="part2">
                 
@@ -97,11 +109,12 @@ if(isset($_POST["delete"])){
                 <!-- type1 -->
                 <p>
                     <label for="titre">Titre</label>
-                    <input type='text' name='user' id ='user' maxlength="80" required>
+                    <input type='text' name='user' id ='user' maxlength="80" required <?php if(isset($_SESSION["article"])){echo "value='".$_SESSION["article"]["texte"]."'";} ?>>
                 </p>
                 <p>
                     <label for="sub">Phrase d accroche</label>
-                    <textarea id="sub" name="sub" rows="10" cols="33" maxlength="500" required> 
+                    <textarea id="sub" name="sub" rows="10" cols="33" maxlength="500" required >
+                        <?php if(isset($_SESSION["article"])){echo $_SESSION["article"]["sub"];} ?>
                     </textarea>
                 </p>
                 <p>
@@ -111,15 +124,15 @@ if(isset($_POST["delete"])){
                     <input type='text' name='pic-desc' id ='pic-desc' size='25' maxlength="80" required>
                 </p>
                 <p>
-                    <label for="texte">Phrase d accroche</label>
-                    <textarea id="texte" name="texte" rows="10" cols="33" maxlength="500" required> 
+                    <label for="texte">Texte</label>
+                    <textarea id="texte" name="texte" rows="10" cols="33" required>
+                        <?php if(isset($_SESSION["article"])){echo $_SESSION["article"]["texte"];} ?>
                     </textarea>
                 </p>
                 <p>
                     <label for="keyword">Mots clefs (séparé par des ";")</label>
-                    <input type='text' name='keyword' id ='keyword' maxlength="100" required>
+                    <input type='text' name='keyword' id ='keyword' maxlength="100" required <?php if(isset($_SESSION["article"])){echo "value='".$_SESSION["article"]["keyword"]."'";} ?>>
                 </p>
-
                 <!-- type 2 -->
             </div>
             <button type="submit">Ajouter l article</button>
