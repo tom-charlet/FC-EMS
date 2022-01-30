@@ -15,6 +15,26 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     header("Location: ../html/connect.php");
 }
 $bdd=bdd_connection();
+
+if(isset($_POST["delete"])){
+    $bdd->query("'delete from article where id=".$_POST["delete"]."'");
+    $image=$bdd->query("'select nom,id-media from media where artcile = ".$_POST["delete"]."'")->fetchAll();
+    foreach ($image as $key => $value) {
+        if(unlink("../img/".explode("|",$image[$key]["nom"])[0])){
+            $bdd->query("'delete from media where article = ".$_POST["delete"]."'");
+            echo "<script language=javascript>
+            console.log('supresion de ".explode("|",$image[$key]["nom"])[0]."');
+            </script>";
+        } else {
+            echo "<script language=javascript>
+            console.log('probleme de supresion de ".explode("|",$image[$key]["nom"])[0]."');
+            </script>";
+        }
+    }
+    echo "supr termine";
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
