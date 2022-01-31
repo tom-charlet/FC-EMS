@@ -39,7 +39,7 @@ if(isset($_POST["user"])){
     <form action="" method="post">
         <p>
             <label for="user">User</label>
-            <input type='text' name='user' id ='user' size='25' <?php if(isset($_POST{'user'})){echo'value="'.$_POST['user'].'"';}?> pattern='[A-Za-z0-9]{3-20}' required autofocus >
+            <input type='text' name='user' id ='user' size='25' <?php if(isset($_POST['user'])){echo'value="'.$_POST['user'].'"';}?> pattern='[A-Za-z0-9]{3-20}' required autofocus >
         </p>
         <p>
             <label for="pass">Password</label>

@@ -18,7 +18,7 @@ $bdd=bdd_connection();
 
 if(isset($_POST["delete"])){
     $bdd->query("'delete from article where id = ".$_POST["delete"]."'");
-    $image=$bdd->query("'select nom,id-media from media where artcile = ".$_POST["delete"]."'")->fetchAll();
+    $image=$bdd->query("select nom,id-media from media where article = '".$_POST["delete"]."'")->fetchAll();
     foreach ($image as $key => $value) {
         if(unlink("../img/".explode("|",$image[$key]["nom"])[0])){
             $bdd->query("'delete from media where article = ".$_POST["delete"]."'");
@@ -34,16 +34,20 @@ if(isset($_POST["delete"])){
     echo "supr termine";
 }
 
+if(isset($_POST["edit"])){$_SESSION["article"]=$bdd->query("select * form article where id-article = ".$_POST["edit"]."")->fetch();}
 
 //  A finir
 
-if(isset($_POST)){
-    $rep=$bdd->query("select name from staff where name = '".$_POST["user"]."' and password = '".$pass."'")->fetch();
-        if(empty($rep)){
-            
-        } else {
-            echo '<div id="error">Le titre existe deja</div>';
-        }
+if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_POST["texte"])&&isset($_POST["keyword"])){
+    $rep=$bdd->query("select * from article where titre = '".$_POST["titre"]."'")->fetch();
+    if(empty($rep)){
+        
+// gerer insertion données
+
+    } else {
+        echo '<div id="error">Le titre existe deja</div>';
+        $_SESSION["article"]=["type"=>$_POST["type"],"titre"=>$_POST["titre"],"sub"=>$_POST["sub"],"texte"=>$_POST["texte"],"keyword"=>$_POST["keyword"]];
+    }
 }
 
 ?>
@@ -64,7 +68,7 @@ if(isset($_POST)){
             <th><p>Action</p></th>
         </tr>
     <?php 
-    $article=$bdd->query("select * from rencontre order by 'id-article' desc")->fetchAll();
+    $article=$bdd->query("select * from article order by 'id-article' desc")->fetchAll();
 
 
     //finir les boutons de suppr et edit
@@ -92,16 +96,15 @@ if(isset($_POST)){
     <div class="button">
         <p>Ajouter un article</p>
     </div>
-    <?php if(isset($_POST["edit"])){$_SESSION["article"]=$bdd->query("select * form article where id-article = ".$_POST["edit"]."")->fetch();} ?>
     <div id="form-article">
         <form action="" method="post">
             <div id="part1">
                 <label for="type1"><img src="../icon/form1.jpg" alt="template d article 1" srcset=""></label>
-                <input type="radio" name="type" id="type1" value="type1" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]===1){echo 'checked="checked"';} ?>>
+                <input type="radio" name="type" id="type1" value="type1" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]["type"]==="type1"){echo 'checked="checked"';} ?>>
                 <label for="type2"><img src="../icon/form2.jpg" alt="template d article 2" srcset=""></label>
-                <input type="radio" name="type" id="type2" value="type2" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]===2){echo 'checked="checked"';} ?>>
+                <input type="radio" name="type" id="type2" value="type2" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]["type"]==="type2"){echo 'checked="checked"';} ?>>
                 <label for="type3"><img src="../icon/form3.jpg" alt="template d article 3" srcset=""></label>
-                <input type="radio" name="type" id="type3" value="type3" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]===3){echo 'checked="checked"';} ?>>
+                <input type="radio" name="type" id="type3" value="type3" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]["type"]==="type3"){echo 'checked="checked"';} ?>>
             </div>
             <div id="part2">
                 
@@ -109,7 +112,7 @@ if(isset($_POST)){
                 <!-- type1 -->
                 <p>
                     <label for="titre">Titre</label>
-                    <input type='text' name='user' id ='user' maxlength="80" required <?php if(isset($_SESSION["article"])){echo "value='".$_SESSION["article"]["texte"]."'";} ?>>
+                    <input type='text' name='user' id ='user' maxlength="80" required <?php if(isset($_SESSION["article"])){echo "value='".$_SESSION["article"]["titre"]."'";} ?>>
                 </p>
                 <p>
                     <label for="sub">Phrase d accroche</label>
