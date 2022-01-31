@@ -34,21 +34,31 @@ if(isset($_POST["delete"])){
     echo "supr termine";
 }
 
-if(isset($_POST["edit"])){$_SESSION["article"]=$bdd->query("select * form article where id-article = ".$_POST["edit"]."")->fetch();}
+if(isset($_POST["edit"])){$_SESSION["article"]=$bdd->query("SELECT * form article where id-article = ".$_POST["edit"]."")->fetch();$_SESSION["article"]["action"]="edit";}
 
 //  A finir
+$_SESSION["article"]=["type"=>$_POST["type"],"titre"=>$_POST["titre"],"sub"=>$_POST["sub"],"texte"=>$_POST["texte"],"keyword"=>$_POST["keyword"]];
 
+// revoir les test de premier if pour pallier  un manque de certaines info
 if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_POST["texte"])&&isset($_POST["keyword"])){
-    $rep=$bdd->query("select * from article where titre = '".$_POST["titre"]."'")->fetch();
-    if(empty($rep)){
-        
-// gerer insertion données
-
+    
+        $rep=$bdd->query("select * from article where titre = '".$_SESSION["titre"]."'")->fetch();
+        if(empty($rep)){
+            if($_SESSION["article"]["action"]==="edit"){    
+                if($bdd->query("UPDATE 'article' SET 'titre'='".$_SESSION["article"]["titre"]."','keyword'='".$_SESSION["article"]["keyword"]."','sub'='".$_SESSION["article"]["sub"]."','texte'='".$_SESSION["article"]["texte"]."','auteur'=".$_SESSION["article"]["auteur"].",'date'='".traitement_date($_SESSION["article"]["date"])."','type'='".$_SESSION["article"]["type"]."' WHERE id-article = ".$_SESSION["token"]["id"]."")){
+                echo '<div id="error">L article a bien ete modif</div>';
+                }
+            } else {
+                if($bdd->query("INSERT INTO 'article'('titre', 'keyword', 'sub', 'texte', 'auteur', 'date', 'type') VALUES ('".$_SESSION["article"]["titre"]."','".$_SESSION["article"]["keyword"]."','".$_SESSION["article"]["sub"]."',
+                '".$_SESSION["article"]["texte"]."',".$_SESSION["token"]["id"].",'".traitement_date($_SESSION["article"]["date"])."','".$_SESSION["article"]["type"]."')")){
+                    echo '<div id="error">L article a bien ete creer</div>';
+                    }
+            }
+        unset($_SESSION["article"]);
     } else {
         echo '<div id="error">Le titre existe deja</div>';
-        $_SESSION["article"]=["type"=>$_POST["type"],"titre"=>$_POST["titre"],"sub"=>$_POST["sub"],"texte"=>$_POST["texte"],"keyword"=>$_POST["keyword"]];
+    } 
     }
-}
 
 ?>
 <!DOCTYPE html>
@@ -100,11 +110,11 @@ if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_
         <form action="" method="post">
             <div id="part1">
                 <label for="type1"><img src="../icon/form1.jpg" alt="template d article 1" srcset=""></label>
-                <input type="radio" name="type" id="type1" value="type1" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]["type"]==="type1"){echo 'checked="checked"';} ?>>
+                <input type="radio" name="type" id="type1" value="type1" <?php if(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==="type1"){echo 'checked="checked"';} ?>>
                 <label for="type2"><img src="../icon/form2.jpg" alt="template d article 2" srcset=""></label>
-                <input type="radio" name="type" id="type2" value="type2" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]["type"]==="type2"){echo 'checked="checked"';} ?>>
+                <input type="radio" name="type" id="type2" value="type2" <?php if(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==="type2"){echo 'checked="checked"';} ?>>
                 <label for="type3"><img src="../icon/form3.jpg" alt="template d article 3" srcset=""></label>
-                <input type="radio" name="type" id="type3" value="type3" <?php if(isset($_SESSION["article"])&&$_SESSION["article"]["type"]==="type3"){echo 'checked="checked"';} ?>>
+                <input type="radio" name="type" id="type3" value="type3" <?php if(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==="type3"){echo 'checked="checked"';} ?>>
             </div>
             <div id="part2">
                 
@@ -112,12 +122,12 @@ if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_
                 <!-- type1 -->
                 <p>
                     <label for="titre">Titre</label>
-                    <input type='text' name='user' id ='user' maxlength="80" required <?php if(isset($_SESSION["article"])){echo "value='".$_SESSION["article"]["titre"]."'";} ?>>
+                    <input type='text' name='user' id ='user' maxlength="80" required <?php if(isset($_SESSION["article"]["titre"])){echo "value='".$_SESSION["article"]["titre"]."'";} ?>>
                 </p>
                 <p>
                     <label for="sub">Phrase d accroche</label>
                     <textarea id="sub" name="sub" rows="10" cols="33" maxlength="500" required >
-                        <?php if(isset($_SESSION["article"])){echo $_SESSION["article"]["sub"];} ?>
+                        <?php if(isset($_SESSION["article"]["sub"])){echo $_SESSION["article"]["sub"];} ?>
                     </textarea>
                 </p>
                 <p>
@@ -129,12 +139,16 @@ if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_
                 <p>
                     <label for="texte">Texte</label>
                     <textarea id="texte" name="texte" rows="10" cols="33" required>
-                        <?php if(isset($_SESSION["article"])){echo $_SESSION["article"]["texte"];} ?>
+                        <?php if(isset($_SESSION["article"]["texte"])){echo $_SESSION["article"]["texte"];} ?>
                     </textarea>
                 </p>
                 <p>
                     <label for="keyword">Mots clefs (séparé par des ";")</label>
-                    <input type='text' name='keyword' id ='keyword' maxlength="100" required <?php if(isset($_SESSION["article"])){echo "value='".$_SESSION["article"]["keyword"]."'";} ?>>
+                    <input type='text' name='keyword' id ='keyword' maxlength="100" required <?php if(isset($_SESSION["article"]["keyword"])){echo "value='".$_SESSION["article"]["keyword"]."'";} ?>>
+                </p>
+                <p>
+                    <label for="date">Mots clefs (séparé par des ";")</label>
+                    <input type='text' name='date' id ='date' maxlength="20" required placeholder="Format Année-Mois-Jour" <?php if(isset($_SESSION["article"]["date"])){echo "value='".$_SESSION["article"]["date"]."'";} ?>>
                 </p>
                 <!-- type 2 -->
             </div>

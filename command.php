@@ -16,6 +16,11 @@ function bdd_connection(string $user="root",string $pass=""){
     return $dbh;
 }
 
+function traitement_date(string $var,string $option="")
+{
+    // a finir , fonction decoupe string avec reverse
+}
+
 // voir si pas usine a gaz
 function get_rank(string $rank="entraineur"){
     $nb=0;

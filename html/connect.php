@@ -9,11 +9,12 @@ $bdd=bdd_connection();
 if(isset($_POST["user"])){
     if(isset($_POST["pass"])){
         $pass=hash("sha256",$_POST["pass"]);
-        $rep=$bdd->query("select name from staff where name = '".$_POST["user"]."' and password = '".$pass."'")->fetch(PDO::FETCH_ASSOC);
+        $rep=$bdd->query("select name,id-staff from staff where name = '".$_POST["user"]."' and password = '".$pass."'")->fetch(PDO::FETCH_ASSOC);
         if(!empty($rep)){
             $_SESSION["connection"]=true;
             $_SESSION["token"]["name"]=$rep["name"];
             $_SESSION["token"]["pass"]=$pass;
+            $_SESSION["token"]["id"]=$rep["id-staff"];
             header("Location: ../private/index.php");
         } else {
             echo '<div id="error">Votre identifiant / mot de passe est incorrect</div>';
