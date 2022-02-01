@@ -45,12 +45,12 @@ if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_
         $rep=$bdd->query("select * from article where titre = '".$_SESSION["titre"]."'")->fetch();
         if(empty($rep)){
             if($_SESSION["article"]["action"]==="edit"){    
-                if($bdd->query("UPDATE 'article' SET 'titre'='".$_SESSION["article"]["titre"]."','keyword'='".$_SESSION["article"]["keyword"]."','sub'='".$_SESSION["article"]["sub"]."','texte'='".$_SESSION["article"]["texte"]."','auteur'=".$_SESSION["article"]["auteur"].",'date'='".traitement_date($_SESSION["article"]["date"])."','type'='".$_SESSION["article"]["type"]."' WHERE id-article = ".$_SESSION["token"]["id"]."")){
+                if($bdd->query("UPDATE 'article' SET 'titre'='".$_SESSION["article"]["titre"]."','keyword'='".$_SESSION["article"]["keyword"]."','sub'='".$_SESSION["article"]["sub"]."','texte'='".$_SESSION["article"]["texte"]."','auteur'=".$_SESSION["article"]["auteur"].",'date'='".$_SESSION["article"]["date"]."','type'='".$_SESSION["article"]["type"]."' WHERE id-article = ".$_SESSION["token"]["id"]."")){
                 echo '<div id="error">L article a bien ete modif</div>';
                 }
             } else {
                 if($bdd->query("INSERT INTO 'article'('titre', 'keyword', 'sub', 'texte', 'auteur', 'date', 'type') VALUES ('".$_SESSION["article"]["titre"]."','".$_SESSION["article"]["keyword"]."','".$_SESSION["article"]["sub"]."',
-                '".$_SESSION["article"]["texte"]."',".$_SESSION["token"]["id"].",'".traitement_date($_SESSION["article"]["date"])."','".$_SESSION["article"]["type"]."')")){
+                '".$_SESSION["article"]["texte"]."',".$_SESSION["token"]["id"].",'".$_SESSION["article"]["date"]."','".$_SESSION["article"]["type"]."')")){
                     echo '<div id="error">L article a bien ete creer</div>';
                     }
             }

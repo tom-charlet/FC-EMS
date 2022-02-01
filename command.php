@@ -16,9 +16,9 @@ function bdd_connection(string $user="root",string $pass=""){
     return $dbh;
 }
 
-function traitement_date(string $var,string $option="")
+function traitement_date(string $var)
 {
-    // a finir , fonction decoupe string avec reverse
+    // a finir , affichage de valeur sur article
 }
 
 // voir si pas usine a gaz
