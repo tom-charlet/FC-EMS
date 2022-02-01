@@ -92,11 +92,11 @@ if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_
         <td>
         <form id='form".$article[$key]["id-article"]."-delete'>
             <input type='hidden' name='delete' value='".$article[$key]["id-article"]."'>
-            <button type='submit' form='form".$article[$key]["id-article"]."-delete'><img src='../icon/seo-social-web-network-internet_262_icon-icons.com_61518.svg' alt='poubelle'></button>
+            <button type='submit' form='form".$article[$key]["id-article"]."-delete'><img src='../assets/bin.svg' alt='poubelle'></button>
         </form>
         <form id='form".$article[$key]["id-article"]."-edit'>
             <input type='hidden' name='edit' value='".$article[$key]["id-article"]."'>
-            <button type='submit' form='form".$article[$key]["id-article"]."-edit'><img src='../icon/' alt=''></button>
+            <button type='submit' form='form".$article[$key]["id-article"]."-edit'><img src='../assets/edit.svg' alt=''></button>
         </form>
         </td>
         </tr>";
@@ -147,7 +147,7 @@ if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_
                     <input type='text' name='keyword' id ='keyword' maxlength="100" required <?php if(isset($_SESSION["article"]["keyword"])){echo "value='".$_SESSION["article"]["keyword"]."'";} ?>>
                 </p>
                 <p>
-                    <label for="date">Mots clefs (séparé par des ";")</label>
+                    <label for="date">Date</label>
                     <input type='text' name='date' id ='date' maxlength="20" required placeholder="Format Année-Mois-Jour" <?php if(isset($_SESSION["article"]["date"])){echo "value='".$_SESSION["article"]["date"]."'";} ?>>
                 </p>
                 <!-- type 2 -->
