@@ -36,10 +36,23 @@ if(isset($_POST["delete"])){
 
 if(isset($_POST["edit"])){$_SESSION["article"]=$bdd->query("SELECT * form article where id-article = ".$_POST["edit"]."")->fetch();$_SESSION["article"]["action"]="edit";}
 
-//  A finir
-$_SESSION["article"]=["type"=>$_POST["type"],"titre"=>$_POST["titre"],"sub"=>$_POST["sub"],"texte"=>$_POST["texte"],"keyword"=>$_POST["keyword"]];
+// (fait) A finir
+// $_SESSION["article"]=["type"=>$_POST["type"],"titre"=>$_POST["titre"],"sub"=>$_POST["sub"],"texte"=>$_POST["texte"],"keyword"=>$_POST["keyword"]];
 
-// revoir les test de premier if pour pallier  un manque de certaines info
+if(!isset($_SESSION["article"])){
+    $_SESSION["article"]=[];
+}
+if(isset($_POST["titre"])){$_SESSION["article"]["titre"]=$_POST["titre"];}
+if(isset($_POST["keyword"])){$_SESSION["article"]["keyword"]=$_POST["keyword"];}
+if(isset($_POST["sub"])){$_SESSION["article"]["sub"]=$_POST["sub"];}
+if(isset($_POST["texte"])){$_SESSION["article"]["texte"]=$_POST["texte"];}
+if(isset($_POST["date"])){$_SESSION["article"]["date"]=$_POST["date"];}
+if(isset($_POST["type"])){$_SESSION["article"]["type"]=$_POST["type"];}
+
+// (fait) revoir les test de premier if pour pallier  un manque de certaines info
+
+// traitement creation + edit
+
 if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_POST["texte"])&&isset($_POST["keyword"])){
     
         $rep=$bdd->query("select * from article where titre = '".$_SESSION["titre"]."'")->fetch();
