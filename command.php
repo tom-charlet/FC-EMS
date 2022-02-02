@@ -21,11 +21,11 @@ function traitement_date(string $var)
     // a finir , affichage de valeur sur article
 }
 
-function traitement_match($texte){
+function traitement_match($texte,$equipe){
     $result=[];
     foreach (explode("info : ",$texte) as $key => $value) {
     echo $value;
-        if(count(explode("-",$value))==){}
+    $
     }
 
 
