@@ -21,6 +21,25 @@ function traitement_date(string $var)
     // a finir , affichage de valeur sur article
 }
 
+function traitement_match($texte){
+    $result=[];
+    foreach (explode("info : ",$texte) as $key => $value) {
+    echo $value;
+        if(count(explode("-",$value))==){}
+    }
+
+
+
+
+
+
+    if(!empty($result)){
+        return $result;
+    } else {
+        return "error";
+    }
+}
+
 // voir si pas usine a gaz
 function get_rank(string $rank="entraineur"){
     $nb=0;
