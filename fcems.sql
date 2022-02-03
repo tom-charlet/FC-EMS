@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `article` (
-  `id-article` int(10) UNSIGNED NOT NULL,
+  `id_article` int(10) UNSIGNED NOT NULL,
   `titre` varchar(80) NOT NULL,
   `keyword` varchar(100) NOT NULL,
   `sub` varchar(500) NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE `article` (
 -- Déchargement des données de la table `article`
 --
 
-INSERT INTO `article` (`id-article`, `titre`, `keyword`, `sub`, `texte`, `auteur`, `date`, `type`) VALUES
+INSERT INTO `article` (`id_article`, `titre`, `keyword`, `sub`, `texte`, `auteur`, `date`, `type`) VALUES
 (1, 'Article victoire senior', 'senior;victoire', 'Lorem ipsum dolor sit amet. Et assumenda illo ut rerum dolorem non sunt impedit ut amet expedita vel ipsam ratione! Aut voluptatem ipsam sit dolorum consequatur eos fugiat exercitationem qui modi dolorem.', 'Lorem ipsum dolor sit amet. Et assumenda illo ut rerum dolorem non sunt impedit ut amet expedita vel ipsam ratione! Aut voluptatem ipsam sit dolorum consequatur eos fugiat exercitationem qui modi dolorem. Cum omnis amet id incidunt sint est totam dignissimos ut dolores nihil est voluptatem recusandae in unde odit.\r\n\r\nEa galisum vero aut officiis enim ad deleniti voluptates nam quas itaque ad Quis incidunt. Est nihil harum quo rerum enim qui ipsam velit eum recusandae sint ab autem temporibus et temporibus amet. Et voluptas alias et omnis nemo hic ipsum rerum non provident nulla.\r\n\r\nEst rerum accusantium et perspiciatis quisquam hic iste necessitatibus est velit galisum ea nesciunt inventore in officia laborum aut dolor nisi? Eum quasi quam non aspernatur voluptas qui commodi excepturi non aspernatur maxime et tenetur veritatis eos ducimus consequatur. Eum sunt corporis est ducimus voluptate sed aliquam illum sit vero molestias et quos asperiores quo neque vitae. In quaerat sint eum deleniti saepe sed dicta neque 33 quod veritatis eos fuga nihil?', 1, '20220130', 'type1');
 
 -- --------------------------------------------------------
@@ -74,10 +74,10 @@ INSERT INTO `categorie` (`id`, `equipe`, `categorie`) VALUES
 --
 
 CREATE TABLE `convocation` (
-  `id-convocation` int(10) UNSIGNED NOT NULL,
+  `id_convocation` int(10) UNSIGNED NOT NULL,
   `joueur` int(10) UNSIGNED NOT NULL,
   `categorie` tinyint(3) UNSIGNED NOT NULL,
-  `id-rencontre` int(10) UNSIGNED NOT NULL
+  `id_rencontre` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -87,7 +87,7 @@ CREATE TABLE `convocation` (
 --
 
 CREATE TABLE `equipe` (
-  `id-equipe` tinyint(10) UNSIGNED NOT NULL,
+  `id_equipe` tinyint(10) UNSIGNED NOT NULL,
   `nom` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -95,7 +95,7 @@ CREATE TABLE `equipe` (
 -- Déchargement des données de la table `equipe`
 --
 
-INSERT INTO `equipe` (`id-equipe`, `nom`) VALUES
+INSERT INTO `equipe` (`id_equipe`, `nom`) VALUES
 (1, 'U13'),
 (3, 'U15'),
 (4, 'Senior');
@@ -107,7 +107,7 @@ INSERT INTO `equipe` (`id-equipe`, `nom`) VALUES
 --
 
 CREATE TABLE `joueur` (
-  `id-joueur` int(10) UNSIGNED NOT NULL,
+  `id_joueur` int(10) UNSIGNED NOT NULL,
   `nom` varchar(50) NOT NULL,
   `prenom` varchar(50) NOT NULL,
   `equipe` tinyint(3) UNSIGNED NOT NULL,
@@ -118,7 +118,7 @@ CREATE TABLE `joueur` (
 -- Déchargement des données de la table `joueur`
 --
 
-INSERT INTO `joueur` (`id-joueur`, `nom`, `prenom`, `equipe`, `photo`) VALUES
+INSERT INTO `joueur` (`id_joueur`, `nom`, `prenom`, `equipe`, `photo`) VALUES
 (1, 'Charlet', 'Tom', 4, NULL),
 (2, 'Abraham', 'Noah', 1, NULL);
 
@@ -129,7 +129,7 @@ INSERT INTO `joueur` (`id-joueur`, `nom`, `prenom`, `equipe`, `photo`) VALUES
 --
 
 CREATE TABLE `media` (
-  `id-media` smallint(5) UNSIGNED NOT NULL,
+  `id_media` smallint(5) UNSIGNED NOT NULL,
   `nom` varchar(255) NOT NULL,
   `equipe` tinyint(3) UNSIGNED NOT NULL,
   `type` varchar(100) NOT NULL,
@@ -143,7 +143,7 @@ CREATE TABLE `media` (
 --
 
 CREATE TABLE `palmares` (
-  `id-palmares` int(10) UNSIGNED NOT NULL,
+  `id_palmares` int(10) UNSIGNED NOT NULL,
   `nom` varchar(255) NOT NULL,
   `date` varchar(20) NOT NULL,
   `equipe` tinyint(3) UNSIGNED NOT NULL
@@ -156,7 +156,7 @@ CREATE TABLE `palmares` (
 --
 
 CREATE TABLE `rencontre` (
-  `id-rencontre` int(10) UNSIGNED NOT NULL,
+  `id_rencontre` int(10) UNSIGNED NOT NULL,
   `nom` varchar(50) NOT NULL,
   `date` varchar(40) NOT NULL,
   `equipe-ems` tinyint(3) UNSIGNED NOT NULL,
@@ -171,7 +171,7 @@ CREATE TABLE `rencontre` (
 --
 
 CREATE TABLE `settings` (
-  `id-settings` tinyint(4) NOT NULL,
+  `id_settings` tinyint(4) NOT NULL,
   `name` varchar(256) NOT NULL,
   `value` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -180,7 +180,7 @@ CREATE TABLE `settings` (
 -- Déchargement des données de la table `settings`
 --
 
-INSERT INTO `settings` (`id-settings`, `name`, `value`) VALUES
+INSERT INTO `settings` (`id_settings`, `name`, `value`) VALUES
 (3, 'home-text', 'voici l histoire du club EMS c est super tout ce blabla');
 
 -- --------------------------------------------------------
@@ -190,7 +190,7 @@ INSERT INTO `settings` (`id-settings`, `name`, `value`) VALUES
 --
 
 CREATE TABLE `sponsor` (
-  `id-sponsor` int(10) UNSIGNED NOT NULL,
+  `id_sponsor` int(10) UNSIGNED NOT NULL,
   `nom` varchar(80) NOT NULL,
   `date` tinytext NOT NULL,
   `type` varchar(40) NOT NULL
@@ -203,7 +203,7 @@ CREATE TABLE `sponsor` (
 --
 
 CREATE TABLE `staff` (
-  `id-staff` int(10) UNSIGNED NOT NULL,
+  `id_staff` int(10) UNSIGNED NOT NULL,
   `nom` varchar(50) NOT NULL,
   `prenom` varchar(50) NOT NULL,
   `type` varchar(20) NOT NULL,
@@ -216,7 +216,7 @@ CREATE TABLE `staff` (
 -- Déchargement des données de la table `staff`
 --
 
-INSERT INTO `staff` (`id-staff`, `nom`, `prenom`, `type`, `infos`, `name`, `password`) VALUES
+INSERT INTO `staff` (`id_staff`, `nom`, `prenom`, `type`, `infos`, `name`, `password`) VALUES
 (1, 'Caillot', 'Antoine', 'admin', 'fsefsfqd', 'ad', 'fc8252c8dc55839967c58b9ad755a59b61b67c13227ddae4bd3f78a38bf394f7');
 
 --
@@ -227,7 +227,7 @@ INSERT INTO `staff` (`id-staff`, `nom`, `prenom`, `type`, `infos`, `name`, `pass
 -- Index pour la table `article`
 --
 ALTER TABLE `article`
-  ADD PRIMARY KEY (`id-article`);
+  ADD PRIMARY KEY (`id_article`);
 
 --
 -- Index pour la table `categorie`
@@ -241,22 +241,22 @@ ALTER TABLE `categorie`
 -- Index pour la table `convocation`
 --
 ALTER TABLE `convocation`
-  ADD PRIMARY KEY (`id-convocation`),
+  ADD PRIMARY KEY (`id_convocation`),
   ADD KEY `joueur` (`joueur`) USING BTREE,
   ADD KEY `categorie` (`categorie`),
-  ADD KEY `id-rencontre` (`id-rencontre`);
+  ADD KEY `id_rencontre` (`id_rencontre`);
 
 --
 -- Index pour la table `equipe`
 --
 ALTER TABLE `equipe`
-  ADD PRIMARY KEY (`id-equipe`);
+  ADD PRIMARY KEY (`id_equipe`);
 
 --
 -- Index pour la table `joueur`
 --
 ALTER TABLE `joueur`
-  ADD PRIMARY KEY (`id-joueur`),
+  ADD PRIMARY KEY (`id_joueur`),
   ADD UNIQUE KEY `photo` (`photo`),
   ADD KEY `equipe` (`equipe`) USING BTREE;
 
@@ -264,7 +264,7 @@ ALTER TABLE `joueur`
 -- Index pour la table `media`
 --
 ALTER TABLE `media`
-  ADD PRIMARY KEY (`id-media`),
+  ADD PRIMARY KEY (`id_media`),
   ADD KEY `article` (`article`),
   ADD KEY `equipe` (`equipe`);
 
@@ -272,33 +272,33 @@ ALTER TABLE `media`
 -- Index pour la table `palmares`
 --
 ALTER TABLE `palmares`
-  ADD PRIMARY KEY (`id-palmares`),
+  ADD PRIMARY KEY (`id_palmares`),
   ADD KEY `equipe` (`equipe`);
 
 --
 -- Index pour la table `rencontre`
 --
 ALTER TABLE `rencontre`
-  ADD PRIMARY KEY (`id-rencontre`),
+  ADD PRIMARY KEY (`id_rencontre`),
   ADD KEY `equipe-ems` (`equipe-ems`);
 
 --
 -- Index pour la table `settings`
 --
 ALTER TABLE `settings`
-  ADD PRIMARY KEY (`id-settings`);
+  ADD PRIMARY KEY (`id_settings`);
 
 --
 -- Index pour la table `sponsor`
 --
 ALTER TABLE `sponsor`
-  ADD PRIMARY KEY (`id-sponsor`);
+  ADD PRIMARY KEY (`id_sponsor`);
 
 --
 -- Index pour la table `staff`
 --
 ALTER TABLE `staff`
-  ADD PRIMARY KEY (`id-staff`);
+  ADD PRIMARY KEY (`id_staff`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -308,7 +308,7 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT pour la table `article`
 --
 ALTER TABLE `article`
-  MODIFY `id-article` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_article` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `categorie`
@@ -320,55 +320,55 @@ ALTER TABLE `categorie`
 -- AUTO_INCREMENT pour la table `convocation`
 --
 ALTER TABLE `convocation`
-  MODIFY `id-convocation` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_convocation` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `equipe`
 --
 ALTER TABLE `equipe`
-  MODIFY `id-equipe` tinyint(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_equipe` tinyint(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `joueur`
 --
 ALTER TABLE `joueur`
-  MODIFY `id-joueur` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_joueur` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id-media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `palmares`
 --
 ALTER TABLE `palmares`
-  MODIFY `id-palmares` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_palmares` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `rencontre`
 --
 ALTER TABLE `rencontre`
-  MODIFY `id-rencontre` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_rencontre` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id-settings` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_settings` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `sponsor`
 --
 ALTER TABLE `sponsor`
-  MODIFY `id-sponsor` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_sponsor` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `id-staff` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_staff` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Contraintes pour les tables déchargées
@@ -378,34 +378,34 @@ ALTER TABLE `staff`
 -- Contraintes pour la table `categorie`
 --
 ALTER TABLE `categorie`
-  ADD CONSTRAINT `categorie_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id-equipe`);
+  ADD CONSTRAINT `categorie_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id_equipe`);
 
 --
 -- Contraintes pour la table `convocation`
 --
 ALTER TABLE `convocation`
-  ADD CONSTRAINT `convocation_ibfk_1` FOREIGN KEY (`joueur`) REFERENCES `joueur` (`id-joueur`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `convocation_ibfk_1` FOREIGN KEY (`joueur`) REFERENCES `joueur` (`id_joueur`) ON UPDATE CASCADE,
   ADD CONSTRAINT `convocation_ibfk_2` FOREIGN KEY (`categorie`) REFERENCES `categorie` (`id`),
-  ADD CONSTRAINT `convocation_ibfk_3` FOREIGN KEY (`id-rencontre`) REFERENCES `rencontre` (`id-rencontre`);
+  ADD CONSTRAINT `convocation_ibfk_3` FOREIGN KEY (`id_rencontre`) REFERENCES `rencontre` (`id_rencontre`);
 
 --
 -- Contraintes pour la table `joueur`
 --
 ALTER TABLE `joueur`
-  ADD CONSTRAINT `joueur_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id-equipe`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `joueur_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id_equipe`) ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `media`
 --
 ALTER TABLE `media`
-  ADD CONSTRAINT `media_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id-equipe`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `media_ibfk_2` FOREIGN KEY (`article`) REFERENCES `article` (`id-article`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `media_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id_equipe`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `media_ibfk_2` FOREIGN KEY (`article`) REFERENCES `article` (`id_article`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `palmares`
 --
 ALTER TABLE `palmares`
-  ADD CONSTRAINT `palmares_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id-equipe`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `palmares_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id_equipe`) ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `rencontre`
