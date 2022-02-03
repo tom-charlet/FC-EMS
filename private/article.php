@@ -18,7 +18,7 @@ $bdd=bdd_connection();
 
 if(isset($_POST["delete"])){
     $bdd->query("'delete from article where id = ".$_POST["delete"]."'");
-    $image=$bdd->query("select nom,id-media from media where article = '".$_POST["delete"]."'")->fetchAll();
+    $image=$bdd->query("select nom,id_media from media where article = '".$_POST["delete"]."'")->fetchAll();
     foreach ($image as $key => $value) {
         if(unlink("../img/".explode("|",$image[$key]["nom"])[0])){
             $bdd->query("'delete from media where article = ".$_POST["delete"]."'");

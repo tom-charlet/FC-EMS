@@ -27,8 +27,8 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
 
 
 if(isset($_POST["joueur"])){
-    $joueur=$bdd->query("select joueur.id-joueur from (convocation inner join joueur on convocation.joueur = joueur.id-joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
-    $insert=$bdd->query("INSERT INTO `convocation`(`joueur`, `categorie`, `date`) VALUES ('".$joueur["id-joueur"]."','".$_POST["team"]."','[value-4]')");
+    $joueur=$bdd->query("select joueur.id_joueur from (convocation inner join joueur on convocation.joueur = joueur.id_joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
+    $insert=$bdd->query("INSERT INTO `convocation`(`joueur`, `categorie`, `date`) VALUES ('".$joueur["id_joueur"]."','".$_POST["team"]."','[value-4]')");
 }
 
 ?>
@@ -42,7 +42,7 @@ if(isset($_POST["joueur"])){
 </head>
 <body>
     <?php 
-        $team=$bdd->query("select equipe.nom,categorie.categorie from categorie INNER JOIN equipe on equipe.id-equipe = categorie.equipe ")->fetchAll();
+        $team=$bdd->query("select equipe.nom,categorie.categorie from categorie INNER JOIN equipe on equipe.id_equipe = categorie.equipe ")->fetchAll();
         foreach ($team as $key => $value) {
             if (isset($_POST["equipe"])&&$team[$key]===$_POST["equipe"]) {
                 $select="selected";
@@ -59,12 +59,12 @@ if(isset($_POST["joueur"])){
         if(isset($_POST["equipe"])){
             //$team=$bdd->query("select equipe from categorie where")->fetch();
             $date=$bdd->query("");
-            $joueur=$bdd->query("select categorie.id,joueur.id-joueur,joueur.nom,joueur.prenom from (convocation inner join joueur on convocation.joueur = joueur.id-joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
+            $joueur=$bdd->query("select categorie.id,joueur.id_joueur,joueur.nom,joueur.prenom from (convocation inner join joueur on convocation.joueur = joueur.id_joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
             foreach ($joueur as $key => $value) {
                 echo '<div class="player">
                 <form action="" method="POST">
                     <input id="team" name="team" type="hidden" value="'.$joueur[$key]["id"].'">
-                    <input type="hidden" name="joueur" value="'.$joueur[$key]["id-joueur"].'">
+                    <input type="hidden" name="joueur" value="'.$joueur[$key]["id_joueur"].'">
                     <input type="submit" value="'.strtoupper($joueur[$key]["nom"]).' '.ucfirst($joueur[$key]["prenom"]).'">
                 </form>
             </div>';
