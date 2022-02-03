@@ -34,7 +34,7 @@ if(isset($_POST["delete"])){
     echo "supr termine";
 }
 
-if(isset($_POST["edit"])){$_SESSION["article"]=$bdd->query("SELECT * form article where id-article = ".$_POST["edit"]."")->fetch();$_SESSION["article"]["action"]="edit";}
+if(isset($_POST["edit"])){$_SESSION["article"]=$bdd->query("SELECT * form article where id_article = ".$_POST["edit"]."")->fetch();$_SESSION["article"]["action"]="edit";}
 
 // (fait) A finir
 // $_SESSION["article"]=["type"=>$_POST["type"],"titre"=>$_POST["titre"],"sub"=>$_POST["sub"],"texte"=>$_POST["texte"],"keyword"=>$_POST["keyword"]];
@@ -58,7 +58,7 @@ if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_
         $rep=$bdd->query("select * from article where titre = '".$_SESSION["titre"]."'")->fetch();
         if(empty($rep)){
             if($_SESSION["article"]["action"]==="edit"){    
-                if($bdd->query("UPDATE 'article' SET 'titre'='".$_SESSION["article"]["titre"]."','keyword'='".$_SESSION["article"]["keyword"]."','sub'='".$_SESSION["article"]["sub"]."','texte'='".$_SESSION["article"]["texte"]."','auteur'=".$_SESSION["article"]["auteur"].",'date'='".$_SESSION["article"]["date"]."','type'='".$_SESSION["article"]["type"]."' WHERE id-article = ".$_SESSION["token"]["id"]."")){
+                if($bdd->query("UPDATE 'article' SET 'titre'='".$_SESSION["article"]["titre"]."','keyword'='".$_SESSION["article"]["keyword"]."','sub'='".$_SESSION["article"]["sub"]."','texte'='".$_SESSION["article"]["texte"]."','auteur'=".$_SESSION["article"]["auteur"].",'date'='".$_SESSION["article"]["date"]."','type'='".$_SESSION["article"]["type"]."' WHERE id_article = ".$_SESSION["token"]["id"]."")){
                 echo '<div id="error">L article a bien ete modif</div>';
                 }
             } else {
@@ -91,7 +91,7 @@ if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_
             <th><p>Action</p></th>
         </tr>
     <?php 
-    $article=$bdd->query("select * from article order by 'id-article' desc")->fetchAll();
+    $article=$bdd->query("select * from article order by 'id_article' desc")->fetchAll();
 
 
     //finir les boutons de suppr et edit
@@ -103,13 +103,13 @@ if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_
         <td>".$article[$key]["date"]."</td>
         <td>".$article[$key]["keyword"]."</td>
         <td>
-        <form id='form".$article[$key]["id-article"]."-delete'>
-            <input type='hidden' name='delete' value='".$article[$key]["id-article"]."'>
-            <button type='submit' form='form".$article[$key]["id-article"]."-delete'><img src='../assets/bin.svg' alt='poubelle'></button>
+        <form id='form".$article[$key]["id_article"]."-delete'>
+            <input type='hidden' name='delete' value='".$article[$key]["id_article"]."'>
+            <button type='submit' form='form".$article[$key]["id_article"]."-delete'><img src='../assets/bin.svg' alt='poubelle'></button>
         </form>
-        <form id='form".$article[$key]["id-article"]."-edit'>
-            <input type='hidden' name='edit' value='".$article[$key]["id-article"]."'>
-            <button type='submit' form='form".$article[$key]["id-article"]."-edit'><img src='../assets/edit.svg' alt=''></button>
+        <form id='form".$article[$key]["id_article"]."-edit'>
+            <input type='hidden' name='edit' value='".$article[$key]["id_article"]."'>
+            <button type='submit' form='form".$article[$key]["id_article"]."-edit'><img src='../assets/edit.svg' alt=''></button>
         </form>
         </td>
         </tr>";
