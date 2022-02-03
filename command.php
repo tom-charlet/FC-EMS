@@ -22,10 +22,13 @@ function traitement_date(string $var)
 }
 
 function traitement_match($texte,$equipe){
+    $bdd=bdd_connection();
+    $infos=$bdd->query("select categorie.id,equipe.nom from categorie inner join equipe on categorie.equipe = equipe.id_equipe where categorie.categorie = '".$equipe."'")->fetch();
     $result=[];
-    foreach (explode("info : ",$texte) as $key => $value) {
+    var_dump($infos);
+    foreach(explode("info : ",$texte) as $key => $value) {
     echo $value;
-    $
+    $result["nom"]=explode($infos["nom"],$value)[0];
     }
 
 
