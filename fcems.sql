@@ -159,8 +159,8 @@ CREATE TABLE `rencontre` (
   `id_rencontre` int(10) UNSIGNED NOT NULL,
   `nom` varchar(50) NOT NULL,
   `date` varchar(40) NOT NULL,
-  `equipe-ems` tinyint(3) UNSIGNED NOT NULL,
-  `equipe-ext` varchar(50) NOT NULL,
+  `equipe_ems` tinyint(3) UNSIGNED NOT NULL,
+  `equipe_ext` varchar(50) NOT NULL,
   `score` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -181,7 +181,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id_settings`, `name`, `value`) VALUES
-(3, 'home-text', 'voici l histoire du club EMS c est super tout ce blabla');
+(3, 'home_text', 'voici l histoire du club EMS c est super tout ce blabla');
 
 -- --------------------------------------------------------
 
@@ -280,7 +280,7 @@ ALTER TABLE `palmares`
 --
 ALTER TABLE `rencontre`
   ADD PRIMARY KEY (`id_rencontre`),
-  ADD KEY `equipe-ems` (`equipe-ems`);
+  ADD KEY `equipe_ems` (`equipe_ems`);
 
 --
 -- Index pour la table `settings`
@@ -411,7 +411,7 @@ ALTER TABLE `palmares`
 -- Contraintes pour la table `rencontre`
 --
 ALTER TABLE `rencontre`
-  ADD CONSTRAINT `rencontre_ibfk_1` FOREIGN KEY (`equipe-ems`) REFERENCES `categorie` (`id`);
+  ADD CONSTRAINT `rencontre_ibfk_1` FOREIGN KEY (`equipe_ems`) REFERENCES `categorie` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
