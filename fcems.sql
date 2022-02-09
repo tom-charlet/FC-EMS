@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 31 jan. 2022 à 21:54
--- Version du serveur :  10.4.17-MariaDB
--- Version de PHP : 8.0.0
+-- Généré le : mer. 09 fév. 2022 à 11:18
+-- Version du serveur : 10.4.22-MariaDB
+-- Version de PHP : 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -66,6 +66,21 @@ INSERT INTO `categorie` (`id`, `equipe`, `categorie`) VALUES
 (4, 1, 'U13 B'),
 (6, 3, 'U15 A'),
 (7, 3, 'U15 B');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `classement`
+--
+
+CREATE TABLE `classement` (
+  `id_classement` smallint(5) UNSIGNED NOT NULL,
+  `categorie` tinyint(3) UNSIGNED NOT NULL,
+  `position` tinyint(3) UNSIGNED NOT NULL,
+  `point` tinyint(4) NOT NULL,
+  `nom` varchar(70) NOT NULL,
+  `logo` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -159,9 +174,10 @@ CREATE TABLE `rencontre` (
   `id_rencontre` int(10) UNSIGNED NOT NULL,
   `nom` varchar(50) NOT NULL,
   `date` varchar(40) NOT NULL,
-  `equipe_ems` tinyint(3) UNSIGNED NOT NULL,
-  `equipe_ext` varchar(50) NOT NULL,
-  `score` varchar(12) NOT NULL
+  `equipe_int` smallint(5) UNSIGNED NOT NULL,
+  `equipe_ext` smallint(5) UNSIGNED NOT NULL,
+  `score` varchar(12) NOT NULL,
+  `categorie` tinyint(3) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -238,6 +254,13 @@ ALTER TABLE `categorie`
   ADD KEY `equipe` (`equipe`) USING BTREE;
 
 --
+-- Index pour la table `classement`
+--
+ALTER TABLE `classement`
+  ADD PRIMARY KEY (`id_classement`),
+  ADD KEY `categorie` (`categorie`);
+
+--
 -- Index pour la table `convocation`
 --
 ALTER TABLE `convocation`
@@ -280,7 +303,9 @@ ALTER TABLE `palmares`
 --
 ALTER TABLE `rencontre`
   ADD PRIMARY KEY (`id_rencontre`),
-  ADD KEY `equipe_ems` (`equipe_ems`);
+  ADD KEY `equipe_ext` (`equipe_ext`),
+  ADD KEY `equipe_int` (`equipe_int`),
+  ADD KEY `categorie` (`categorie`) USING BTREE;
 
 --
 -- Index pour la table `settings`
@@ -315,6 +340,12 @@ ALTER TABLE `article`
 --
 ALTER TABLE `categorie`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT pour la table `classement`
+--
+ALTER TABLE `classement`
+  MODIFY `id_classement` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `convocation`
@@ -381,6 +412,12 @@ ALTER TABLE `categorie`
   ADD CONSTRAINT `categorie_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id_equipe`);
 
 --
+-- Contraintes pour la table `classement`
+--
+ALTER TABLE `classement`
+  ADD CONSTRAINT `classement_ibfk_1` FOREIGN KEY (`categorie`) REFERENCES `categorie` (`id`);
+
+--
 -- Contraintes pour la table `convocation`
 --
 ALTER TABLE `convocation`
@@ -406,12 +443,6 @@ ALTER TABLE `media`
 --
 ALTER TABLE `palmares`
   ADD CONSTRAINT `palmares_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id_equipe`) ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `rencontre`
---
-ALTER TABLE `rencontre`
-  ADD CONSTRAINT `rencontre_ibfk_1` FOREIGN KEY (`equipe_ems`) REFERENCES `categorie` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
