@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 09 fév. 2022 à 11:18
+-- Généré le : jeu. 10 fév. 2022 à 13:40
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.1.2
 
@@ -443,6 +443,14 @@ ALTER TABLE `media`
 --
 ALTER TABLE `palmares`
   ADD CONSTRAINT `palmares_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id_equipe`) ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `rencontre`
+--
+ALTER TABLE `rencontre`
+  ADD CONSTRAINT `categorie_ibfk_2` FOREIGN KEY (`categorie`) REFERENCES `categorie` (`id`),
+  ADD CONSTRAINT `equipe_ext_ibfk_3` FOREIGN KEY (`equipe_ext`) REFERENCES `classement` (`id_classement`),
+  ADD CONSTRAINT `equipe_int_ibfk_4` FOREIGN KEY (`equipe_int`) REFERENCES `classement` (`id_classement`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
