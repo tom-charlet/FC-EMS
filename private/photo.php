@@ -31,22 +31,29 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     <table>
         <tr>
             <th><p>Titre</p></th>
-            <th><p>Description</p></th>
-            <th><p>photo</p></th>
+            <th><p>Equipe</p></th>
+            <th><p>Article</p></th>
             <th><p>Action</p></th>
         </tr>
     <?php 
 
     // ajouter inner join pour recup titre article
-    $photo=$bdd->query("select * from media order by id_media desc")->fetchAll();
-
+    $photo=$bdd->query("SELECT media.*,article.titre from media left join article on media.article = article.id_article  order by id_media desc")->fetchAll(PDO::FETCH_ASSOC);
+    var_dump($photo[0]);
     // reflechir au systeme de disable en cas d absence de 
 
     foreach ($photo as $key => $value) {
+        if($photo[$key]["article"]===NULL){
+            $class="class='cross'";
+            $article="";
+        } else {
+            $class="";
+            $article=$photo[$key]["titre"];
+        }
         echo "<tr> 
-        <td>".$photo[$key]["titre"]."</td>
-        <td>".$photo[$key]["date"]."</td>
-        <td>".$photo[$key]["keyword"]."</td>
+        <td>".explode("|",$photo[$key]["nom"])[1]."</td>
+        <td>Temporaire</td>
+        <td ".$class.">".$article."</td>
         <td>
         <form id='form".$photo[$key]["id_media"]."-delete'>
             <input type='hidden' name='delete' value='".$photo[$key]["id_media"]."'>
