@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 10 fév. 2022 à 13:40
+-- Généré le : ven. 11 fév. 2022 à 04:06
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.1.2
 
@@ -146,10 +146,19 @@ INSERT INTO `joueur` (`id_joueur`, `nom`, `prenom`, `equipe`, `photo`) VALUES
 CREATE TABLE `media` (
   `id_media` smallint(5) UNSIGNED NOT NULL,
   `nom` varchar(255) NOT NULL,
-  `equipe` tinyint(3) UNSIGNED NOT NULL,
-  `type` varchar(100) NOT NULL,
+  `equipe` tinyint(3) UNSIGNED DEFAULT NULL,
+  `type` varchar(10) NOT NULL,
   `article` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `media`
+--
+
+INSERT INTO `media` (`id_media`, `nom`, `equipe`, `type`, `article`) VALUES
+(1, 'chat.jpg|une photo de chat', NULL, 'photo', NULL),
+(2, 'femme.jpg|une jolie photo de femme', 4, 'photo', 1),
+(3, 'loupe.jpg|une image de loupe', 1, 'photo', NULL);
 
 -- --------------------------------------------------------
 
@@ -233,7 +242,7 @@ CREATE TABLE `staff` (
 --
 
 INSERT INTO `staff` (`id_staff`, `nom`, `prenom`, `type`, `infos`, `name`, `password`) VALUES
-(1, 'Caillot', 'Antoine', 'admin', 'fsefsfqd', 'ad', 'fc8252c8dc55839967c58b9ad755a59b61b67c13227ddae4bd3f78a38bf394f7');
+(1, 'Caillot', 'Antoine', 'admin', 'fsefsfqd', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');
 
 --
 -- Index pour les tables déchargées
@@ -369,7 +378,7 @@ ALTER TABLE `joueur`
 -- AUTO_INCREMENT pour la table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id_media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `palmares`
