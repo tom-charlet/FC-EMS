@@ -86,6 +86,14 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
         }
     }
 
+    // traitement supr
+    if(isset($_POST["equipe"])){$_SESSION["joueur"]["equipe"]=$_POST["equipe"];}
+    if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="suppr"){
+        $joueur=$bdd->query("select * from joueur where equipe = ".$_SESSION["joueur"]["equipe"]."")->fetchAll();
+        foreach ($joueur as $key => $value) {
+            echo "<button  >".$joueur[$key]["nom"]." ".$joueur[$key]["prenom"]."</button>";
+        }
+    }
     ?>
 </body>
 </html>
