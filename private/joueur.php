@@ -45,6 +45,47 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
         }
         echo '<form method="post"><p>'.$team.'</p></form>';
     }
+    if(isset($_POST["equipe"])){$_SESSION["joueur"]["equipe"]=$_POST["equipe"];}
+    
+    // cas d'ajout
+    if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"){ 
+        $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
+        $option = "<select name='equipe' id='equipe'>";//penser a convertir le 'null' en NULL
+        foreach ($equipe as $key => $value) {
+            $option .= '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>';
+        }
+        echo '<form method="post" id="add" enctype="multipart/form-data">
+        <input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" required autofocus>
+        <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" required>
+        '.$option.'</select>
+        <label for="titre">Photo du joueur</label>
+        <input type="file" name="media" id ="media" required class="hidden">
+        <button type="submit" form="add">Valider</button>
+        ';// faire formulaire
+    }
+    // traitement ajout ( a tester)
+    if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"&&isset($_POST["nom"])){
+        if(isset($_FILES["media"])){
+            $_FILES["media"]["name"]=str_replace("|"," ",$_FILES["media"]["name"]);
+            while(file_exists("../img/".$_FILES["media"]["name"])){
+                $_FILES["media"]["name"].=1; // permet d'eviter qu'un fichier existe 2 fois
+            }
+            if (move_uploaded_file($_FILES["media"]["tmp_name"],"../img/".$_FILES["media"]["name"])){
+                $bdd->query("insert into media (nom, equipe, type) VALUES ('".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."', ".$_POST['equipe'].",'joueur'");
+                echo "image ajouté dans la bdd";
+                $joueur=$bdd->query("select * from media where nom = '".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."' ")->fetch();
+            }
+        } else {echo"Aucune image n a été ajouté";}
+        // ajout joueur bdd
+        if(isset($joueur)){
+            $bdd->query("insert into joueur (nom, prenom, equipe, photo) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe'].",".$joueur."");
+            echo "joueur ajouté avec equipe";
+        } else {
+            $bdd->query("insert into joueur (nom, prenom, equipe) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe']."");
+            echo "joueur ajouté";
+        }
+    }
+
     ?>
 </body>
 </html>
