@@ -36,16 +36,6 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     </p>
     </form>
     <?php
-    if(isset($_SESSION["joueur"]["action"])&&($_SESSION["joueur"]["action"]==="del"||$_SESSION["joueur"]["action"]=="mod")){ // sup et mod de joueur 
-        $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
-        $team='';
-        foreach ($equipe as $key => $value) {
-            if(isset($_SESSION["joueur"]["equipe"])&&$_SESSION["joueur"]["action"]==="add"){$check='class="select"';}else{$check='';}
-            $team.="<button name='equipe' type='submit' value='".$equipe[$key]["id_equipe"]."'>".$equipe[$key]["nom"]."</button>";
-        }
-        echo '<form method="post"><p>'.$team.'</p></form>';
-    }
-    if(isset($_POST["equipe"])){$_SESSION["joueur"]["equipe"]=$_POST["equipe"];}
     
     // cas d'ajout
     if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"){ 
@@ -86,13 +76,28 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
         }
     }
 
-    // traitement supr
-    if(isset($_POST["equipe"])){$_SESSION["joueur"]["equipe"]=$_POST["equipe"];}
-    if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="suppr"){
-        $joueur=$bdd->query("select * from joueur where equipe = ".$_SESSION["joueur"]["equipe"]."")->fetchAll();
-        foreach ($joueur as $key => $value) {
-            echo "<button  >".$joueur[$key]["nom"]." ".$joueur[$key]["prenom"]."</button>";
+
+    // sup et mod de joueur
+    if(isset($_SESSION["joueur"]["action"])&&($_SESSION["joueur"]["action"]==="del"||$_SESSION["joueur"]["action"]=="mod")){  
+        $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
+        $team='';
+        foreach ($equipe as $key => $value) {
+            if(isset($_SESSION["joueur"]["equipe"])&&$_SESSION["joueur"]["action"]==="add"){$check='class="select"';}else{$check='';}
+            $team.="<button name='equipe' type='submit' value='".$equipe[$key]["id_equipe"]."'>".$equipe[$key]["nom"]."</button>";
         }
+        echo '<form method="post"><p>'.$team.'</p></form>';
+    }
+    if(isset($_POST["equipe"])){$_SESSION["joueur"]["equipe"]=$_POST["equipe"];}
+
+    
+    // affichage joueur
+    if(isset($_SESSION["joueur"]["action"])&&($_SESSION["joueur"]["action"]=="del"||$_SESSION["joueur"]["action"]=="mod")){
+        $joueur=$bdd->query("select * from joueur where equipe = ".$_SESSION["joueur"]["equipe"]."")->fetchAll();
+        $player='';
+        foreach ($joueur as $key => $value) {
+            $player.="<button name='joueur' type='submit' value='".$joueur[$key]["nom"]."|".$joueur[$key]["prenom"]."'>".$joueur[$key]["nom"]." ".$joueur[$key]["prenom"]."</button>";
+        }
+        echo '<form method="post">'.$player.'</form>';
     }
     ?>
 </body>
