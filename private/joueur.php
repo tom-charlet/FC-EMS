@@ -99,6 +99,26 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
         }
         echo '<form method="post">'.$player.'</form>';
     }
+
+    //traitement sup/mod
+    if(isset($_POST["joueur"])){
+        //cas sup 
+        if($_SESSION["joueur"]["action"]==='del'){
+            $img=$bdd->query("select photo from joueur where nom = '".explode("|",$_POST["joueur"])[0]."' AND prenom = '".explode("|",$_POST["joueur"])[1]."'")->fetc;
+            if($img["photo"]!==NULL){
+                $supr=$bdd->query("select nom from media where id_media = ".$img["photo"]."")->fetch();
+                if(unlink("../img/".explode("|",$supr["nom"])[0])){
+                    echo "image supprimer sur le serveur" ;
+                }
+                if($bdd->query("DELETE from media where id_media = ".$img["photo"]."")){
+                    echo "image supprimer sur la bdd" ;
+                }
+            }
+        }
+        if($bdd->query("DELETE from joueur where id_media = ".$img["photo"]."")){
+            echo "joueur bien supr";
+        }
+    }
     ?>
 </body>
 </html>
