@@ -23,14 +23,14 @@ if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"&&i
             $_FILES["media"]["name"].=1; // permet d'eviter qu'un fichier existe 2 fois
         }
         if (move_uploaded_file($_FILES["media"]["tmp_name"],"../img/".$_FILES["media"]["name"])){
-            $bdd->query("insert into media (nom, equipe, type) VALUES ('".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."', ".$_POST['equipe'].",'joueur'");
+            $bdd->query("insert into media (nom, equipe, type) VALUES ('".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."', ".$_POST['equipe'].",'joueur')");
             echo "image ajouté dans la bdd";
-            $joueur=$bdd->query("select * from media where nom = '".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."' ")->fetch();
+            $joueur=$bdd->query("select id_media from media where nom = '".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."' ")->fetch();
         }
     } else {echo"Aucune image n a été ajouté";}
     // ajout joueur bdd
     if(isset($joueur)){
-        $bdd->query("insert into joueur (nom, prenom, equipe, photo) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe'].",".$joueur."");
+        $bdd->query("insert into joueur (nom, prenom, equipe, photo) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe'].",".$joueur["id_media"].")");
         echo "joueur ajouté avec equipe";
     } else {
         $bdd->query("INSERT into joueur (nom, prenom, equipe) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe'].")");
