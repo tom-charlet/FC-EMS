@@ -33,7 +33,7 @@ if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"&&i
         $bdd->query("insert into joueur (nom, prenom, equipe, photo) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe'].",".$joueur."");
         echo "joueur ajouté avec equipe";
     } else {
-        $bdd->query("INSERT into joueur (nom, prenom, equipe) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe']."");
+        $bdd->query("INSERT into joueur (nom, prenom, equipe) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe'].")");
         echo "joueur ajouté";
     }
 }
@@ -98,28 +98,6 @@ if(isset($_POST["joueur"])){
         <input type="file" name="media" id ="media" class="hidden">
         <button type="submit" form="add">Valider</button>
         ';// faire formulaire
-    }
-    // traitement ajout ( a tester)
-    if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"&&isset($_POST["nom"])){
-        if(isset($_FILES["media"])){
-            $_FILES["media"]["name"]=str_replace("|"," ",$_FILES["media"]["name"]);
-            while(file_exists("../img/".$_FILES["media"]["name"])){
-                $_FILES["media"]["name"].=1; // permet d'eviter qu'un fichier existe 2 fois
-            }
-            if (move_uploaded_file($_FILES["media"]["tmp_name"],"../img/".$_FILES["media"]["name"])){
-                $bdd->query("insert into media (nom, equipe, type) VALUES ('".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."', ".$_POST['equipe'].",'joueur'");
-                echo "image ajouté dans la bdd";
-                $joueur=$bdd->query("select * from media where nom = '".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."' ")->fetch();
-            }
-        } else {echo"Aucune image n a été ajouté";}
-        // ajout joueur bdd
-        if(isset($joueur)){
-            $bdd->query("insert into joueur (nom, prenom, equipe, photo) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe'].",".$joueur."");
-            echo "joueur ajouté avec equipe";
-        } else {
-            $bdd->query("insert into joueur (nom, prenom, equipe) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe']."");
-            echo "joueur ajouté";
-        }
     }
 
 
