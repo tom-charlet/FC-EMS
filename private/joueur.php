@@ -83,16 +83,20 @@ if(isset($_POST["joueur"])){
     </form>
     <?php
     
-    // cas d'ajout
-    if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"){ 
+    // cas d'ajout / affichage 
+    if((isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add")||(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]==='mod'&&isset($_POST["joueur"]))){ 
+        if($_SESSION["joueur"]["action"]==='mod'){
+            $joueur=$bdd->query("select * from joueur where id_joueur = ".$_POST["joueur"])->fetch();
+        }
         $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
         $option = "<select name='equipe' id='equipe'>";//penser a convertir le 'null' en NULL
         foreach ($equipe as $key => $value) {
+            //faire mise en avant des équipes
             $option .= '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>';
         }
         echo '<form method="post" id="add" enctype="multipart/form-data">
-        <input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" required autofocus>
-        <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" required>
+        <input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" '.$a=($_SESSION["joueur"]["action"]==='mod')?:"value='".$joueur["nom"]."'".' required autofocus >
+        <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" '.$a=($_SESSION["joueur"]["action"]==='mod')?:"value='".$joueur["nom"]."'".' required>
         '.$option.'</select>
         <label for="titre">Photo du joueur</label>
         <input type="file" name="media" id ="media" class="hidden">
@@ -122,7 +126,6 @@ if(isset($_POST["joueur"])){
         echo '<form method="post">'.$player.'</form>';
     }
 
-    
     ?>
 </body>
 </html>
