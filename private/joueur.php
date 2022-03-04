@@ -59,6 +59,14 @@ if(isset($_POST["joueur"])){
             echo "joueur bien supr";
         }
     }
+    //cas mod
+    if($_SESSION["joueur"]["action"]==='mod' && isset($_POST["nom"])){
+        if($bdd->query("DELETE from joueur where id_joueur = ".$_POST["joueur"]."")->fetch()){
+            echo "joueur bien supr";
+        }
+    }
+
+    // note pour modifier une photo, il est obligatoire de supr le joueur / travailler sur ce cas en dernier
 }
 ?>
 <!DOCTYPE html>
@@ -83,24 +91,6 @@ if(isset($_POST["joueur"])){
     </form>
     <?php
     
-    // cas d'ajout
-    if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"){ 
-        $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
-        $option = "<select name='equipe' id='equipe'>";//penser a convertir le 'null' en NULL
-        foreach ($equipe as $key => $value) {
-            $option .= '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>';
-        }
-        echo '<form method="post" id="add" enctype="multipart/form-data">
-        <input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" required autofocus>
-        <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" required>
-        '.$option.'</select>
-        <label for="titre">Photo du joueur</label>
-        <input type="file" name="media" id ="media" class="hidden">
-        <button type="submit" form="add">Valider</button>
-        ';// faire formulaire
-    }
-
-
     // sup et mod de joueur
     if(isset($_SESSION["joueur"]["action"])&&($_SESSION["joueur"]["action"]==="del"||$_SESSION["joueur"]["action"]=="mod")){  
         $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
@@ -122,7 +112,24 @@ if(isset($_POST["joueur"])){
         echo '<form method="post">'.$player.'</form>';
     }
 
+    // form d'ajout / mod
+    if(isset($_SESSION["joueur"]["action"])&&($_SESSION["joueur"]["action"]=="add"||$_SESSION["joueur"]["action"]=="mod")){ 
+        $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
+        $option = "<select name='equipe' id='equipe'>";//penser a convertir le 'null' en NULL
+        foreach ($equipe as $key => $value) {
+            $option .= '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>';
+        }
+        echo '<form method="post" id="add" enctype="multipart/form-data">
+        <input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" required autofocus>
+        <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" required>
+        '.$option.'</select>
+        <label for="titre">Photo du joueur</label>
+        <input type="file" name="media" id ="media" class="hidden">
+        <button type="submit" form="add">Valider</button>
+        ';// faire formulaire
+        }
     
+
     ?>
 </body>
 </html>
