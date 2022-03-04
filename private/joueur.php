@@ -15,7 +15,7 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     header("Location: ../html/connect.php");
 }
 
-// traitement ajout ( a tester)
+// traitement ajout ( a tester) / mod coupler la mod en "reajoutant" le joueur
 if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"&&isset($_POST["nom"])){
     if(isset($_FILES["media"])){
         $_FILES["media"]["name"]=str_replace("|"," ",$_FILES["media"]["name"]);
@@ -40,7 +40,7 @@ if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"&&i
 
 if(isset($_POST["equipe"])){$_SESSION["joueur"]["equipe"]=$_POST["equipe"];}
 
-//traitement sup/mod
+//traitement sup
 if(isset($_POST["joueur"])){
     //cas sup 
     if($_SESSION["joueur"]["action"]==='del'){
@@ -113,25 +113,32 @@ if(isset($_POST["joueur"])){
     }
 
 
-    // cas d'ajout / affichage 
-    if((isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add")||(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]==='mod'&&isset($_POST["joueur"]))){ 
+    // affichage d'ajout / mod 
+    if((isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add") || (isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]==='mod'&&isset($_POST["joueur"]))){ 
         if($_SESSION["joueur"]["action"]==='mod'){
+            // a tester pour voir si le mod ne bug pas si aucun joueur est select
             $joueur=$bdd->query("select * from joueur where id_joueur = ".$_POST["joueur"])->fetch();
         }
         $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
         $option = "<select name='equipe' id='equipe'>";//penser a convertir le 'null' en NULL
         foreach ($equipe as $key => $value) {
-            //faire mise en avant des équipes
-            $option .= '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>';
+            //mise en avant des équipes (uniquement pour la modification)
+            if(isset($joueur["equipe"])&&$equipe[$key]["id_equipe"]===$joueur["equipe"]){
+                $option = '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>'.$option;
+            } else{
+                $option .= '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>';
+            }
         }
         echo '<form method="post" id="add" enctype="multipart/form-data">
         <input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" '.$a=($_SESSION["joueur"]["action"]==='mod')?:"value='".$joueur["nom"]."'".' required autofocus >
         <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" '.$a=($_SESSION["joueur"]["action"]==='mod')?:"value='".$joueur["nom"]."'".' required>
         '.$option.'</select>
-        <label for="titre">Photo du joueur</label>
+        <label for="titre">Photo du joueur '.$a=($_SESSION["joueur"]["action"]==='mod'&&$joueur["photo"]===NULL)?:"(le joueur n'a pas de photo)".'</label>
         <input type="file" name="media" id ="media" class="hidden">
         <button type="submit" form="add">Valider</button>
-        ';// faire formulaire
+        ';
+
+        //(a verifier) Info : pour la modification de la photo, il est obligatoire de recréer le joueur / gerer ce cas a la fin pour une V2
     }
 
 
