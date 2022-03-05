@@ -16,8 +16,31 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
 }
 
 // traitement ajout ( a tester) / mod coupler la mod en "reajoutant" le joueur
-if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"&&isset($_POST["nom"])){
-    if(isset($_FILES["media"])){
+if(isset($_SESSION["joueur"]["action"])&&($_SESSION["joueur"]["action"]==="add"||$_SESSION["joueur"]["action"]==="mod")&&isset($_POST["nom"])){
+    //partie mod
+    if($_SESSION["joueur"]["action"]==="mod"){
+        //del sql
+        $photo=$bdd->query("SELECT photo from joueur where id_joueur = ".$_POST["photo"]."")->fetch();
+        // supr du joueur
+        $bdd->query("DELETE from joueur where id_joueur = ".$_POST["photo"]."");
+    }
+    
+    // finir traitement mod pour cas photo
+
+    //partie ajout photo
+    if(isset($_FILES["media"])&&$_FILES["media"]["error"]===0){
+        var_dump($_FILES["media"]);
+        //partie mod (supr photo)
+        if($_SESSION["joueur"]["action"]==="mod"){
+            $supr=$bdd->query("select nom from media where id_media = ".$img["photo"]."")->fetch();
+            if(unlink("../img/".explode("|",$supr["nom"])[0])){
+                echo "image mod sur le serveur" ;
+            }
+            if($bdd->query("DELETE from media where id_media = ".$img["photo"]."")){
+                echo "image mod sur la bdd" ;
+            }
+        }
+        //partie ajout
         $_FILES["media"]["name"]=str_replace("|"," ",$_FILES["media"]["name"]);
         while(file_exists("../img/".$_FILES["media"]["name"])){
             $_FILES["media"]["name"].=1; // permet d'eviter qu'un fichier existe 2 fois
@@ -27,7 +50,10 @@ if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]=="add"&&i
             echo "image ajouté dans la bdd";
             $joueur=$bdd->query("select id_media from media where nom = '".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."' ")->fetch();
         }
-    } else {echo"Aucune image n a été ajouté";}
+    } else if(isset($_POST["photo"])){
+        //en cas de non-changement de la photo la photo précedente est 
+        $joueur["id_media"]=$_POST["photo"];
+    }
     // ajout joueur bdd
     if(isset($joueur)){
         $bdd->query("insert into joueur (nom, prenom, equipe, photo) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe'].",".$joueur["id_media"].")");
@@ -59,14 +85,6 @@ if(isset($_POST["joueur"])){
             echo "joueur bien supr";
         }
     }
-    //cas mod
-    if($_SESSION["joueur"]["action"]==='mod' && isset($_POST["nom"])){
-        if($bdd->query("DELETE from joueur where id_joueur = ".$_POST["joueur"]."")->fetch()){
-            echo "joueur bien supr";
-        }
-    }
-
-    // note pour modifier une photo, il est obligatoire de supr le joueur / travailler sur ce cas en dernier
 }
 ?>
 <!DOCTYPE html>
@@ -118,9 +136,16 @@ if(isset($_POST["joueur"])){
         if($_SESSION["joueur"]["action"]==='mod'){
             // a tester pour voir si le mod ne bug pas si aucun joueur est select
             $joueur=$bdd->query("select * from joueur where id_joueur = ".$_POST["joueur"])->fetch();
+            $joueur["id_joueur"]='<input type="hidden" name="photo" value="'.$joueur["id_joueur"].'">';
+            $joueur["nom"]="value='".$joueur["nom"]."'";
+            $joueur["prenom"]="value='".$joueur["prenom"]."'";
+
+            if($joueur["photo"]===NULL){
+                $joueur["photo"]="(le joueur n'a pas de photo)";
+            }
         }
         $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
-        $option = "<select name='equipe' id='equipe'>";//penser a convertir le 'null' en NULL
+        $option = "";//penser a convertir le 'null' en NULL
         foreach ($equipe as $key => $value) {
             //mise en avant des équipes (uniquement pour la modification)
             if(isset($joueur["equipe"])&&$equipe[$key]["id_equipe"]===$joueur["equipe"]){
@@ -129,11 +154,15 @@ if(isset($_POST["joueur"])){
                 $option .= '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>';
             }
         }
-        echo '<form method="post" id="add" enctype="multipart/form-data">
-        <input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" '.$a=($_SESSION["joueur"]["action"]==='mod')?:"value='".$joueur["nom"]."'".' required autofocus >
-        <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" '.$a=($_SESSION["joueur"]["action"]==='mod')?:"value='".$joueur["nom"]."'".' required>
-        '.$option.'</select>
-        <label for="titre">Photo du joueur '.$a=($_SESSION["joueur"]["action"]==='mod'&&$joueur["photo"]===NULL)?:"(le joueur n'a pas de photo)".'</label>
+        //si $joueur n'est pas defini
+        if(!isset($joueur)){$joueur["id_joueur"]="";$joueur["nom"]='';$joueur["prenom"]='';$joueur["photo"]='';}
+        echo '<form method="post" id="add" enctype="multipart/form-data">'
+        //cette ligne permet le transfert de l 'id joueur pour la mod
+        .$joueur["id_joueur"].
+        '<input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" '.$joueur["nom"].' required autofocus >
+        <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" '.$joueur["prenom"].' required>
+        <select name="equipe" id="equipe">'.$option.'</select>
+        <label for="titre">Photo du joueur '.$joueur["photo"].'</label>
         <input type="file" name="media" id ="media" class="hidden">
         <button type="submit" form="add">Valider</button>
         ';
