@@ -50,7 +50,7 @@ if(isset($_SESSION["joueur"]["action"])&&($_SESSION["joueur"]["action"]==="add"|
             echo "image ajouté dans la bdd";
             $joueur=$bdd->query("select id_media from media where nom = '".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."' ")->fetch();
         }
-    } else if(isset($_POST["photo"])){
+    } else if(isset($_POST["photo"])&&$_FILES["media"]["error"]===0){
         //en cas de non-changement de la photo la photo précedente est 
         $joueur["id_media"]=$_POST["photo"];
     }
