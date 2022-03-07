@@ -109,7 +109,6 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'){
         <button type="submit" form="add">Valider</button>
         ';
 
-        //(a verifier) Info : pour la modification de la photo, il est obligatoire de recréer le joueur / gerer ce cas a la fin pour une V2
     }
 
 
