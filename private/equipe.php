@@ -61,6 +61,8 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'){
     </form>
     <?php
     
+    // la partie inférieur est faite 
+
     // sup et mod d'equipe (affichage liste)
     if(isset($_SESSION["equipe"]["action"])&&($_SESSION["equipe"]["action"]==="del"||$_SESSION["equipe"]["action"]=="mod")){  
         $equipe = $bdd->query("SELECT * from categorie")->fetchAll(PDO::FETCH_ASSOC);
@@ -79,36 +81,31 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'){
             
             //point d'arret
 
-            // a tester pour voir si le mod ne bug pas si aucun joueur est select
-            $joueur=$bdd->query("select * from joueur where id_joueur = ".$_POST["joueur"])->fetch();
-            $joueur["id_joueur"]='<input type="hidden" name="photo" value="'.$joueur["id_joueur"].'">';
-            $joueur["nom"]="value='".$joueur["nom"]."'";
-            $joueur["prenom"]="value='".$joueur["prenom"]."'";
-
-            if($joueur["photo"]===NULL){
-                $joueur["photo"]="(le joueur n'a pas de photo)";
-            }
+            $categorie=$bdd->query("SELECT categorie.*,equipe.* from categorie INNER JOIN equipe ON categorie.equipe = equipe.id_equipe where categorie.id = ".$_POST["categorie"])->fetch();
+            $categorie["id_joueur"]='<input type="hidden" name="photo" value="'.$categorie["id_joueur"].'">';
+            $categorie["nom"]="value='".$categorie["nom"]."'";
+            $categorie["lien"]="value='".explode("|",$categorie["lien"])[0]."'";
+            $categorie["mot"]="value='".explode("|",$categorie["lien"])[1]."'";
         }
         $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
         $option = "";//penser a convertir le 'null' en NULL
         foreach ($equipe as $key => $value) {
             //mise en avant des équipes (uniquement pour la modification)
-            if(isset($joueur["equipe"])&&$equipe[$key]["id_equipe"]===$joueur["equipe"]){
+            if(isset($categorie["equipe"])&&$equipe[$key]["id_equipe"]===$categorie["equipe"]){
                 $option = '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>'.$option;
             } else{
                 $option .= '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>';
             }
         }
-        //si $joueur n'est pas defini
-        if(!isset($joueur)){$joueur["id_joueur"]="";$joueur["nom"]='';$joueur["prenom"]='';$joueur["photo"]='';}
+        //si $categorie n'est pas defini
+        if(!isset($categorie)){$categorie["id_joueur"]="";$categorie["nom"]='';$categorie["lien"]='';$categorie["mot"]='';}
         echo '<form method="post" id="add" enctype="multipart/form-data">'
-        //cette ligne permet le transfert de l 'id joueur pour la mod
-        .$joueur["id_joueur"].
-        '<input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" '.$joueur["nom"].' required autofocus >
-        <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" '.$joueur["prenom"].' required>
+        //cette ligne permet le transfert de l 'id categorie pour la mod
+        .$categorie["id_joueur"].
+        '<input type="text" name="nom" id ="categorie" maxlength="30" size="25" placeholder="Categorie" '.$categorie["nom"].' required autofocus >
         <select name="equipe" id="equipe">'.$option.'</select>
-        <label for="titre">Photo du joueur '.$joueur["photo"].'</label>
-        <input type="file" name="media" id ="media" class="hidden">
+        <input type="text" name="lien" id ="lien" maxlength="450" size="60" placeholder="Lien des matchs" '.$categorie["lien"].' required>
+        <input type="text" name="mot" id ="mot" maxlength="50" size="60" placeholder="Mot de découpe" '.$categorie["mot"].' required>
         <button type="submit" form="add">Valider</button>
         ';
 
