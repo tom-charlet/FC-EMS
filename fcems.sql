@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 11 fév. 2022 à 04:06
+-- Généré le : lun. 07 mars 2022 à 21:48
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.1.2
 
@@ -54,18 +54,19 @@ INSERT INTO `article` (`id_article`, `titre`, `keyword`, `sub`, `texte`, `auteur
 CREATE TABLE `categorie` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `equipe` tinyint(3) UNSIGNED NOT NULL,
-  `categorie` varchar(30) NOT NULL
+  `categorie` varchar(30) NOT NULL,
+  `lien` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `categorie`
 --
 
-INSERT INTO `categorie` (`id`, `equipe`, `categorie`) VALUES
-(1, 1, 'U13 A'),
-(4, 1, 'U13 B'),
-(6, 3, 'U15 A'),
-(7, 3, 'U15 B');
+INSERT INTO `categorie` (`id`, `equipe`, `categorie`, `lien`) VALUES
+(1, 1, 'U13 A', ''),
+(4, 1, 'U13 B', ''),
+(6, 3, 'U15 A', ''),
+(7, 3, 'U15 B', '');
 
 -- --------------------------------------------------------
 
@@ -135,7 +136,7 @@ CREATE TABLE `joueur` (
 
 INSERT INTO `joueur` (`id_joueur`, `nom`, `prenom`, `equipe`, `photo`) VALUES
 (1, 'Charlet', 'Tom', 4, NULL),
-(2, 'Abraham', 'Noah', 1, NULL);
+(9, 'Abraham', 'Noah', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -372,13 +373,13 @@ ALTER TABLE `equipe`
 -- AUTO_INCREMENT pour la table `joueur`
 --
 ALTER TABLE `joueur`
-  MODIFY `id_joueur` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_joueur` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id_media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `palmares`
