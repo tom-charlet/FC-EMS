@@ -98,11 +98,11 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'){
             }
         }
         //si $categorie n'est pas defini
-        if(!isset($categorie)){$categorie["id_equipe"]="";$categorie["nom"]='';$categorie["lien"]='';$categorie["mot"]='';}
+        if(!isset($categorie)){$categorie["id_equipe"]="";$categorie["categorie"]='';$categorie["lien"]='';$categorie["mot"]='';}
         echo '<form method="post" id="add" enctype="multipart/form-data">'
         //cette ligne permet le transfert de l 'id categorie pour la mod
         .$categorie["id_equipe"].
-        '<input type="text" name="nom" id ="categorie" maxlength="30" size="25" placeholder="Categorie" '.$categorie["categorie"].' required autofocus >
+        '<input type="text" name="categorie" id ="categorie" maxlength="30" size="25" placeholder="Categorie" '.$categorie["categorie"].' required autofocus >
         <select name="equipe" id="equipe">'.$option.'</select>
         <input type="text" name="lien" id ="lien" maxlength="450" size="60" placeholder="Lien des matchs" '.$categorie["lien"].' required>
         <input type="text" name="mot" id ="mot" maxlength="50" size="60" placeholder="Mot de découpe" '.$categorie["mot"].' required>
