@@ -28,8 +28,8 @@ if(isset($_POST["equipe"])){$_SESSION["equipe"]["equipe"]=$_POST["equipe"];}
 
 //traitement sup
 if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='del'){
-
-    
+    $bdd->query("DELETE from categorie where id = ".$_POST["id"]);
+    // categorie del de la bdd
 }
 
 //traitement mod
@@ -82,7 +82,7 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'){
             //point d'arret
 
             $categorie=$bdd->query("SELECT categorie.*,equipe.* from categorie INNER JOIN equipe ON categorie.equipe = equipe.id_equipe where categorie.id = ".$_POST["categorie"])->fetch();
-            $categorie["id_equipe"]='<input type="hidden" name="photo" value="'.$categorie["id_equipe"].'">';
+            $categorie["id_equipe"]='<input type="hidden" name="id" value="'.$categorie["id"].'">';
             $categorie["categorie"]="value='".$categorie["categorie"]."'";
             $categorie["lien"]="value='".explode("|",$categorie["lien"])[0]."'";
             $categorie["mot"]="value='".explode("|",$categorie["lien"])[1]."'";
