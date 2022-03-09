@@ -20,8 +20,12 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
 
 // traitement ajout
 if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==="add"&&isset($_POST["categorie"])){
-    $bdd->query("INSERT INTO categorie (equipe,categorie,lien) VALUES (".$_POST["equipe"].",'".$_POST["categorie"]."','".$_POST["lien"]."|".$_POST["mot"]."')");
+    if(empty($bdd->query("SELECT * from categorie where categorie = '".$_POST["categorie"]."'")->fetch())){
+    echo $bdd->query("INSERT INTO categorie (equipe,categorie,lien) VALUES (".$_POST["equipe"].",'".$_POST["categorie"]."','".$_POST["lien"]."|".$_POST["mot"]."')")->fetch();
     echo "categorie ajoutée";
+    } else {
+        echo "l équipe existe deja";
+    }
 }
 
 // if(isset($_POST["equipe"])){$_SESSION["equipe"]["equipe"]=$_POST["equipe"];}
