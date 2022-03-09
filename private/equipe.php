@@ -19,12 +19,12 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
 }
 
 // traitement ajout
-if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==="add"&&isset($_POST["nom"])){
-    
-    
+if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==="add"&&isset($_POST["categorie"])){
+    $bdd->query("INSERT INTO categorie (equipe,categorie,lien) VALUES (".$_POST["equipe"].",'".$_POST["categorie"]."','".$_POST["lien"]."|".$_POST["mot"]."')");
+    echo "categorie ajoutée";
 }
 
-if(isset($_POST["equipe"])){$_SESSION["equipe"]["equipe"]=$_POST["equipe"];}
+// if(isset($_POST["equipe"])){$_SESSION["equipe"]["equipe"]=$_POST["equipe"];}
 
 //traitement sup
 if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='del'){
