@@ -46,10 +46,10 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Joueur</title>
+    <title>Categorie</title>
 </head>
 <body>
-    <h3>Joueur</h3>
+    <h3>Categorie</h3>
     <form id='for' method='post'>
     <?php 
     if(isset($_POST["action"])){$_SESSION["equipe"]["action"]=$_POST["action"];}
