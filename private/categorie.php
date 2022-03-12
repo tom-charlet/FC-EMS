@@ -28,11 +28,10 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==="add"&&
     }
 }
 
-// if(isset($_POST["equipe"])){$_SESSION["equipe"]["equipe"]=$_POST["equipe"];}
-
 //traitement sup
-if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='del'){
-    $bdd->query("DELETE from categorie where id = ".$_POST["id"]);
+if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='del'&&isset($_POST["id_categorie"])){
+    $bdd->query("DELETE from categorie where id = ".$_POST["id_categorie"]);
+    echo "categorie del de la bdd";
     // categorie del de la bdd
 }
 
@@ -74,19 +73,19 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&
         $cat='';
         foreach ($equipe as $key => $value) {
             if(isset($_SESSION["equipe"]["equipe"])&&$_SESSION["equipe"]["action"]==="add"){$check='class="select"';}else{$check='';}
-            $cat.="<button name='categorie' type='submit' value='".$equipe[$key]["id"]."'>".$equipe[$key]["categorie"]."</button>";
+            $cat.="<button name='id_categorie' type='submit' value='".$equipe[$key]["id"]."'>".$equipe[$key]["categorie"]."</button>";
         }
         echo '<form method="post"><p>'.$cat.'</p></form>';
     }
 
 
     // affichage d'ajout / mod (affichage form)
-    if((isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]=="add") || (isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&isset($_POST["categorie"]))){ 
+    if((isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]=="add") || (isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&isset($_POST["id_categorie"]))){ 
         if($_SESSION["equipe"]["action"]==='mod'){
             
             //point d'arret
 
-            $categorie=$bdd->query("SELECT categorie.*,equipe.* from categorie INNER JOIN equipe ON categorie.equipe = equipe.id_equipe where categorie.id = ".$_POST["categorie"])->fetch();
+            $categorie=$bdd->query("SELECT categorie.*,equipe.* from categorie INNER JOIN equipe ON categorie.equipe = equipe.id_equipe where categorie.id = ".$_POST["id_categorie"])->fetch();
             $categorie["id_equipe"]='<input type="hidden" name="id" value="'.$categorie["id"].'">';
             $categorie["categorie"]="value='".$categorie["categorie"]."'";
             $categorie["mot"]="value='".explode("|",$categorie["lien"])[1]."'";
