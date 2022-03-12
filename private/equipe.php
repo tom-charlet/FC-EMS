@@ -64,13 +64,13 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&
 
     // sup et mod d'equipe (affichage liste)
     if(isset($_SESSION["equipe"]["action"])&&($_SESSION["equipe"]["action"]==="del"||$_SESSION["equipe"]["action"]=="mod")){  
-        // $equipe = $bdd->query("SELECT * from categorie")->fetchAll(PDO::FETCH_ASSOC);
-        // $cat='';
-        // foreach ($equipe as $key => $value) {
-        //     if(isset($_SESSION["equipe"]["equipe"])&&$_SESSION["equipe"]["action"]==="add"){$check='class="select"';}else{$check='';}
-        //     $cat.="<button name='id_categorie' type='submit' value='".$equipe[$key]["id"]."'>".$equipe[$key]["categorie"]."</button>";
-        // }
-        // echo '<form method="post"><p>'.$cat.'</p></form>';
+        $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
+        $equ='';
+        foreach ($equipe as $key => $value) {
+            if(isset($_SESSION["equipe"]["equipe"])&&$_SESSION["equipe"]["action"]==="add"){$check='class="select"';}else{$check='';}
+            $equ.="<button name='id_equipe' type='submit' value='".$equipe[$key]["id_equipe"]."'>".$equipe[$key]["nom"]."</button>";
+        }
+        echo '<form method="post"><p>'.$equ.'</p></form>';
     }
 
 
