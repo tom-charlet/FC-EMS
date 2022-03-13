@@ -16,13 +16,13 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
 }
 
 // traitement ajout
-if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==="add"&&isset($_POST["categorie"])){
-    // if(empty($bdd->query("SELECT * from categorie where categorie = '".$_POST["categorie"]."'")->fetch())){
-    // echo $bdd->query("INSERT INTO categorie (equipe,categorie,lien) VALUES (".$_POST["equipe"].",'".$_POST["categorie"]."','".$_POST["lien"]."|".$_POST["mot"]."')")->fetch();
-    // echo "categorie ajoutée";
-    // } else {
-    //     echo "l équipe existe deja";
-    // }
+if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==="add"&&isset($_POST["equipe"])){
+    if(empty($bdd->query("SELECT * from equipe where nom = '".$_POST["nom"]."'")->fetch())){
+    echo $bdd->query("INSERT INTO equipe (nom) VALUES ('".$_POST["nom"]."')")->fetch();
+    echo "equipe ajoutée";
+    } else {
+        echo "l équipe existe deja";
+    }
 }
 
 //traitement sup
@@ -68,7 +68,7 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&
         $equ='';
         foreach ($equipe as $key => $value) {
             if(isset($_SESSION["equipe"]["equipe"])&&$_SESSION["equipe"]["action"]==="add"){$check='class="select"';}else{$check='';}
-            $equ.="<button name='id_equipe' type='submit' value='".$equipe[$key]["id_equipe"]."'>".$equipe[$key]["nom"]."</button>";
+            $equ.="<button name='equipe' type='submit' value='".$equipe[$key]["id_equipe"]."'>".$equipe[$key]["nom"]."</button>";
         }
         echo '<form method="post"><p>'.$equ.'</p></form>';
     }
@@ -78,7 +78,7 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&
     if((isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]=="add") || (isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&isset($_POST["id_equipe"]))){ 
         if($_SESSION["equipe"]["action"]==='mod'){
             $equipe=$bdd->query("SELECT * from equipe where id_equipe = ".$_POST["id_equipe"])->fetch();
-            $equipe["id_equipe"]='<input type="hidden" name="id" value="'.$equipe["id_equipe"].'">';
+            $equipe["equipe"]='<input type="hidden" name="id" value="'.$equipe["id_equipe"].'">';
             $equipe["nom"]="value='".$equipe["nom"]."'";
         }
         // //si $equipe n'est pas defini
@@ -86,7 +86,7 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&
         echo '<form method="post" id="add" enctype="multipart/form-data">'
         //cette ligne permet le transfert de l 'id equipe pour la mod
         .$equipe["id_equipe"].
-        '<input type="text" name="equipe" id ="categorie" maxlength="30" size="25" placeholder="Equipe" '.$equipe["nom"].' required autofocus >
+        '<input type="text" name="nom" id ="categorie" maxlength="30" size="25" placeholder="Equipe" '.$equipe["nom"].' required autofocus >
         <button type="submit" form="add">Valider</button>
         ';
     }
