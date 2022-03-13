@@ -27,7 +27,7 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==="add"&&
 
 //traitement sup
 if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='del'&&isset($_POST["id_equipe"])){
-    $bdd->query("DELETE from categorie where id = ".$_POST["id_equipe"]);
+    $bdd->query("DELETE from equipe where id_equipe = ".$_POST["id_equipe"]);
     echo "categorie del de la bdd";
     // equipe del de la bdd
 }
@@ -86,7 +86,7 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&
         echo '<form method="post" id="add" enctype="multipart/form-data">'
         //cette ligne permet le transfert de l 'id equipe pour la mod
         .$equipe["id_equipe"].
-        '<input type="text" name="nom" id ="categorie" maxlength="30" size="25" placeholder="Equipe" '.$equipe["nom"].' required autofocus >
+        '<input type="text" name="nom" id ="nom" maxlength="30" size="25" placeholder="Equipe" '.$equipe["nom"].' required autofocus >
         <button type="submit" form="add">Valider</button>
         ';
     }
