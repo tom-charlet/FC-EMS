@@ -16,7 +16,7 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
 }
 
 // traitement ajout
-if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==="add"&&isset($_POST["equipe"])){
+if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==="add"&&isset($_POST["nom"])){
     if(empty($bdd->query("SELECT * from equipe where nom = '".$_POST["nom"]."'")->fetch())){
     echo $bdd->query("INSERT INTO equipe (nom) VALUES ('".$_POST["nom"]."')")->fetch();
     echo "equipe ajoutée";
@@ -26,10 +26,10 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==="add"&&
 }
 
 //traitement sup
-if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='del'&&isset($_POST["id_categorie"])){
-    // $bdd->query("DELETE from categorie where id = ".$_POST["id_categorie"]);
-    // echo "categorie del de la bdd";
-    // // categorie del de la bdd
+if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='del'&&isset($_POST["id_equipe"])){
+    $bdd->query("DELETE from categorie where id = ".$_POST["id_equipe"]);
+    echo "categorie del de la bdd";
+    // equipe del de la bdd
 }
 
 //traitement mod
@@ -68,7 +68,7 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&
         $equ='';
         foreach ($equipe as $key => $value) {
             if(isset($_SESSION["equipe"]["equipe"])&&$_SESSION["equipe"]["action"]==="add"){$check='class="select"';}else{$check='';}
-            $equ.="<button name='equipe' type='submit' value='".$equipe[$key]["id_equipe"]."'>".$equipe[$key]["nom"]."</button>";
+            $equ.="<button name='id_equipe' type='submit' value='".$equipe[$key]["id_equipe"]."'>".$equipe[$key]["nom"]."</button>";
         }
         echo '<form method="post"><p>'.$equ.'</p></form>';
     }
