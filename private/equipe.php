@@ -75,39 +75,20 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&
 
 
     // affichage d'ajout / mod (affichage form)
-    if((isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]=="add") || (isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&isset($_POST["id_categorie"]))){ 
-        // if($_SESSION["equipe"]["action"]==='mod'){
-            
-        //     //point d'arret
-
-        //     $categorie=$bdd->query("SELECT categorie.*,equipe.* from categorie INNER JOIN equipe ON categorie.equipe = equipe.id_equipe where categorie.id = ".$_POST["id_categorie"])->fetch();
-        //     $categorie["id_equipe"]='<input type="hidden" name="id" value="'.$categorie["id"].'">';
-        //     $categorie["categorie"]="value='".$categorie["categorie"]."'";
-        //     $categorie["mot"]="value='".explode("|",$categorie["lien"])[1]."'";
-        //     $categorie["lien"]="value='".explode("|",$categorie["lien"])[0]."'";
-        // }
-        // $equipe = $bdd->query("SELECT * from equipe")->fetchAll(PDO::FETCH_ASSOC);
-        // $option = "";//penser a convertir le 'null' en NULL
-        // foreach ($equipe as $key => $value) {
-        //     //mise en avant des équipes (uniquement pour la modification)
-        //     if(isset($categorie["equipe"])&&$equipe[$key]["id_equipe"]===$categorie["equipe"]){
-        //         $option = '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>'.$option;
-        //     } else{
-        //         $option .= '<option value='.$equipe[$key]["id_equipe"].'>Equipe '.$equipe[$key]["nom"].'</option>';
-        //     }
-        // }
-        // //si $categorie n'est pas defini
-        // if(!isset($categorie)){$categorie["id_equipe"]="";$categorie["categorie"]='';$categorie["lien"]='';$categorie["mot"]='';}
-        // echo '<form method="post" id="add" enctype="multipart/form-data">'
-        // //cette ligne permet le transfert de l 'id categorie pour la mod
-        // .$categorie["id_equipe"].
-        // '<input type="text" name="categorie" id ="categorie" maxlength="30" size="25" placeholder="Categorie" '.$categorie["categorie"].' required autofocus >
-        // <select name="equipe" id="equipe">'.$option.'</select>
-        // <input type="text" name="lien" id ="lien" maxlength="450" size="60" placeholder="Lien des matchs" '.$categorie["lien"].' required>
-        // <input type="text" name="mot" id ="mot" maxlength="50" size="60" placeholder="Mot de découpe" '.$categorie["mot"].' required>
-        // <button type="submit" form="add">Valider</button>
-        // ';
-
+    if((isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]=="add") || (isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&isset($_POST["id_equipe"]))){ 
+        if($_SESSION["equipe"]["action"]==='mod'){
+            $equipe=$bdd->query("SELECT * from equipe where id_equipe = ".$_POST["id_equipe"])->fetch();
+            $equipe["id_equipe"]='<input type="hidden" name="id" value="'.$equipe["id_equipe"].'">';
+            $equipe["nom"]="value='".$equipe["nom"]."'";
+        }
+        // //si $equipe n'est pas defini
+         if(!isset($equipe)){$equipe["id_equipe"]="";$equipe["nom"]="";}
+        echo '<form method="post" id="add" enctype="multipart/form-data">'
+        //cette ligne permet le transfert de l 'id equipe pour la mod
+        .$equipe["id_equipe"].
+        '<input type="text" name="equipe" id ="categorie" maxlength="30" size="25" placeholder="Equipe" '.$equipe["nom"].' required autofocus >
+        <button type="submit" form="add">Valider</button>
+        ';
     }
 
 
