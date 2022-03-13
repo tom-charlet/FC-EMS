@@ -34,9 +34,9 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='del'&&
 
 //traitement mod
 if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&isset($_POST["id"])){
-    // $bdd->query("UPDATE categorie set equipe = ".$_POST["equipe"].",categorie = '".$_POST["categorie"]."',lien = '".$_POST["lien"]."|".$_POST["mot"]."' where id = ".$_POST["id"]."");
-    // //categorie update
-    // unset($_POST["categorie"]);
+    $bdd->query("UPDATE equipe set nom = '".$_POST["nom"]."' where id_equipe = ".$_POST["id"]."");
+    echo "equipe update";
+    unset($_POST["id_equipe"]);
 }
 
 ?>
@@ -78,7 +78,7 @@ if(isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&
     if((isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]=="add") || (isset($_SESSION["equipe"]["action"])&&$_SESSION["equipe"]["action"]==='mod'&&isset($_POST["id_equipe"]))){ 
         if($_SESSION["equipe"]["action"]==='mod'){
             $equipe=$bdd->query("SELECT * from equipe where id_equipe = ".$_POST["id_equipe"])->fetch();
-            $equipe["equipe"]='<input type="hidden" name="id" value="'.$equipe["id_equipe"].'">';
+            $equipe["id_equipe"]='<input type="hidden" name="id" value="'.$equipe["id_equipe"].'">';
             $equipe["nom"]="value='".$equipe["nom"]."'";
         }
         // //si $equipe n'est pas defini
