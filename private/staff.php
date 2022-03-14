@@ -16,13 +16,26 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
 }
 
 // traitement ajout
-if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==="add"&&isset($_POST["nom"])){
-    // if(empty($bdd->query("SELECT * from staff where nom = '".$_POST["nom"]."'")->fetch())){
-    // echo $bdd->query("INSERT INTO staff (nom) VALUES ('".$_POST["nom"]."')")->fetch();
-    // echo "staff ajoutée";
-    // } else {
-    //     echo "l équipe existe deja";
-    // }
+if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==="add"&&isset($_POST["pseudo"])){
+    if(empty($bdd->query("SELECT * from staff where name = '".$_POST["pseudo"]."'")->fetch())){
+        
+        // point arret
+
+        //partie ajout 
+        $_FILES["media"]["name"]=str_replace("|"," ",$_FILES["media"]["name"]);
+        while(file_exists("../img/".$_FILES["media"]["name"])){
+            $_FILES["media"]["name"].=1; // permet d'eviter qu'un fichier existe 2 fois
+        }
+        if (move_uploaded_file($_FILES["media"]["tmp_name"],"../img/".$_FILES["media"]["name"])){
+            $bdd->query("insert into media (nom, equipe, type) VALUES ('".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."', ".$_POST['equipe'].",'joueur')");
+            echo "image ajouté dans la bdd";
+            $joueur=$bdd->query("select id_media from media where nom = '".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."' ")->fetch();
+        }
+    echo $bdd->query("INSERT INTO staff (nom) VALUES ('".$_POST["nom"]."')")->fetch();
+    echo "staff ajoutée";
+    } else {
+        echo "le pseudo existe deja existe deja";
+    }
 }
 
 //traitement sup
