@@ -15,30 +15,29 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     header("Location: ../html/connect.php");
 }
 
-// traitement ajout ( a tester) / mod coupler la mod en "reajoutant" le joueur
-if(isset($_SESSION["joueur"]["action"])&&($_SESSION["joueur"]["action"]==="add"||$_SESSION["joueur"]["action"]==="mod")&&isset($_POST["nom"])){
-    //partie mod
-    if($_SESSION["joueur"]["action"]==="mod"){
-        // supr du joueur
-        $bdd->query("DELETE from joueur where id_joueur = ".$_POST["photo"]."");
-    }
-    
+// traitement ajout
+if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]==="add"&&isset($_POST["nom"])){
     // ajout joueur bdd
         $bdd->query("INSERT into joueur (nom, prenom, equipe) VALUES ('".$_POST['nom']."', '".$_POST['prenom']."',".$_POST['equipe'].")");
         echo "joueur ajouté";
 }
 
-if(isset($_POST["equipe"])){$_SESSION["joueur"]["equipe"]=$_POST["equipe"];}
+//traitement mod
+if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]==="mod"&&isset($_POST["nom"])){
+        $bdd->query("UPDATE joueur SET nom = '".$_POST['nom']."',prenom='".$_POST['prenom']."',equipe=".$_POST['equipe']." WHERE id_joueur = ".$_POST["id"]."");
+        echo "joueur mod";
+    }
+
+
 
 //traitement sup
-if(isset($_POST["joueur"])){
-    //cas sup 
-    if($_SESSION["joueur"]["action"]==='del'){
-        if($bdd->query("DELETE from joueur where id_joueur = ".$_POST["joueur"]."")->fetch()){
+if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]==="del"&&isset($_POST["joueur"])){
+    if($bdd->query("DELETE from joueur where id_joueur = ".$_POST["joueur"]."")->fetch()){
             echo "joueur bien supr";
         }
+
     }
-}
+if(isset($_POST["equipe"])){$_SESSION["joueur"]["equipe"]=$_POST["equipe"];}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -89,7 +88,7 @@ if(isset($_POST["joueur"])){
         if($_SESSION["joueur"]["action"]==='mod'){
             // a tester pour voir si le mod ne bug pas si aucun joueur est select
             $joueur=$bdd->query("select * from joueur where id_joueur = ".$_POST["joueur"])->fetch();
-            $joueur["id_joueur"]='<input type="hidden" name="photo" value="'.$joueur["id_joueur"].'">';
+            $joueur["id_joueur"]='<input type="hidden" name="id" value="'.$joueur["id_joueur"].'">';
             $joueur["nom"]="value='".$joueur["nom"]."'";
             $joueur["prenom"]="value='".$joueur["prenom"]."'";
         }
@@ -104,7 +103,7 @@ if(isset($_POST["joueur"])){
             }
         }
         //si $joueur n'est pas defini
-        if(!isset($joueur)){$joueur["id_joueur"]="";$joueur["nom"]='';$joueur["prenom"]='';$joueur["photo"]='';}
+        if(!isset($joueur)){$joueur["id_joueur"]="";$joueur["nom"]='';$joueur["prenom"]='';}
         echo '<form method="post" id="add">'
         //cette ligne permet le transfert de l 'id joueur pour la mod
         .$joueur["id_joueur"].
