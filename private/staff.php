@@ -76,19 +76,43 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
 
     // affichage d'ajout / mod (affichage form)
     if((isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]=="add") || (isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&isset($_POST["id_staff"]))){ 
-        // if($_SESSION["staff"]["action"]==='mod'){
-        //     $staff=$bdd->query("SELECT * from staff where id_staff = ".$_POST["id_staff"])->fetch();
-        //     $staff["id_staff"]='<input type="hidden" name="id" value="'.$staff["id_staff"].'">';
-        //     $staff["nom"]="value='".$staff["nom"]."'";
-        // }
-        // // //si $staff n'est pas defini
-        //  if(!isset($staff)){$staff["id_staff"]="";$staff["nom"]="";}
-        // echo '<form method="post" id="add" enctype="multipart/form-data">'
-        // //cette ligne permet le transfert de l 'id staff pour la mod
-        // .$staff["id_staff"].
-        // '<input type="text" name="nom" id ="nom" maxlength="30" size="25" placeholder="staff" '.$staff["nom"].' required autofocus >
-        // <button type="submit" form="add">Valider</button>
-        // ';
+        if($_SESSION["staff"]["action"]==='mod'){
+            $staff=$bdd->query("select * from staff where id_staff = ".$_POST["id_staff"])->fetch();
+            $staff["id_staff"]='<input type="hidden" name="photo" value="'.$staff["id_staff"].'">';
+            $staff["nom"]="value='".$staff["nom"]."'";
+            $staff["prenom"]="value='".$staff["prenom"]."'";
+
+            if($staff["photo"]===NULL){
+                $staff["photo"]="(le staff n'a pas de photo)";
+            }
+        }
+        $equipe = ["staff"];
+        // pour president admin et C A
+        if($rep["type"]==="admin"||$rep["type"]==="president"||$rep["type"]==="conseil administration"){$equipe=array_merge($equipe,["conseil administration"]);}
+        // pour admin et president
+        if($rep["type"]==="admin"||$rep["type"]==="president"){$equipe=array_merge($equipe,["president","admin"]);}
+        var_dump($equipe);
+        $option = "";//penser a convertir le 'null' en NULL
+        foreach ($equipe as $key => $value) {
+            //mise en avant des types (uniquement pour la modification)
+            if(isset($staff["type"])&&$value===$staff["type"]){
+                $option = '<option value='.$value.'>'.ucfirst($value).'</option>'.$option;
+            } else{
+                $option .= '<option value='.$value.'>'.ucfirst($value).'</option>';
+            }
+        }
+        //si $staff n'est pas defini
+        if(!isset($staff)){$staff["id_staff"]="";$staff["nom"]='';$staff["prenom"]='';$staff["photo"]='';}
+        echo '<form method="post" id="add" enctype="multipart/form-data">'
+        //cette ligne permet le transfert de l 'id staff pour la mod
+        .$staff["id_staff"].
+        '<input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" '.$staff["nom"].' required autofocus >
+        <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" '.$staff["prenom"].' required>
+        <select name="type" id="type">'.$option.'</select>
+        <label for="titre">Photo du staff '.$staff["photo"].'</label>
+        <input type="file" name="media" id ="media" class="hidden">
+        <button type="submit" form="add">Valider</button>
+        ';
     }
 
 
