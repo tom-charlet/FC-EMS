@@ -81,7 +81,7 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
             $staff["id_staff"]='<input type="hidden" name="photo" value="'.$staff["id_staff"].'">';
             $staff["nom"]="value='".$staff["nom"]."'";
             $staff["prenom"]="value='".$staff["prenom"]."'";
-
+            $staff['pseudo']='';
             if($staff["photo"]===NULL){
                 $staff["photo"]="(le staff n'a pas de photo)";
             }
@@ -91,7 +91,6 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
         if($rep["type"]==="admin"||$rep["type"]==="president"||$rep["type"]==="conseil administration"){$equipe=array_merge($equipe,["conseil administration"]);}
         // pour admin et president
         if($rep["type"]==="admin"||$rep["type"]==="president"){$equipe=array_merge($equipe,["president","admin"]);}
-        var_dump($equipe);
         $option = "";//penser a convertir le 'null' en NULL
         foreach ($equipe as $key => $value) {
             //mise en avant des types (uniquement pour la modification)
@@ -102,13 +101,18 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
             }
         }
         //si $staff n'est pas defini
-        if(!isset($staff)){$staff["id_staff"]="";$staff["nom"]='';$staff["prenom"]='';$staff["photo"]='';}
+        if(!isset($staff)){$staff["id_staff"]="";$staff["nom"]='';$staff["prenom"]='';$staff["photo"]='';
+            $staff["pseudo"]='<input type="text" name="pseudo" id ="pseudo" maxlength="50" size="25" placeholder="Pseudo" required autofocus >
+            <input type="text" name="pass" id ="pass" maxlength="50" size="25" placeholder="Pseudo" required autofocus >
+            ';
+        }
         echo '<form method="post" id="add" enctype="multipart/form-data">'
         //cette ligne permet le transfert de l 'id staff pour la mod
         .$staff["id_staff"].
         '<input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" '.$staff["nom"].' required autofocus >
         <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" '.$staff["prenom"].' required>
         <select name="type" id="type">'.$option.'</select>
+        '.$staff['pseudo'].'
         <label for="titre">Photo du staff '.$staff["photo"].'</label>
         <input type="file" name="media" id ="media" class="hidden">
         <button type="submit" form="add">Valider</button>
