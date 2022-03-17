@@ -47,9 +47,17 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='del'&&is
 
 //traitement mod
 if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&isset($_POST["id"])){
-    // $bdd->query("UPDATE staff set nom = '".$_POST["nom"]."' where id_staff = ".$_POST["id"]."");
-    // echo "staff update";
-    // unset($_POST["id_staff"]);
+    echo $bdd->query("UPDATE staff set nom = '".$_POST["nom"]."',prenom = '".$_POST["prenom"]."',`type` = '".$_POST["type"]."',`name` = '".$_POST["pseudo"]."' where id_staff = ".$_POST["id"]."")->fetch();
+    //traitement des infos (uniquement pour le president)
+    if($_POST["type"]==="president"&&isset($_POST["tel"])){
+        $bdd->query("UPDATE staff set infos = 'téléphone|".$_POST["tel"]."|mail|".$_POST["mail"]."' where id_staff = ".$_POST["id"]."");
+    }
+    //traitement du mot de passe (pas obligatoire)
+    if(isset($_POST["pass"])){
+        $bdd->query("UPDATE staff set `password` = '".hash("sha256",$_POST["pass"])."' where id_staff = ".$_POST["id"]."");
+    }
+    echo "staff update";
+    unset($_POST["id_staff"]);
 }
 
 ?>
@@ -91,10 +99,11 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
     if((isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]=="add") || (isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&isset($_POST["id_staff"]))){ 
         if($_SESSION["staff"]["action"]==='mod'){
             $staff=$bdd->query("select * from staff where id_staff = ".$_POST["id_staff"])->fetch();
-            $staff["id_staff"]='<input type="hidden" name="photo" value="'.$staff["id_staff"].'">';
+            $staff["id_staff"]='<input type="hidden" name="id" value="'.$staff["id_staff"].'">';
             $staff["nom"]="value='".$staff["nom"]."'";
             $staff["prenom"]="value='".$staff["prenom"]."'";
-            $staff['pseudo']='';
+            $staff['pseudo']="value='".$staff["name"]."'";
+            $staff['pass']="Soyez Sur de modifier le mot de passe";
             //infos spécifique au president
             if($staff["type"]==="president"){
                 
@@ -107,6 +116,8 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
                 }
                 $staff['tel']='<label for="tel">Téléphone </label><input type="tel" id="tel" name="tel" '.$tel.' required>';
                 $staff['mail']='<label for="tel">Mail </label><input type="email" id="mail" name="mail" '.$mail.' required>';
+            } else {
+                $staff['tel']='';$staff['mail']='';
             }
             
             if($staff["photo"]===NULL){
@@ -131,13 +142,9 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
         }
         //si $staff n'est pas defini
         if(!isset($staff)){$staff["id_staff"]="";$staff["nom"]='';$staff["prenom"]='';
-            $staff["photo"]='<label for="titre">Photo du staff </label><input type="file" name="media" id ="media" class="hidden">
-            ';
-            $staff["pseudo"]='<input type="text" name="pseudo" id ="pseudo" maxlength="50" size="25" placeholder="Pseudo" required autofocus >
-            <input type="text" name="pass" id ="pass" maxlength="50" size="25" placeholder="Pass" required autofocus >
-            ';
-            $staff['tel']='';
-            $staff['mail']='';
+            $staff["photo"]='<label for="titre">Photo du staff </label><input type="file" name="media" id ="media" class="hidden">';
+            $staff["pseudo"]='';$staff['tel']='';$staff['mail']='';
+            $staff["pass"]='Mot de passe';
         }
         echo '<form method="post" id="add" enctype="multipart/form-data">'
         //cette ligne permet le transfert de l 'id staff pour la mod
@@ -145,7 +152,8 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
         '<input type="text" name="nom" id ="nom" maxlength="50" size="25" placeholder="Nom" '.$staff["nom"].' required autofocus >
         <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" '.$staff["prenom"].' required>
         <select name="type" id="type">'.$option.'</select>
-        '.$staff['pseudo'].'
+        <input type="text" name="pseudo" id ="pseudo" maxlength="50" size="25" placeholder="Pseudo" '.$staff['pseudo'].' required>
+        <input type="text" name="pass" id ="pass" maxlength="50" size="25" placeholder="'.$staff["pass"].'">
         '.$staff["photo"].'
         '.$staff['tel'].'
         '.$staff["mail"].'
