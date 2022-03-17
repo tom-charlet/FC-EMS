@@ -114,7 +114,8 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
             }
         }
         //si $staff n'est pas defini
-        if(!isset($staff)){$staff["id_staff"]="";$staff["nom"]='';$staff["prenom"]='';$staff["photo"]='';
+        if(!isset($staff)){$staff["id_staff"]="";$staff["nom"]='';$staff["prenom"]='';
+            $staff["photo"]='<label for="titre">Photo du staff </label><input type="file" name="media" id ="media" class="hidden">';
             $staff["pseudo"]='<input type="text" name="pseudo" id ="pseudo" maxlength="50" size="25" placeholder="Pseudo" required autofocus >
             <input type="text" name="pass" id ="pass" maxlength="50" size="25" placeholder="Pseudo" required autofocus >
             ';
@@ -126,8 +127,7 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
         <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" '.$staff["prenom"].' required>
         <select name="type" id="type">'.$option.'</select>
         '.$staff['pseudo'].'
-        <label for="titre">Photo du staff '.$staff["photo"].'</label>
-        <input type="file" name="media" id ="media" class="hidden">
+        '.$staff["photo"].'
         <button type="submit" form="add">Valider</button>
         ';
     }
