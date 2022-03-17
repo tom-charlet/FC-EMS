@@ -31,10 +31,10 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==="add"&&is
             echo "image ajouté dans la bdd";
             $joueur=$bdd->query("select id_media from media where nom = '".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."' ")->fetch();
         }
-    echo $bdd->query("INSERT INTO staff (nom) VALUES ('".$_POST["nom"]."')")->fetch();
-    echo "staff ajoutée";
+        echo $bdd->query("INSERT INTO staff (nom,prenom,`type`,`name`,`password`) VALUES ('".$_POST["nom"]."','".$_POST["prenom"]."','".$_POST["type"]."','".$_POST["pseudo"]."','".hash("sha256",$_POST["pass"])."')")->fetch();
+        echo "staff ajouté";
     } else {
-        echo "le pseudo existe deja existe deja";
+        echo "le pseudo existe deja";
     }
 }
 
@@ -95,6 +95,20 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
             $staff["nom"]="value='".$staff["nom"]."'";
             $staff["prenom"]="value='".$staff["prenom"]."'";
             $staff['pseudo']='';
+            //infos spécifique au president
+            if($staff["type"]==="president"){
+                
+                if($staff["infos"]!==NULL){
+                    
+                    $tel="value='".explode("|",$staff["type"])[1]."'";
+                    $mail="value='".explode("|",$staff["type"])[3]."'";
+                } else {
+                    $tel="";$mail="";
+                }
+                $staff['tel']='<label for="tel">Téléphone </label><input type="tel" id="tel" name="tel" '.$tel.' required>';
+                $staff['mail']='<label for="tel">Mail </label><input type="email" id="mail" name="mail" '.$mail.' required>';
+            }
+            
             if($staff["photo"]===NULL){
                 $staff["photo"]="(le staff n'a pas de photo)";
             }
@@ -103,7 +117,9 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
         // pour president admin et C A
         if($rep["type"]==="admin"||$rep["type"]==="president"||$rep["type"]==="conseil administration"){$equipe=array_merge($equipe,["conseil administration"]);}
         // pour admin et president
-        if($rep["type"]==="admin"||$rep["type"]==="president"){$equipe=array_merge($equipe,["president","admin"]);}
+        if($rep["type"]==="admin"||$rep["type"]==="president"){$equipe=array_merge($equipe,["president","admin"]);
+        
+        }
         $option = "";//penser a convertir le 'null' en NULL
         foreach ($equipe as $key => $value) {
             //mise en avant des types (uniquement pour la modification)
@@ -115,10 +131,13 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
         }
         //si $staff n'est pas defini
         if(!isset($staff)){$staff["id_staff"]="";$staff["nom"]='';$staff["prenom"]='';
-            $staff["photo"]='<label for="titre">Photo du staff </label><input type="file" name="media" id ="media" class="hidden">';
-            $staff["pseudo"]='<input type="text" name="pseudo" id ="pseudo" maxlength="50" size="25" placeholder="Pseudo" required autofocus >
-            <input type="text" name="pass" id ="pass" maxlength="50" size="25" placeholder="Pseudo" required autofocus >
+            $staff["photo"]='<label for="titre">Photo du staff </label><input type="file" name="media" id ="media" class="hidden">
             ';
+            $staff["pseudo"]='<input type="text" name="pseudo" id ="pseudo" maxlength="50" size="25" placeholder="Pseudo" required autofocus >
+            <input type="text" name="pass" id ="pass" maxlength="50" size="25" placeholder="Pass" required autofocus >
+            ';
+            $staff['tel']='';
+            $staff['mail']='';
         }
         echo '<form method="post" id="add" enctype="multipart/form-data">'
         //cette ligne permet le transfert de l 'id staff pour la mod
@@ -128,6 +147,8 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
         <select name="type" id="type">'.$option.'</select>
         '.$staff['pseudo'].'
         '.$staff["photo"].'
+        '.$staff['tel'].'
+        '.$staff["mail"].'
         <button type="submit" form="add">Valider</button>
         ';
     }
