@@ -81,6 +81,10 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
         }else{
             echo"probleme de déplacement de la photo";
         }
+        //update staff
+        if($bdd->query("UPDATE staff set photo = ".$bdd->query("SELECT id_media from media where nom ='".$_FILES["media"]["name"]."|".$name."'")->fetchColumn()." where id_staff = ".$_POST["id"]."")){
+            echo "photo link au staff";
+        }
     }
     echo "staff update";
     unset($_POST["id_staff"]);
