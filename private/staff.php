@@ -27,22 +27,22 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==="add"&&is
 }
 
 //traitement sup
-// if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='del'&&isset($_POST["id_staff"])){
-//     $tmp=$bdd->query("SELECT * from staff LEFT JOIN media ON staff.photo = media.id_media where id_staff = ".$_POST["id_staff"])->fetch();
-//     if($bdd->query("DELETE from staff where id_staff = ".$_POST["id_staff"])){
-//         echo "staff del de la bdd";
-//     }
-//     var_dump($tmp);
-//     //supr photo
-//     if($tmp["id_media"]!==NULL){
-//         if(unlink("../img/".explode("|",$tmp["nom"])[0])){
-//             echo "image del sur le serveur" ;
-//         }
-//         if($bdd->query("DELETE from media where id_media = ".$tmp["id_media"]."")){
-//             echo "image del sur la bdd" ;
-//         }
-//     }
-// }
+if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='del'&&isset($_POST["id_staff"])){
+    $tmp=$bdd->query("SELECT * from staff LEFT JOIN media ON staff.photo = media.id_media where id_staff = ".$_POST["id_staff"])->fetch();
+    if($bdd->query("DELETE from staff where id_staff = ".$_POST["id_staff"])){
+        echo "staff del de la bdd";
+    }
+    var_dump($tmp);
+    //supr photo
+    if($tmp["id_media"]!==NULL){
+        if(unlink("../img/".explode("|",$tmp["nom"])[0])){
+            echo "image del sur le serveur" ;
+        }
+        if($bdd->query("DELETE from media where id_media = ".$tmp["id_media"]."")){
+            echo "image del sur la bdd" ;
+        }
+    }
+}
 
 //traitement mod
 if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&isset($_POST["id"])){
