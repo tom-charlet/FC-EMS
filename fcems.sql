@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 11 fév. 2022 à 04:06
+-- Généré le : sam. 19 mars 2022 à 23:46
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.1.2
 
@@ -54,18 +54,19 @@ INSERT INTO `article` (`id_article`, `titre`, `keyword`, `sub`, `texte`, `auteur
 CREATE TABLE `categorie` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `equipe` tinyint(3) UNSIGNED NOT NULL,
-  `categorie` varchar(30) NOT NULL
+  `categorie` varchar(30) NOT NULL,
+  `lien` varchar(500) NOT NULL,
+  `photo` smallint(5) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `categorie`
 --
 
-INSERT INTO `categorie` (`id`, `equipe`, `categorie`) VALUES
-(1, 1, 'U13 A'),
-(4, 1, 'U13 B'),
-(6, 3, 'U15 A'),
-(7, 3, 'U15 B');
+INSERT INTO `categorie` (`id`, `equipe`, `categorie`, `lien`, `photo`) VALUES
+(4, 1, 'U13 B', '', NULL),
+(6, 3, 'U15 A', '', NULL),
+(7, 3, 'U15 B', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -125,17 +126,16 @@ CREATE TABLE `joueur` (
   `id_joueur` int(10) UNSIGNED NOT NULL,
   `nom` varchar(50) NOT NULL,
   `prenom` varchar(50) NOT NULL,
-  `equipe` tinyint(3) UNSIGNED NOT NULL,
-  `photo` smallint(5) UNSIGNED DEFAULT NULL
+  `equipe` tinyint(3) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `joueur`
 --
 
-INSERT INTO `joueur` (`id_joueur`, `nom`, `prenom`, `equipe`, `photo`) VALUES
-(1, 'Charlet', 'Tom', 4, NULL),
-(2, 'Abraham', 'Noah', 1, NULL);
+INSERT INTO `joueur` (`id_joueur`, `nom`, `prenom`, `equipe`) VALUES
+(1, 'Charlet', 'Tom', 4),
+(9, 'Abraha', 'Noah', 1);
 
 -- --------------------------------------------------------
 
@@ -234,15 +234,17 @@ CREATE TABLE `staff` (
   `type` varchar(20) NOT NULL,
   `infos` varchar(255) DEFAULT NULL,
   `name` varchar(70) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `photo` smallint(5) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `staff`
 --
 
-INSERT INTO `staff` (`id_staff`, `nom`, `prenom`, `type`, `infos`, `name`, `password`) VALUES
-(1, 'Caillot', 'Antoine', 'admin', 'fsefsfqd', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');
+INSERT INTO `staff` (`id_staff`, `nom`, `prenom`, `type`, `infos`, `name`, `password`, `photo`) VALUES
+(1, 'Caillot', 'Antoine', 'admin', 'fsefsfqd', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', NULL),
+(2, 'Charlet', 'Tom', 'president', NULL, 'tommy', '044f4b3501cd8e8131d40c057893f4fdff66bf4032ecae159e0c892a28cf6c8e', NULL);
 
 --
 -- Index pour les tables déchargées
@@ -260,7 +262,8 @@ ALTER TABLE `article`
 ALTER TABLE `categorie`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `categorie` (`categorie`),
-  ADD KEY `equipe` (`equipe`) USING BTREE;
+  ADD KEY `equipe` (`equipe`) USING BTREE,
+  ADD KEY `photo` (`photo`);
 
 --
 -- Index pour la table `classement`
@@ -289,7 +292,6 @@ ALTER TABLE `equipe`
 --
 ALTER TABLE `joueur`
   ADD PRIMARY KEY (`id_joueur`),
-  ADD UNIQUE KEY `photo` (`photo`),
   ADD KEY `equipe` (`equipe`) USING BTREE;
 
 --
@@ -332,7 +334,8 @@ ALTER TABLE `sponsor`
 -- Index pour la table `staff`
 --
 ALTER TABLE `staff`
-  ADD PRIMARY KEY (`id_staff`);
+  ADD PRIMARY KEY (`id_staff`),
+  ADD KEY `photo` (`photo`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -366,19 +369,19 @@ ALTER TABLE `convocation`
 -- AUTO_INCREMENT pour la table `equipe`
 --
 ALTER TABLE `equipe`
-  MODIFY `id_equipe` tinyint(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_equipe` tinyint(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `joueur`
 --
 ALTER TABLE `joueur`
-  MODIFY `id_joueur` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_joueur` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id_media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pour la table `palmares`
@@ -408,7 +411,7 @@ ALTER TABLE `sponsor`
 -- AUTO_INCREMENT pour la table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `id_staff` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_staff` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Contraintes pour les tables déchargées
