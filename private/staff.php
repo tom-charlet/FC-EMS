@@ -18,19 +18,7 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
 // traitement ajout
 if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==="add"&&isset($_POST["pseudo"])){
     if(empty($bdd->query("SELECT * from staff where name = '".$_POST["pseudo"]."'")->fetch())){
-        
-        // point arret
-
         //partie ajout 
-        $_FILES["media"]["name"]=str_replace("|"," ",$_FILES["media"]["name"]);
-        while(file_exists("../img/".$_FILES["media"]["name"])){
-            $_FILES["media"]["name"].=1; // permet d'eviter qu'un fichier existe 2 fois
-        }
-        if (move_uploaded_file($_FILES["media"]["tmp_name"],"../img/".$_FILES["media"]["name"])){
-            $bdd->query("insert into media (nom, equipe, type) VALUES ('".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."', ".$_POST['equipe'].",'joueur')");
-            echo "image ajouté dans la bdd";
-            $joueur=$bdd->query("select id_media from media where nom = '".$_FILES["media"]["name"]."|Photo de ".$_POST['nom']." ".$_POST['prenom']."' ")->fetch();
-        }
         echo $bdd->query("INSERT INTO staff (nom,prenom,`type`,`name`,`password`) VALUES ('".$_POST["nom"]."','".$_POST["prenom"]."','".$_POST["type"]."','".$_POST["pseudo"]."','".hash("sha256",$_POST["pass"])."')")->fetch();
         echo "staff ajouté";
     } else {
@@ -55,6 +43,32 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
     //traitement du mot de passe (pas obligatoire)
     if(isset($_POST["pass"])){
         $bdd->query("UPDATE staff set `password` = '".hash("sha256",$_POST["pass"])."' where id_staff = ".$_POST["id"]."");
+    }
+    //traitement de la photo
+    if(isset($_FILES["media"])&&$_FILES["media"]["error"]===0){
+        //var_dump($_FILES["media"]);
+        $tmp=$bdd->query("SELECT staff.nom,staff.prenom,staff.type,media.* from staff LEFT JOIN media on staff.photo = media.id_media where staff.id_staff = ".$_POST["id"]."")->fetch();
+        echo "<hr>".var_dump($tmp);
+        $name="photo de ".$_POST["prenom"]." ".strtoupper($_POST["nom"]);
+        //partie mod (supr photo)
+        if($tmp["id_media"]!==NULL){
+            if(unlink("../img/".explode("|",$supr["nom"])[0])){
+                echo "image mod sur le serveur" ;
+            }
+            if($bdd->query("DELETE from media where id_media = ".$img["photo"]."")){
+                echo "image mod sur la bdd" ;
+            }
+        }
+        //traitement doublons
+        while(!empty($bdd->query("SELECT * from media where nom = '%".$name."%'")->fetch())){
+            $name.="_1";
+        }
+        if(move_uploaded_file($_FILES["media"]["tmp_name"],"../img/".$_FILES["media"]["name"])){
+            $bdd->query("INSERT INTO media (nom,`type`) VALUES ('".$_FILES["media"]["name"]."|".$name."','".$_POST["type"]."'");
+            echo "photo ajoutée";
+        }else{
+            echo"probleme de déplacement de la photo";
+        }
     }
     echo "staff update";
     unset($_POST["id_staff"]);
@@ -104,6 +118,7 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
             $staff["prenom"]="value='".$staff["prenom"]."'";
             $staff['pseudo']="value='".$staff["name"]."'";
             $staff['pass']="Soyez Sur de modifier le mot de passe";
+            $staff["req"]="";
             //infos spécifique au president
             if($staff["type"]==="president"){
                 
@@ -121,7 +136,9 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
             }
             
             if($staff["photo"]===NULL){
-                $staff["photo"]="(le staff n'a pas de photo)";
+                $staff['photo']='<label for="titre">Photo du staff </label><input type="file" name="media" id ="media" class="hidden">';
+            } else {
+                $staff['photo']='<label for="titre">Le Staff a deja une photo</label><input type="file" name="media" id ="media" class="hidden">';
             }
         }
         $equipe = ["staff"];
@@ -142,9 +159,10 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
         }
         //si $staff n'est pas defini
         if(!isset($staff)){$staff["id_staff"]="";$staff["nom"]='';$staff["prenom"]='';
-            $staff["photo"]='<label for="titre">Photo du staff </label><input type="file" name="media" id ="media" class="hidden">';
+            $staff["photo"]='Pour ajouter une photo , il faut ajouter le staff';
             $staff["pseudo"]='';$staff['tel']='';$staff['mail']='';
             $staff["pass"]='Mot de passe';
+            $staff["req"]="required";
         }
         echo '<form method="post" id="add" enctype="multipart/form-data">'
         //cette ligne permet le transfert de l 'id staff pour la mod
@@ -153,11 +171,12 @@ if(isset($_SESSION["staff"]["action"])&&$_SESSION["staff"]["action"]==='mod'&&is
         <input type="text" name="prenom" id ="prenom" maxlength="50" size="25" placeholder="Prenom" '.$staff["prenom"].' required>
         <select name="type" id="type">'.$option.'</select>
         <input type="text" name="pseudo" id ="pseudo" maxlength="50" size="25" placeholder="Pseudo" '.$staff['pseudo'].' required>
-        <input type="text" name="pass" id ="pass" maxlength="50" size="25" placeholder="'.$staff["pass"].'">
+        <input type="text" name="pass" id ="pass" maxlength="50" size="25" placeholder="'.$staff["pass"].'" '.$staff["req"].'">
         '.$staff["photo"].'
         '.$staff['tel'].'
         '.$staff["mail"].'
         <button type="submit" form="add">Valider</button>
+        
         ';
     }
 
