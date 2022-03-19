@@ -20,6 +20,16 @@ function traitement_date(string $var)
 {
     // a finir , affichage de valeur sur article
 }
+//pour generer des noms
+function nom(){
+    $long=rand(15,25);
+    $letters = 'abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    $nom="";
+    for ($i=0; $i < $long; $i++) { 
+        $nom=$nom.substr($letters,rand(0,strlen($letters)),1);
+    }
+    return $nom;
+}
 
 // voir si pas usine a gaz
 function get_rank(string $rank="entraineur"){
