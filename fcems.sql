@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 19 mars 2022 à 23:46
+-- Généré le : dim. 20 mars 2022 à 18:10
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.1.2
 
@@ -221,6 +221,14 @@ CREATE TABLE `sponsor` (
   `type` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Déchargement des données de la table `sponsor`
+--
+
+INSERT INTO `sponsor` (`id_sponsor`, `nom`, `date`, `type`) VALUES
+(1, 'nike', '2018', 'materiel'),
+(2, 'nike', '2023', 'materiel');
+
 -- --------------------------------------------------------
 
 --
@@ -405,7 +413,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT pour la table `sponsor`
 --
 ALTER TABLE `sponsor`
-  MODIFY `id_sponsor` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_sponsor` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `staff`
