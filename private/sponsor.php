@@ -80,7 +80,7 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
     if(isset($_SESSION["sponsor"]["action"])&&($_SESSION["sponsor"]["action"]==="del"||$_SESSION["sponsor"]["action"]=="mod")){  
         $sponsor = $bdd->query("SELECT * from sponsor")->fetchAll(PDO::FETCH_ASSOC);
         $sta='';
-        foreach ($staff as $key => $value) {
+        foreach ($sponsor as $key => $value) {
             if(isset($_SESSION["sponsor"]["id_sponsor"])&&$_SESSION["sponsor"]["action"]==="mod"&&$_SESSION["sponsor"]["id_sponsor"]===$sponsor[$key]["id_sponsor"]){$check='class="select"';}else{$check='';}
             $sta.="<button name='id_sponsor' type='submit' value='".$sponsor[$key]["id_sponsor"]."' ".$check.">".strtoupper($sponsor[$key]["nom"])." ".$sponsor[$key]["date"]."</button>";
         }
