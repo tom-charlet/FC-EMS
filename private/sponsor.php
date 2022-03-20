@@ -28,7 +28,7 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==="add"
         if(empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
             //partie ajout 
             $bdd->query("INSERT INTO sponsor (nom,`date`,`type`) VALUES ('".$name."',".$_POST["date"].",'".$_POST["type"]."')")->fetch();
-            echo "staff ajouté";
+            echo "sponsor ajouté";
         } else {
             echo "le sponsor existe deja";
         }
@@ -36,21 +36,12 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==="add"
 }
 
 //traitement sup
-if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'&&isset($_POST["id_staff"])){
-    $tmp=$bdd->query("SELECT * from staff LEFT JOIN media ON staff.photo = media.id_media where id_staff = ".$_POST["id_staff"])->fetch();
-    // if($bdd->query("DELETE from staff where id_staff = ".$_POST["id_staff"])){
-    //     echo "staff del de la bdd";
-    // }
-    // var_dump($tmp);
-    // //supr photo
-    // if($tmp["id_media"]!==NULL){
-    //     if(unlink("../img/".explode("|",$tmp["nom"])[0])){
-    //         echo "image del sur le serveur" ;
-    //     }
-    //     if($bdd->query("DELETE from media where id_media = ".$tmp["id_media"]."")){
-    //         echo "image del sur la bdd" ;
-    //     }
-    // }
+if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'&&isset($_POST["id_sponsor"])){
+    if($bdd->query("DELETE from sponsor where id_sponsor = ".$_POST["id_sponsor"])){
+        echo "Sponsor del de la bdd";
+    } else {
+        echo "Sponsor NON del de la bdd";
+    }
 }
 
 //traitement mod
