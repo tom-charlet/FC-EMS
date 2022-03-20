@@ -22,7 +22,7 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==="add"
     } else if($_POST["name"]!==""){
         $name=$_POST["name"];
     } else {
-        echo "le sponsor existe deja";
+        echo "Erreur nom";
     }
     if(isset($name)){
         if(empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
@@ -46,11 +46,24 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'
 
 //traitement mod
 if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'&&isset($_POST["id"])){
-    // echo $bdd->query("UPDATE staff set nom = '".$_POST["nom"]."',prenom = '".$_POST["prenom"]."',`type` = '".$_POST["type"]."',`name` = '".$_POST["pseudo"]."' where id_staff = ".$_POST["id"]."")->fetch();
-    // //traitement des infos (uniquement pour le president)
-    
-    // echo "staff update";
-    // unset($_POST["id_staff"]);
+    if($_POST["nom"]!==""){
+        $name=$_POST["nom"];
+    } else if($_POST["name"]!==""){
+        $name=$_POST["name"];
+    } else {
+        echo "Erreur nom";
+    }
+    if(isset($name)&&empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
+        
+    } else {
+        echo "Le sponsor existe deja";
+    }
+    if($bdd->query("UPDATE sponsor set nom = '".$_POST["nom"]."',date = ".$_POST["date"].",`type` = '".$_POST["type"]."' where id_sponsor = ".$_POST["id"]."")){
+        echo "staff update";
+        unset($_POST["id_sponsor"]);
+    } else {
+        echo "Probleme requete";
+    }
 }
 
 ?>
