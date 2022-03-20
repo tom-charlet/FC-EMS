@@ -97,8 +97,11 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
             $sponsor["date"]="value='".$sponsor["nom"]."'";
         }
         //liste des différents type de sponsors
-        $type = ["nourriture","materiel sportif"];
-        
+        $type = ["materiel sportif","nourriture"];
+        $a="";
+        foreach ($type as $key => $value) {
+            $a.='<option value='.$value.'>'.ucfirst($value).'</option>';
+        }
         $spon=$bdd->query("SELECT DISTINCT(nom) from sponsor")->fetchAll(PDO::FETCH_ASSOC);
         //l input text prend la priorité sur le select
         $option = "<option value=''></option>";
@@ -115,8 +118,9 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
         echo '<form method="post" id="add" enctype="multipart/form-data">'
         //cette ligne permet le transfert de l 'id sponsor pour la mod
         .$sponsor["id_sponsor"].
-        '<input type="text" name="nom" id ="nom" maxlength="80" size="25" placeholder="Nom" '.$sponsor["nom"].' required autofocus > OU 
-        <select name="type" id="type">'.$option.'</select>
+        '<p><input type="text" name="nom" id ="nom" maxlength="80" size="25" placeholder="Nom" '.$sponsor["nom"].' autofocus > OU 
+        <select name="name" id="name">'.$option.'</select></p>
+        <select name="type" id="type">'.$a.'</select>
         <label for="date">Date du sponsor</label><input type="number" name="date" id="date" min="2010" max="2030" value="'.date("Y").'" >
         <button type="submit" form="add">Valider</button>
         ';
