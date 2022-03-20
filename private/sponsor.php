@@ -89,38 +89,36 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
 
 
     // affichage d'ajout / mod (affichage form)
-    if((isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]=="add") || (isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'&&isset($_POST["id_staff"]))){ 
+    if((isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]=="add") || (isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'&&isset($_POST["id_sponsor"]))){ 
         if($_SESSION["sponsor"]["action"]==='mod'){
-            $staff=$bdd->query("select * from staff where id_staff = ".$_POST["id_staff"])->fetch();
-            $sponsor["id_staff"]='<input type="hidden" name="id" value="'.$sponsor["id_staff"].'">';
+            $sponsor=$bdd->query("select * from sponsor where id_sponsor = ".$_POST["id_sponsor"])->fetch();
+            $sponsor["id_sponsor"]='<input type="hidden" name="id" value="'.$sponsor["id_sponsor"].'">';
             $sponsor["nom"]="value='".$sponsor["nom"]."'";
-            $sponsor["prenom"]="value='".$sponsor["prenom"]."'";
-            $sponsor['pseudo']="value='".$sponsor["name"]."'";
-            $sponsor['pass']="Soyez Sur de modifier le mot de passe";
-            $sponsor["req"]="";
+            $sponsor["date"]="value='".$sponsor["nom"]."'";
         }
-        $type = ["sponsor"];
-        $option = "";//penser a convertir le 'null' en NULL
-        foreach ($equipe as $key => $value) {
+        //liste des différents type de sponsors
+        $type = ["nourriture","materiel sportif"];
+        
+        $spon=$bdd->query("SELECT DISTINCT(nom) from sponsor")->fetchAll(PDO::FETCH_ASSOC);
+        //l input text prend la priorité sur le select
+        $option = "<option value=''></option>";
+        foreach ($spon as $key => $value) {
             //mise en avant des types (uniquement pour la modification)
-            if(isset($sponsor["type"])&&$value===$sponsor["type"]){
+            if(isset($spon["type"])&&$value===$sponsor["type"]){
                 $option = '<option value='.$value.'>'.ucfirst($value).'</option>'.$option;
             } else{
-                $option .= '<option value='.$value.'>'.ucfirst($value).'</option>';
+                $option .= '<option value='.$spon["key"]["nom"].'>'.ucfirst($spon["key"]["nom"]).'</option>';
             }
         }
-        //si $staff n'est pas defini
-        if(!isset($staff)){$sponsor["id_staff"]="";$sponsor["nom"]='';$sponsor["prenom"]='';
-            $sponsor["photo"]='Pour ajouter une photo , il faut ajouter le staff';
-            $sponsor["pseudo"]='';$sponsor['tel']='';$sponsor['mail']='';
-            $sponsor["pass"]='Mot de passe';
-            $sponsor["req"]="required";
-        }
-        echo '<form method="post" id="add" enctype="multipart/form-data">'.
-        //cette ligne permet le transfert de l 'id staff pour la mod
-       
-        '<button type="submit" form="add">Valider</button>
-        
+        //si $sponsor n'est pas defini
+        if(!isset($sponsor)){$sponsor["id_sponsor"]="";$sponsor["nom"]='';$sponsor["date"]='';}
+        echo '<form method="post" id="add" enctype="multipart/form-data">'
+        //cette ligne permet le transfert de l 'id sponsor pour la mod
+        .$sponsor["id_sponsor"].
+        '<input type="text" name="nom" id ="nom" maxlength="80" size="25" placeholder="Nom" '.$sponsor["nom"].' required autofocus > OU 
+        <select name="type" id="type">'.$option.'</select>
+        <label for="date">Date du sponsor</label><input type="number" name="date" id="date" min="2010" max="2030" value="'.date("Y").'" >
+        <button type="submit" form="add">Valider</button>
         ';
     }
 
