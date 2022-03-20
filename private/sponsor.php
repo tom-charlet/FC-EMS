@@ -107,6 +107,8 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
         }
         //liste des différents type de sponsors
         $type = ["materiel sportif","nourriture"];
+        
+        
         $a="";
         foreach ($type as $key => $value) {
             //mise en avant des sponsors deja existant (uniquement pour la modification)
