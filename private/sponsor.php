@@ -16,14 +16,23 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
 }
 
 // traitement ajout
-if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==="add"&&isset($_POST["pseudo"])){
-    // if(empty($bdd->query("SELECT * from staff where name = '".$_POST["pseudo"]."'")->fetch())){
-    //     //partie ajout 
-    //     echo $bdd->query("INSERT INTO staff (nom,prenom,`type`,`name`,`password`) VALUES ('".$_POST["nom"]."','".$_POST["prenom"]."','".$_POST["type"]."','".$_POST["pseudo"]."','".hash("sha256",$_POST["pass"])."')")->fetch();
-    //     echo "staff ajouté";
-    // } else {
-    //     echo "le pseudo existe deja";
-    // }
+if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==="add"&&isset($_POST["date"])){
+    if($_POST["nom"]!==""){
+        $name=$_POST["nom"];
+    } else if($_POST["name"]!==""){
+        $name=$_POST["name"];
+    } else {
+        echo "le sponsor existe deja";
+    }
+    if(isset($name)){
+        if(empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
+            //partie ajout 
+            $bdd->query("INSERT INTO sponsor (nom,`date`,`type`) VALUES ('".$name."',".$_POST["date"].",'".$_POST["type"]."')")->fetch();
+            echo "staff ajouté";
+        } else {
+            echo "le sponsor existe deja";
+        }
+    }
 }
 
 //traitement sup
@@ -93,35 +102,35 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
         if($_SESSION["sponsor"]["action"]==='mod'){
             $sponsor=$bdd->query("select * from sponsor where id_sponsor = ".$_POST["id_sponsor"])->fetch();
             $sponsor["id_sponsor"]='<input type="hidden" name="id" value="'.$sponsor["id_sponsor"].'">';
-            $sponsor["nom"]="value='".$sponsor["nom"]."'";
-            $sponsor["date"]="value='".$sponsor["nom"]."'";
+            $sponsor["nomform"]="value='".$sponsor["nom"]."'";
+            $sponsor["dateform"]=$sponsor["date"];
         }
         //liste des différents type de sponsors
         $type = ["materiel sportif","nourriture"];
         $a="";
         foreach ($type as $key => $value) {
-            $a.='<option value='.$value.'>'.ucfirst($value).'</option>';
-        }
-        $spon=$bdd->query("SELECT DISTINCT(nom) from sponsor")->fetchAll(PDO::FETCH_ASSOC);
-        //l input text prend la priorité sur le select
-        $option = "<option value=''></option>";
-        foreach ($spon as $key => $value) {
-            //mise en avant des types (uniquement pour la modification)
-            if(isset($spon["type"])&&$value===$sponsor["type"]){
-                $option = '<option value='.$value.'>'.ucfirst($value).'</option>'.$option;
+            //mise en avant des sponsors deja existant (uniquement pour la modification)
+            if(isset($sponsor["type"])&&$value===$sponsor["type"]){
+                $a='<option value='.$value.'>'.ucfirst($value).'</option>'.$a;
             } else{
-                $option .= '<option value='.$spon["key"]["nom"].'>'.ucfirst($spon["key"]["nom"]).'</option>';
+                $a.='<option value='.$value.'>'.ucfirst($value).'</option>';
             }
         }
+        $spon=$bdd->query("SELECT DISTINCT(nom) from sponsor")->fetchAll(PDO::FETCH_ASSOC);
+        //IMPORTANT l input text prend la priorité sur le select
+        $option = "<option value=''></option>";
+        foreach ($spon as $key => $value) {
+            $option .= '<option value='.$spon[$key]["nom"].'>'.ucfirst($spon[$key]["nom"]).'</option>';
+        }
         //si $sponsor n'est pas defini
-        if(!isset($sponsor)){$sponsor["id_sponsor"]="";$sponsor["nom"]='';$sponsor["date"]='';}
+        if(!isset($sponsor)){$sponsor["id_sponsor"]="";$sponsor["nomform"]='';$sponsor["dateform"]=date("Y");}
         echo '<form method="post" id="add" enctype="multipart/form-data">'
         //cette ligne permet le transfert de l 'id sponsor pour la mod
         .$sponsor["id_sponsor"].
-        '<p><input type="text" name="nom" id ="nom" maxlength="80" size="25" placeholder="Nom" '.$sponsor["nom"].' autofocus > OU 
+        '<p><input type="text" name="nom" id ="nom" maxlength="80" size="25" placeholder="Nom" '.$sponsor["nomform"].' autofocus > OU 
         <select name="name" id="name">'.$option.'</select></p>
         <select name="type" id="type">'.$a.'</select>
-        <label for="date">Date du sponsor</label><input type="number" name="date" id="date" min="2010" max="2030" value="'.date("Y").'" >
+        <label for="date">Date du sponsor</label><input type="number" name="date" id="date" min="2010" max="2030" value="'.$sponsor["dateform"].'" >
         <button type="submit" form="add">Valider</button>
         ';
     }
