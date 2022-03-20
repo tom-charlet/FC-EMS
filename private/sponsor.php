@@ -69,9 +69,9 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
     if(isset($_POST["action"])){$_SESSION["sponsor"]["action"]=$_POST["action"];}
     ?>
     <p>
-    <button name="action" type="submit" value="add" <?php if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]!=="add"){echo "class='grey'";}?>>Ajouter un staff</button>
-    <button name="action" type="submit" value="del" <?php if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]!=="del"){echo "class='grey'";}?>>Supr un staff</button>
-    <button name="action" type="submit" value="mod" <?php if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]!=="mod"){echo "class='grey'";}?>>Mod un staff</button>
+    <button name="action" type="submit" value="add" <?php if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]!=="add"){echo "class='grey'";}?>>Ajouter un sponsor</button>
+    <button name="action" type="submit" value="del" <?php if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]!=="del"){echo "class='grey'";}?>>Supr un sponsor</button>
+    <button name="action" type="submit" value="mod" <?php if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]!=="mod"){echo "class='grey'";}?>>Mod un sponsor</button>
     </p>
     </form>
     <?php
