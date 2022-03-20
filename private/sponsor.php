@@ -76,13 +76,13 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
     </form>
     <?php
 
-    // sup et mod d'staff (affichage liste)
+    // sup et mod de sponsor (affichage liste)
     if(isset($_SESSION["sponsor"]["action"])&&($_SESSION["sponsor"]["action"]==="del"||$_SESSION["sponsor"]["action"]=="mod")){  
-        $staff = $bdd->query("SELECT * from staff")->fetchAll(PDO::FETCH_ASSOC);
+        $sponsor = $bdd->query("SELECT * from sponsor")->fetchAll(PDO::FETCH_ASSOC);
         $sta='';
         foreach ($staff as $key => $value) {
-            if(isset($_SESSION["sponsor"]["sponsor"])&&$_SESSION["sponsor"]["action"]==="add"){$check='class="select"';}else{$check='';}
-            $sta.="<button name='id_staff' type='submit' value='".$sponsor[$key]["id_staff"]."'>".strtoupper($sponsor[$key]["nom"])." ".$sponsor[$key]["prenom"]."</button>";
+            if(isset($_SESSION["sponsor"]["id_sponsor"])&&$_SESSION["sponsor"]["action"]==="mod"&&$_SESSION["sponsor"]["id_sponsor"]===$sponsor[$key]["id_sponsor"]){$check='class="select"';}else{$check='';}
+            $sta.="<button name='id_sponsor' type='submit' value='".$sponsor[$key]["id_sponsor"]."' ".$check.">".strtoupper($sponsor[$key]["nom"])." ".$sponsor[$key]["date"]."</button>";
         }
         echo '<form method="post"><p>'.$sta.'</p></form>';
     }
