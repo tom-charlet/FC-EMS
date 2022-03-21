@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : dim. 20 mars 2022 à 18:10
--- Version du serveur : 10.4.22-MariaDB
--- Version de PHP : 8.1.2
+-- Généré le : lun. 21 mars 2022 à 23:26
+-- Version du serveur : 10.4.21-MariaDB
+-- Version de PHP : 8.0.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -67,21 +67,6 @@ INSERT INTO `categorie` (`id`, `equipe`, `categorie`, `lien`, `photo`) VALUES
 (4, 1, 'U13 B', '', NULL),
 (6, 3, 'U15 A', '', NULL),
 (7, 3, 'U15 B', '', NULL);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `classement`
---
-
-CREATE TABLE `classement` (
-  `id_classement` smallint(5) UNSIGNED NOT NULL,
-  `categorie` tinyint(3) UNSIGNED NOT NULL,
-  `position` tinyint(3) UNSIGNED NOT NULL,
-  `point` tinyint(4) NOT NULL,
-  `nom` varchar(70) NOT NULL,
-  `logo` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -181,12 +166,12 @@ CREATE TABLE `palmares` (
 
 CREATE TABLE `rencontre` (
   `id_rencontre` int(10) UNSIGNED NOT NULL,
+  `categorie` tinyint(3) UNSIGNED NOT NULL,
   `nom` varchar(50) NOT NULL,
   `date` varchar(40) NOT NULL,
-  `equipe_int` smallint(5) UNSIGNED NOT NULL,
-  `equipe_ext` smallint(5) UNSIGNED NOT NULL,
-  `score` varchar(12) NOT NULL,
-  `categorie` tinyint(3) UNSIGNED NOT NULL
+  `equipe_int` varchar(100) NOT NULL,
+  `equipe_ext` varchar(100) NOT NULL,
+  `score` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -274,13 +259,6 @@ ALTER TABLE `categorie`
   ADD KEY `photo` (`photo`);
 
 --
--- Index pour la table `classement`
---
-ALTER TABLE `classement`
-  ADD PRIMARY KEY (`id_classement`),
-  ADD KEY `categorie` (`categorie`);
-
---
 -- Index pour la table `convocation`
 --
 ALTER TABLE `convocation`
@@ -322,8 +300,6 @@ ALTER TABLE `palmares`
 --
 ALTER TABLE `rencontre`
   ADD PRIMARY KEY (`id_rencontre`),
-  ADD KEY `equipe_ext` (`equipe_ext`),
-  ADD KEY `equipe_int` (`equipe_int`),
   ADD KEY `categorie` (`categorie`) USING BTREE;
 
 --
@@ -360,12 +336,6 @@ ALTER TABLE `article`
 --
 ALTER TABLE `categorie`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT pour la table `classement`
---
-ALTER TABLE `classement`
-  MODIFY `id_classement` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `convocation`
@@ -432,12 +402,6 @@ ALTER TABLE `categorie`
   ADD CONSTRAINT `categorie_ibfk_1` FOREIGN KEY (`equipe`) REFERENCES `equipe` (`id_equipe`);
 
 --
--- Contraintes pour la table `classement`
---
-ALTER TABLE `classement`
-  ADD CONSTRAINT `classement_ibfk_1` FOREIGN KEY (`categorie`) REFERENCES `categorie` (`id`);
-
---
 -- Contraintes pour la table `convocation`
 --
 ALTER TABLE `convocation`
@@ -468,9 +432,7 @@ ALTER TABLE `palmares`
 -- Contraintes pour la table `rencontre`
 --
 ALTER TABLE `rencontre`
-  ADD CONSTRAINT `categorie_ibfk_2` FOREIGN KEY (`categorie`) REFERENCES `categorie` (`id`),
-  ADD CONSTRAINT `equipe_ext_ibfk_3` FOREIGN KEY (`equipe_ext`) REFERENCES `classement` (`id_classement`),
-  ADD CONSTRAINT `equipe_int_ibfk_4` FOREIGN KEY (`equipe_int`) REFERENCES `classement` (`id_classement`);
+  ADD CONSTRAINT `categorie_ibfk_2` FOREIGN KEY (`categorie`) REFERENCES `categorie` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
