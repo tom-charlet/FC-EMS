@@ -137,10 +137,25 @@ function traitement_match($nomEquipe){
     function insertion_Match(array $match,int $cat){
         $bdd=bdd_connection();
         //Loop pour tout les match
+        $k=0;
         foreach ($match as $key => $value) {
-            
-            //Ajout de match 
-            if($bdd->query("INSERT INTO rencontre (categorie,nom,`date`,equipe_int,equipe_ext,score) VALUES (".$cat.",'".$value["coupe"]."')")){}
+            //test si le match existe
+            $id=$bdd->query("SELECT * from rencontre where nom = '".$value["coupe"]."' AND equipe_int = '".$value["equipe1"]."' AND equipe_ext = '".$value["equipe2"]."' AND date LIKE '".substr($value["date"],0,6)."%'")->fetch();
+            if(empty($id)){
+                //Ajout de match 
+                if($bdd->query("INSERT INTO rencontre (categorie,nom,`date`,equipe_int,equipe_ext,score) VALUES (".$cat.",'".$value["coupe"]."',".$value["date"].",'".$value["equipe1"]."','".$value["equipe2"]."','".$value["score"]."')")){
+                    //match ajouté
+                }
+            }
+            //mise a jour du score si celui ci est null (egal a "-") OU qu il faut le mettre a jour         A voir pour match reporté
+            if(isset($id["score"])&&($id["score"]==="-"||$id["score"]!==$value["score"])){
+                //mise a jour du score
+                if($bdd->query("UPDATE rencontre SET score = '".$value["score"]."',date = ".$value["date"]."")){
+                   //score update
+               } 
+            }
+
+
         }
     }
 
