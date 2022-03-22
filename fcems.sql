@@ -171,7 +171,7 @@ CREATE TABLE `rencontre` (
   `date` varchar(40) NOT NULL,
   `equipe_int` varchar(100) NOT NULL,
   `equipe_ext` varchar(100) NOT NULL,
-  `score` varchar(12) DEFAULT NULL
+  `score` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
