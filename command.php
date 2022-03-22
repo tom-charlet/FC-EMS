@@ -69,7 +69,12 @@ function traitement_match($nomEquipe){
     //appel des fonctions + renvoye bdd
 
 
-
+    // L'URL du site à scraper 
+    // A Changer 
+    $url = 'https://www.fff.fr/competition/club/552519-f-c-eure-madrie-seine/equipe/2021121182SEM1/resultats-et-calendrier.html';
+    //echo '<pre>';
+    $code = scraper($url);
+    //echo '</pre>';
     /***
     Code d'un scraper avec Curl réalisé par Julien Cordier
     ***/
@@ -88,11 +93,7 @@ function traitement_match($nomEquipe){
     curl_close ( $ch );
     return $result;
     }
-    // L'URL du site à scraper
-    $url = 'https://www.fff.fr/competition/club/552519-f-c-eure-madrie-seine/equipe/2021121182SEM1/resultats-et-calendrier.html';
-    //echo '<pre>';
-    $code = scraper($url);
-    //echo '</pre>';
+    
     preg_match_all('/<div class="uppercase margin_b20 compet_nom bold">(.*?)<!-- .aside_resultat_match -->/s', $code, $matches);
     //var_dump($matches);
 
@@ -128,13 +129,19 @@ function traitement_match($nomEquipe){
             //echo "score ekp 2 :". $res_ekp_deux."</br></br></br>";
             */
             //la var match contient une ligne pour chaque match decoupé 
-            $match[$i]=[''];
+            $match[$i]=['coupe'=>$comp,'date'=>$date_m,'equipe1'=>$ekp_un,'equipe2'=>$ekp_deux,'score'=>$score];
         }
         return $match;
     }
     data_tri($tab,$nom_eqp);
-    function insertion_Match($match){
+    function insertion_Match(array $match,int $cat){
         $bdd=bdd_connection();
+        //Loop pour tout les match
+        foreach ($match as $key => $value) {
+            
+            //Ajout de match 
+            if($bdd->query("INSERT INTO rencontre (categorie,nom,`date`,equipe_int,equipe_ext,score) VALUES (".$cat.",'".$value["coupe"]."')")){}
+        }
     }
 
 }

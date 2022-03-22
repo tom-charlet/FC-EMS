@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 21 mars 2022 à 23:26
+-- Généré le : mar. 22 mars 2022 à 17:43
 -- Version du serveur : 10.4.21-MariaDB
 -- Version de PHP : 8.0.11
 
@@ -171,7 +171,7 @@ CREATE TABLE `rencontre` (
   `date` varchar(40) NOT NULL,
   `equipe_int` varchar(100) NOT NULL,
   `equipe_ext` varchar(100) NOT NULL,
-  `score` varchar(12) NOT NULL
+  `score` varchar(12) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
