@@ -63,7 +63,9 @@ if (isset($_POST["history"])){
         </script> ";
     }
 }
-
+if(isset($_POST["updateMatch"])){
+    update_Match();
+}
 
 ?>
 <!DOCTYPE html>
@@ -109,6 +111,12 @@ if (isset($_POST["history"])){
         <form action="" method="POST">
             <input type="hidden" name="modHistory" >
             <input type="submit" value="Changer l histoire">
+        </form>
+    </div>
+    <div class="button">
+        <form action="" method="POST">
+            <input type="hidden" name="updateMatch" >
+            <input type="submit" value="Update match">
         </form>
     </div>
 
