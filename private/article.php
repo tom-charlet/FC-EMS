@@ -52,39 +52,68 @@ if(isset($_POST["date"])){$_SESSION["article"]["date"]=$_POST["date"];}
 if(isset($_POST["type"])){$_SESSION["article"]["type"]=$_POST["type"];}
 
 
-// traitement creation
+// traitement creation / modificaion
 if(isset($_SESSION["article"]["action"])&&isset($_POST['sub'])){
-        
-    $tmp=$bdd->query("select * from article where titre = '".$_SESSION["article"]["titre"]."' AND date = ".intval($_SESSION["article"]["date"])."")->fetch();
-    if(empty($tmp)){
-        if($bdd->query("INSERT INTO article (`titre`, `keyword`, `sub`, `texte`, `auteur`, `date`, `type`) VALUES ('".$_SESSION["article"]["titre"]."','".$_SESSION["article"]["keyword"]."','".$_SESSION["article"]["sub"]."','".$_SESSION["article"]["texte"]."',".$rep["id_staff"].",'".$_SESSION["article"]["date"]."','".$_SESSION["article"]["type"]."')")){
-            echo '<div id="error">L article a bien ete creer</div>';
+    // cas ajout
+    if($_SESSION["article"]["action"]==="add"){
+        $tmp=$bdd->query("select * from article where titre = '".$_SESSION["article"]["titre"]."' AND date = ".intval($_SESSION["article"]["date"])."")->fetch();
+        if(empty($tmp)){
+            if($bdd->query("INSERT INTO article (`titre`, `keyword`, `sub`, `texte`, `auteur`, `date`, `type`) VALUES ('".$_SESSION["article"]["titre"]."','".$_SESSION["article"]["keyword"]."','".$_SESSION["article"]["sub"]."','".$_SESSION["article"]["texte"]."',".$rep["id_staff"].",'".$_SESSION["article"]["date"]."','".$_SESSION["article"]["type"]."')")){
+                echo '<div id="error">L article a bien ete creer</div>';
+            }
+            // unset($_SESSION["article"]);
+        } else {
+            echo '<div id="error">Un article similaire existe deja</div>';
         }
-        
+    } else if($_SESSION["article"]["action"]==="mod"&&isset($_POST["id_article"])){
+        if($bdd->query("UPDATE article SET `titre` = '".$_SESSION["article"]["titre"]."', `keyword`= '".$_SESSION["article"]["keyword"]."', `sub`= '".$_SESSION["article"]["sub"]."', `auteur`= ".$rep["id_staff"].", `date`= '".$_SESSION["article"]["date"]."' , `type`= '".$_SESSION["article"]["type"]."' where id_article = ".$_POST["id_article"]."")){
+            echo "Article modifié";
+        }
+        $supr=$bdd->query("SELECT nom from media where article = ".$_POST["id_article"]."")->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($supr as $key => $value) {
+            if(unlink("../img/".explode("|",$value["nom"])[0])){
+                echo "image supprimer sur le serveur" ;
+            }
+        }   
+        if($bdd->query("DELETE from media where article = ".$_POST["id_article"]."")){
+            //images supr de la bdd
+        }
+    }
+
+    //test si il y a des photos
+    if($_FILES["upload"]["size"][0]!=0){
         //traitement des images (creer un tableau ou chaque index est une photo valide)
+        $photo=[];
         foreach ($_FILES["upload"]["name"] as $key => $value) {
             if($_FILES["upload"]["error"][$key]==0&&explode("/",$_FILES["upload"]["type"][$key])[0]=="image"){
                 $photo[]=["name"=>(nom().".".explode("/",$_FILES["upload"]["type"][$key])[1]),"full_path"=>$_FILES["upload"]["full_path"][$key],"type"=>$_FILES["upload"]["type"][$key],"tmp_name"=>$_FILES["upload"]["tmp_name"][$key],"error"=>$_FILES["upload"]["error"][$key],"size"=>$_FILES["upload"]["size"][$key]];
             }
         }
-        var_dump($photo);
-        //ajout des photos
-        foreach ($photo as $key => $value) {
-            while(file_exists("../img/".$value["name"])){
-                $value["name"]=nom().".".explode("/",$_FILES["upload"]["type"][$key])[1]; // permet d'eviter qu'un fichier n existe pas 2 fois
-            }
-            if (move_uploaded_file($value["tmp_name"],"../img/".$value["name"])) {
-                $bdd->query("insert into media (nom, type) VALUES ('".$value["name"]."|".($a=(isset($_POST["pic-desc"])?$_POST["pic-desc"]:"photo n ".($key+1)." de l'article du ".$_SESSION["article"]["date"]))."','".explode("/",$value["type"])[0]."')");
-                echo "Le média a été ajouté dans le serveur";
-                unset($_SESSION["media"]);
-            } else {echo "<p>Probleme lors du televersement</p>";}
+    
+        //recuperation id pour photos
+        if($_SESSION["article"]["action"]==="mod"){
+            $id=$_POST["id_article"];
+        } else if ($_SESSION["article"]["action"]==="add"){
+            $id=$bdd->query("SELECT id_article where `date` = '".$_SESSION["article"]["date"]."' AND titre = '".$_SESSION["article"]["titre"]."'")->fetch();
+            $id=$id['id_article'];
         }
+        
 
-        // unset($_SESSION["article"]);
-    } else {
-        echo '<div id="error">Un article similaire existe deja</div>';
-    } 
+        //ajout des photos
+        if(isset($id)){
+            foreach ($photo as $key => $value) {
+                while(file_exists("../img/".$value["name"])){
+                    $value["name"]=nom().".".explode("/",$_FILES["upload"]["type"][$key])[1]; // permet d'eviter qu'un fichier n existe pas 2 fois
+                }
+                if (move_uploaded_file($value["tmp_name"],"../img/".$value["name"])) {
+                    $bdd->query("insert into media (nom, type,article) VALUES ('".$value["name"]."|".($a=(isset($_POST["pic-desc"])?$_POST["pic-desc"]:"photo n ".($key+1)." de l'article du ".$_SESSION["article"]["date"]))."','".explode("/",$value["type"])[0]."',".$id.")");
+                    echo "Le média a été ajouté dans le serveur";
+                    unset($_SESSION["media"]);
+                } else {echo "<p>Probleme lors du televersement</p>";}
+            }
+        }
     }
+}
 
 ?>
 <!DOCTYPE html>
@@ -149,7 +178,7 @@ if(isset($_SESSION["article"]["action"])&&isset($_POST['sub'])){
                 <input type="radio" name="type" id="type2" value="2" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]===2)?'checked="checked"':'') .'>
             </div>
             <div id="part2">
-                './*Transimssion id pour modification*/($a=(isset($_SESSION["article"]["id_article"]))?'input type="hidden" name="id_article" value="'.$_SESSION["article"]["id_article"].'">':"").'
+                './*Transimssion id pour modification*/($a=(isset($_SESSION["article"]["id_article"]))?'<input type="hidden" name="id_article" value="'.$_SESSION["article"]["id_article"].'">':"").'
                 <!-- form a gerer en js (a voir)-->
 
                 <p>
