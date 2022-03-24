@@ -145,9 +145,7 @@ if(isset($_POST["type"])&&isset($_POST["type"])&&isset($_POST["titre"])&&isset($
                 </p>
                 <p>
                     <label for="sub">Phrase d accroche</label>
-                    <textarea id="sub" name="sub" rows="10" cols="33" maxlength="500" required >
-                    '.($a=(isset($_SESSION["article"]["sub"]))?$_SESSION["article"]["sub"]:"").'
-                    </textarea>
+                    <textarea id="sub" name="sub" rows="10" cols="33" maxlength="500" required >'.($a=(isset($_SESSION["article"]["sub"]))?$_SESSION["article"]["sub"]:"").'</textarea>
                 </p>
                 <p>
                     <label for="upload">Photo</label>
@@ -157,9 +155,7 @@ if(isset($_POST["type"])&&isset($_POST["type"])&&isset($_POST["titre"])&&isset($
                 </p>
                 <p>
                     <label for="texte">Texte</label>
-                    <textarea id="texte" name="texte" rows="10" cols="33" required>
-                    '.($a=(isset($_SESSION["article"]["texte"]))?$_SESSION["article"]["texte"]:"").'
-                    </textarea>
+                    <textarea id="texte" name="texte" rows="10" cols="33" required>'.($a=(isset($_SESSION["article"]["texte"]))?$_SESSION["article"]["texte"]:"").'</textarea>
                 </p>
                 <p>
                     <label for="keyword">Mots clefs (séparé par des ";")</label>
