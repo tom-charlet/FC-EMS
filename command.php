@@ -55,6 +55,8 @@ function get_rank(string $rank="entraineur"){
     return $nb;
 }
 
+
+// traitement match
 function update_Match(){
     $bdd=bdd_connection();
     $equipe=$bdd->query("SELECT id,lien from categorie ")->fetchAll(PDO::FETCH_ASSOC);
