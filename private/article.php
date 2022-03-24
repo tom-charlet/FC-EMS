@@ -55,11 +55,11 @@ if(isset($_POST["type"])){$_SESSION["article"]["type"]=$_POST["type"];}
 // traitement creation
 if(isset($_SESSION["article"]["action"])&&isset($_POST['sub'])){
         
-    //$tmp=$bdd->query("select * from article where titre = '".$_SESSION["article"]["titre"]."' AND date = ".intval($_SESSION["article"]["date"])."")->fetch();
+    $tmp=$bdd->query("select * from article where titre = '".$_SESSION["article"]["titre"]."' AND date = ".intval($_SESSION["article"]["date"])."")->fetch();
     if(empty($tmp)){
-        // if($bdd->query("INSERT INTO article (`titre`, `keyword`, `sub`, `texte`, `auteur`, `date`, `type`) VALUES ('".$_SESSION["article"]["titre"]."','".$_SESSION["article"]["keyword"]."','".$_SESSION["article"]["sub"]."','".$_SESSION["article"]["texte"]."',".$rep["id_staff"].",'".$_SESSION["article"]["date"]."','".$_SESSION["article"]["type"]."')")){
-        //     echo '<div id="error">L article a bien ete creer</div>';
-        // }
+        if($bdd->query("INSERT INTO article (`titre`, `keyword`, `sub`, `texte`, `auteur`, `date`, `type`) VALUES ('".$_SESSION["article"]["titre"]."','".$_SESSION["article"]["keyword"]."','".$_SESSION["article"]["sub"]."','".$_SESSION["article"]["texte"]."',".$rep["id_staff"].",'".$_SESSION["article"]["date"]."','".$_SESSION["article"]["type"]."')")){
+            echo '<div id="error">L article a bien ete creer</div>';
+        }
         
         //traitement des images (creer un tableau ou chaque index est une photo valide)
         foreach ($_FILES["upload"]["name"] as $key => $value) {
