@@ -34,10 +34,11 @@ if(isset($_POST["delete"])){
     echo "supr termine";
 }
 
-if(isset($_POST["edit"])){$_SESSION["article"]=$bdd->query("SELECT * form article where id_article = ".$_POST["edit"]."")->fetch();$_SESSION["article"]["action"]="edit";}
+if(isset($_POST["edit"])){
+    $_SESSION["article"]=$bdd->query("SELECT * from article where id_article = ".$_POST["edit"]."")->fetch();
+    $_SESSION["article"]["action"]="edit";
+}
 
-// (fait) A finir
-// $_SESSION["article"]=["type"=>$_POST["type"],"titre"=>$_POST["titre"],"sub"=>$_POST["sub"],"texte"=>$_POST["texte"],"keyword"=>$_POST["keyword"]];
 
 if(!isset($_SESSION["article"])){
     $_SESSION["article"]=[];
@@ -51,23 +52,22 @@ if(isset($_POST["type"])){$_SESSION["article"]["type"]=$_POST["type"];}
 
 // (fait) revoir les test de premier if pour pallier  un manque de certaines info
 
-// traitement creation + edit
-
-if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_POST["texte"])&&isset($_POST["keyword"])){
-    
+// traitement creation
+if(isset($_POST["type"])&&isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_POST["texte"])&&isset($_POST["keyword"])){
+        var_dump($_FILES);
         $rep=$bdd->query("select * from article where titre = '".$_SESSION["titre"]."'")->fetch();
         if(empty($rep)){
-            if($_SESSION["article"]["action"]==="edit"){    
-                if($bdd->query("UPDATE 'article' SET 'titre'='".$_SESSION["article"]["titre"]."','keyword'='".$_SESSION["article"]["keyword"]."','sub'='".$_SESSION["article"]["sub"]."','texte'='".$_SESSION["article"]["texte"]."','auteur'=".$_SESSION["article"]["auteur"].",'date'='".$_SESSION["article"]["date"]."','type'='".$_SESSION["article"]["type"]."' WHERE id_article = ".$_SESSION["token"]["id"]."")){
-                echo '<div id="error">L article a bien ete modif</div>';
-                }
-            } else {
-                if($bdd->query("INSERT INTO 'article'('titre', 'keyword', 'sub', 'texte', 'auteur', 'date', 'type') VALUES ('".$_SESSION["article"]["titre"]."','".$_SESSION["article"]["keyword"]."','".$_SESSION["article"]["sub"]."',
-                '".$_SESSION["article"]["texte"]."',".$_SESSION["token"]["id"].",'".$_SESSION["article"]["date"]."','".$_SESSION["article"]["type"]."')")){
-                    echo '<div id="error">L article a bien ete creer</div>';
-                    }
-            }
-        unset($_SESSION["article"]);
+        //     if($_SESSION["article"]["action"]==="edit"){    
+        //         if($bdd->query("UPDATE 'article' SET 'titre'='".$_SESSION["article"]["titre"]."','keyword'='".$_SESSION["article"]["keyword"]."','sub'='".$_SESSION["article"]["sub"]."','texte'='".$_SESSION["article"]["texte"]."','auteur'=".$_SESSION["article"]["auteur"].",'date'='".$_SESSION["article"]["date"]."','type'='".$_SESSION["article"]["type"]."' WHERE id_article = ".$_SESSION["token"]["id"]."")){
+        //         echo '<div id="error">L article a bien ete modif</div>';
+        //         }
+        //     } else {
+        //         if($bdd->query("INSERT INTO 'article'('titre', 'keyword', 'sub', 'texte', 'auteur', 'date', 'type') VALUES ('".$_SESSION["article"]["titre"]."','".$_SESSION["article"]["keyword"]."','".$_SESSION["article"]["sub"]."',
+        //         '".$_SESSION["article"]["texte"]."',".$_SESSION["token"]["id"].",'".$_SESSION["article"]["date"]."','".$_SESSION["article"]["type"]."')")){
+        //             echo '<div id="error">L article a bien ete creer</div>';
+        //             }
+        //     }
+        // unset($_SESSION["article"]);
     } else {
         echo '<div id="error">Le titre existe deja</div>';
     } 
@@ -103,12 +103,12 @@ if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_
         <td>".$article[$key]["date"]."</td>
         <td>".$article[$key]["keyword"]."</td>
         <td>
-        <form id='form".$article[$key]["id_article"]."-delete'>
-            <input type='hidden' name='delete' value='".$article[$key]["id_article"]."'>
+        <form id='form".$article[$key]["id_article"]."-delete' method='post'>
+            <input type='hidden' name='delete' value=".$article[$key]["id_article"].">
             <button type='submit' form='form".$article[$key]["id_article"]."-delete'><img src='../assets/bin.svg' alt='poubelle'></button>
         </form>
-        <form id='form".$article[$key]["id_article"]."-edit'>
-            <input type='hidden' name='edit' value='".$article[$key]["id_article"]."'>
+        <form id='form".$article[$key]["id_article"]."-edit' method='post'>
+            <input type='hidden' name='edit' value=".$article[$key]["id_article"].">
             <button type='submit' form='form".$article[$key]["id_article"]."-edit'><img src='../assets/edit.svg' alt=''></button>
         </form>
         </td>
@@ -116,58 +116,67 @@ if(isset($_POST["type"])&&isset($_POST["titre"])&&isset($_POST["sub"])&&isset($_
     }
     ?>
     </table>
-    <div class="button">
-        <p>Ajouter un article</p>
-    </div>
-    <div id="form-article">
-        <form action="" method="post">
+    <form method="post">
+        <button name="add" type="submit" <?php if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]!=="add"){echo "class='grey'";}?>>Ajouter un Article</button>
+    </form>
+    <?php
+    var_dump($_POST);
+    if(isset($_POST["add"])){
+        unset($_SESSION["article"]);
+    }
+    // affichage formulaire pour edit et ajout 
+    if(isset($_POST["edit"])||isset($_POST["add"])){
+        echo '<div id="form-article">
+        <form action="" method="post" enctype="multipart/form-data">
             <div id="part1">
                 <label for="type1"><img src="../icon/form1.jpg" alt="template d article 1" srcset=""></label>
-                <input type="radio" name="type" id="type1" value="type1" <?php if(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==="type1"){echo 'checked="checked"';} ?>>
+                <input type="radio" name="type" id="type1" value="type1" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==="type1")?'checked="checked"':'').'>
                 <label for="type2"><img src="../icon/form2.jpg" alt="template d article 2" srcset=""></label>
-                <input type="radio" name="type" id="type2" value="type2" <?php if(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==="type2"){echo 'checked="checked"';} ?>>
-                <label for="type3"><img src="../icon/form3.jpg" alt="template d article 3" srcset=""></label>
-                <input type="radio" name="type" id="type3" value="type3" <?php if(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==="type3"){echo 'checked="checked"';} ?>>
+                <input type="radio" name="type" id="type2" value="type2" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==="type2")?'checked="checked"':'') .'>
             </div>
             <div id="part2">
-                
-                <!-- form a gerer en js -->
-                <!-- type1 -->
+
+                <input type="hidden" name="id_article" value="">
+                <!-- form a gerer en js (a voir)-->
+
                 <p>
                     <label for="titre">Titre</label>
-                    <input type='text' name='user' id ='user' maxlength="80" required <?php if(isset($_SESSION["article"]["titre"])){echo "value='".$_SESSION["article"]["titre"]."'";} ?>>
+                    <input type="text" name="user" id ="user" maxlength="80" required '.($a=(isset($_SESSION["article"]["titre"]))?'value="'.$_SESSION["article"]["titre"].'"':"").'>
                 </p>
                 <p>
                     <label for="sub">Phrase d accroche</label>
                     <textarea id="sub" name="sub" rows="10" cols="33" maxlength="500" required >
-                        <?php if(isset($_SESSION["article"]["sub"])){echo $_SESSION["article"]["sub"];} ?>
+                    '.($a=(isset($_SESSION["article"]["sub"]))?$_SESSION["article"]["sub"]:"").'
                     </textarea>
                 </p>
                 <p>
                     <label for="upload">Photo</label>
                     <input type="file" name="upload" id="upload" >
-                    <label for="pic-desc">Description photo</label>
-                    <input type='text' name='pic-desc' id ='pic-desc' size='25' maxlength="80" required>
+                    <label for="pic-desc">Description photo (si il y a plusieurs photos, les descriptions sont automatiques)</label>
+                    <input type="text" name="pic-desc" id ="pic-desc" size="25" maxlength="80" required>
                 </p>
                 <p>
                     <label for="texte">Texte</label>
                     <textarea id="texte" name="texte" rows="10" cols="33" required>
-                        <?php if(isset($_SESSION["article"]["texte"])){echo $_SESSION["article"]["texte"];} ?>
+                    '.($a=(isset($_SESSION["article"]["texte"]))?$_SESSION["article"]["texte"]:"").'
                     </textarea>
                 </p>
                 <p>
                     <label for="keyword">Mots clefs (séparé par des ";")</label>
-                    <input type='text' name='keyword' id ='keyword' maxlength="100" required <?php if(isset($_SESSION["article"]["keyword"])){echo "value='".$_SESSION["article"]["keyword"]."'";} ?>>
+                    <input type="text" name="keyword" id ="keyword" maxlength="100" required '.($a=(isset($_SESSION["article"]["keyword"]))?'value="'.$_SESSION["article"]["keyword"].'"':"").'>
                 </p>
                 <p>
                     <label for="date">Date</label>
-                    <input type='text' name='date' id ='date' maxlength="20" required placeholder="Format Année-Mois-Jour" <?php if(isset($_SESSION["article"]["date"])){echo "value='".$_SESSION["article"]["date"]."'";} ?>>
+                    <input type="text" name="date" id ="date" maxlength="20" required placeholder="Format Année Mois Jour" '.($a=(isset($_SESSION["article"]["date"]))?'value="'.$_SESSION["article"]["date"].'"':"").'>
                 </p>
-                <!-- type 2 -->
+                
             </div>
             <button type="submit">Ajouter l article</button>
         </form>
-    </div>
+    </div>';
+    }
+    
+    ?>
     <script src="admin.js"></script>
 </body>
 </html>
