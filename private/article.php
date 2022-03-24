@@ -14,25 +14,6 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     session_destroy();
     header("Location: ../html/connect.php");
 }
-$bdd=bdd_connection();
-
-if(isset($_POST["delete"])){
-    $bdd->query("'delete from article where id = ".$_POST["delete"]."'");
-    $image=$bdd->query("select nom,id_media from media where article = '".$_POST["delete"]."'")->fetchAll();
-    foreach ($image as $key => $value) {
-        if(unlink("../img/".explode("|",$image[$key]["nom"])[0])){
-            $bdd->query("'delete from media where article = ".$_POST["delete"]."'");
-            echo "<script language=javascript>
-            console.log('supresion de ".explode("|",$image[$key]["nom"])[0]."');
-            </script>";
-        } else {
-            echo "<script language=javascript>
-            console.log('probleme de supresion de ".explode("|",$image[$key]["nom"])[0]."');
-            </script>";
-        }
-    }
-    echo "supr termine";
-}
 
 if(isset($_POST["edit"])){
     $_SESSION["article"]=$bdd->query("SELECT * from article where id_article = ".$_POST["edit"]."")->fetch();
@@ -115,6 +96,21 @@ if(isset($_SESSION["article"]["action"])&&isset($_POST['sub'])){
     }
 }
 
+//traitement supr
+if(isset($_POST["delete"])){
+    $supr=$bdd->query("SELECT nom from media where article = ".$_POST["delete"]."")->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($supr as $key => $value) {
+        if(unlink("../img/".explode("|",$value["nom"])[0])){
+            echo "image supprimer sur le serveur" ;
+        }
+    }   
+    if($bdd->query("DELETE from media where article = ".$_POST["delete"]."")){
+        //images supr de la bdd
+    }
+    if($bdd->query("DELETE from article where id_article = ".$_POST["delete"]."")){
+        //article supr de la bdd
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
