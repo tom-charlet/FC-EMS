@@ -48,21 +48,38 @@ if(isset($_POST["titre"])){$_SESSION["article"]["titre"]=$_POST["titre"];}
 if(isset($_POST["keyword"])){$_SESSION["article"]["keyword"]=$_POST["keyword"];}
 if(isset($_POST["sub"])){$_SESSION["article"]["sub"]=$_POST["sub"];}
 if(isset($_POST["texte"])){$_SESSION["article"]["texte"]=$_POST["texte"];}
-if(isset($_POST["date"])){$_SESSION["article"]["date"]=$_POST["date"];var_dump($_SESSION["article"]["date"]);}
+if(isset($_POST["date"])){$_SESSION["article"]["date"]=$_POST["date"];}
 if(isset($_POST["type"])){$_SESSION["article"]["type"]=$_POST["type"];}
 
 
 // traitement creation
 if(isset($_SESSION["article"]["action"])&&isset($_POST['sub'])){
         
-    $tmp=$bdd->query("select * from article where titre = '".$_SESSION["article"]["titre"]."' AND date = ".intval($_SESSION["article"]["date"])."")->fetch();
+    //$tmp=$bdd->query("select * from article where titre = '".$_SESSION["article"]["titre"]."' AND date = ".intval($_SESSION["article"]["date"])."")->fetch();
     if(empty($tmp)){
-        if($bdd->query("INSERT INTO article (`titre`, `keyword`, `sub`, `texte`, `auteur`, `date`, `type`) VALUES ('".$_SESSION["article"]["titre"]."','".$_SESSION["article"]["keyword"]."','".$_SESSION["article"]["sub"]."','".$_SESSION["article"]["texte"]."',".$rep["id_staff"].",'".$_SESSION["article"]["date"]."','".$_SESSION["article"]["type"]."')")){
-            echo '<div id="error">L article a bien ete creer</div>';
+        // if($bdd->query("INSERT INTO article (`titre`, `keyword`, `sub`, `texte`, `auteur`, `date`, `type`) VALUES ('".$_SESSION["article"]["titre"]."','".$_SESSION["article"]["keyword"]."','".$_SESSION["article"]["sub"]."','".$_SESSION["article"]["texte"]."',".$rep["id_staff"].",'".$_SESSION["article"]["date"]."','".$_SESSION["article"]["type"]."')")){
+        //     echo '<div id="error">L article a bien ete creer</div>';
+        // }
+        
+        //traitement des images (creer un tableau ou chaque index est une photo valide)
+        foreach ($_FILES["upload"]["name"] as $key => $value) {
+            if($_FILES["upload"]["error"][$key]==0&&explode("/",$_FILES["upload"]["type"][$key])[0]=="image"){
+                $photo[]=["name"=>(nom().".".explode("/",$_FILES["upload"]["type"][$key])[1]),"full_path"=>$_FILES["upload"]["full_path"][$key],"type"=>$_FILES["upload"]["type"][$key],"tmp_name"=>$_FILES["upload"]["tmp_name"][$key],"error"=>$_FILES["upload"]["error"][$key],"size"=>$_FILES["upload"]["size"][$key]];
+            }
+        }
+        var_dump($photo);
+        //ajout des photos
+        foreach ($photo as $key => $value) {
+            while(file_exists("../img/".$value["name"])){
+                $value["name"]=nom().".".explode("/",$_FILES["upload"]["type"][$key])[1]; // permet d'eviter qu'un fichier n existe pas 2 fois
+            }
+            if (move_uploaded_file($value["tmp_name"],"../img/".$value["name"])) {
+                $bdd->query("insert into media (nom, type) VALUES ('".$value["name"]."|".($a=(isset($_POST["pic-desc"])?$_POST["pic-desc"]:"photo n ".($key+1)." de l'article du ".$_SESSION["article"]["date"]))."','".explode("/",$value["type"])[0]."')");
+                echo "Le média a été ajouté dans le serveur";
+                unset($_SESSION["media"]);
+            } else {echo "<p>Probleme lors du televersement</p>";}
         }
 
-        // var_dump($_FILES["upload"]);
-        // //traitement des images
         // unset($_SESSION["article"]);
     } else {
         echo '<div id="error">Un article similaire existe deja</div>';
@@ -116,7 +133,6 @@ if(isset($_SESSION["article"]["action"])&&isset($_POST['sub'])){
         <button name="add" type="submit" <?php if(isset($_SESSION["joueur"]["action"])&&$_SESSION["joueur"]["action"]!=="add"){echo "class='grey'";}?>>Ajouter un Article</button>
     </form>
     <?php
-    var_dump($_POST);
     if(isset($_POST["add"])){
         unset($_SESSION["article"]);
     }
@@ -128,9 +144,9 @@ if(isset($_SESSION["article"]["action"])&&isset($_POST['sub'])){
         <form action="" method="post" enctype="multipart/form-data">
             <div id="part1">
                 <label for="type1"><img src="../icon/form1.jpg" alt="template d article 1" srcset=""></label>
-                <input type="radio" name="type" id="type1" value="1" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==="type1")?'checked="checked"':'').'>
+                <input type="radio" name="type" id="type1" value="1" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]===1)?'checked="checked"':'').'>
                 <label for="type2"><img src="../icon/form2.jpg" alt="template d article 2" srcset=""></label>
-                <input type="radio" name="type" id="type2" value="2" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==="type2")?'checked="checked"':'') .'>
+                <input type="radio" name="type" id="type2" value="2" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]===2)?'checked="checked"':'') .'>
             </div>
             <div id="part2">
                 './*Transimssion id pour modification*/($a=(isset($_SESSION["article"]["id_article"]))?'input type="hidden" name="id_article" value="'.$_SESSION["article"]["id_article"].'">':"").'

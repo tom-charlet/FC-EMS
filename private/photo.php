@@ -25,7 +25,7 @@ if(isset($_FILES["media"])){
 //} 
     $_FILES["media"]["name"]=str_replace("|"," ",$_FILES["media"]["name"]);
     while(file_exists("../img/".$_FILES["media"]["name"])){
-        $_FILES["media"]["name"].=1; // permet d'eviter qu'un fichier existe 2 fois
+        $_FILES["media"]["name"]=nom().".".explode("/",$_FILES["media"]["type"])[1]; // permet d'eviter qu'un fichier n existe pas 2 fois
     }
     if (move_uploaded_file($_FILES["media"]["tmp_name"],"../img/".$_FILES["media"]["name"])) {
         if($_POST["equipe"]==='null'){
