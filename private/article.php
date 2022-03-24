@@ -43,6 +43,7 @@ if(isset($_POST["edit"])){
 if(!isset($_SESSION["article"])){
     $_SESSION["article"]=[];
 }
+if(isset($_POST["id_article"])){$_SESSION["article"]["id_article"]=$_POST["id_article"];}
 if(isset($_POST["titre"])){$_SESSION["article"]["titre"]=$_POST["titre"];}
 if(isset($_POST["keyword"])){$_SESSION["article"]["keyword"]=$_POST["keyword"];}
 if(isset($_POST["sub"])){$_SESSION["article"]["sub"]=$_POST["sub"];}
@@ -135,8 +136,7 @@ if(isset($_POST["type"])&&isset($_POST["type"])&&isset($_POST["titre"])&&isset($
                 <input type="radio" name="type" id="type2" value="type2" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==="type2")?'checked="checked"':'') .'>
             </div>
             <div id="part2">
-
-                <input type="hidden" name="id_article" value="">
+                './*Transimssion id pour modification*/($a=(isset($_SESSION["article"]["id_article"]))?'input type="hidden" name="id_article" value="'.$_SESSION["article"]["id_article"].'">':"").'
                 <!-- form a gerer en js (a voir)-->
 
                 <p>
