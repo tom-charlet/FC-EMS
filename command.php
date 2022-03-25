@@ -123,19 +123,42 @@ function data_tri($tab,$cutWord){
         //echo "info : ".strip_tags($tab[$i])."";
         $test=strip_tags($tab[$i]);
         //echo $test;
-        //$cutWord="Senior";
-        
-        $coupe1=explode($cutWord,$test);
-        $coupe2=explode(" - ",$coupe1[1],4);
-        $comp=$coupe1[0];
-        $date_m=$coupe2[1]." ".substr($coupe2[2], 0, 5);
-        //var_dump($coupe2);
-        $ekp_un=substr($coupe2[2], 6, -3);
-        //$res_ekp_un=substr($coupe2[2],-2);
-        $score=substr($coupe2[2],-2)." - ".substr($coupe2[3], 0, 4);
-        $ekp_deux=substr($coupe2[3], 3, -1);
-        //echo $date_m;
-        //$res_ekp_deux=substr($coupe2[3], 0, 4);
+        if(strpos($test, "arrêté") !== false){
+            //echo "Le mot existe!";
+            $coupe1=explode($cutWord,$test);
+            $coupe2=explode(" - ",$coupe1[1],4);
+            $comp=$coupe1[0];
+            $date_m=$coupe2[1]." ".substr($coupe2[2], 0, 5);
+            $coupe3=explode("arrêté",$test);
+            $coupe4=explode(":",$coupe3[0]);
+            $ekp_un=substr($coupe4[1],3);
+            $score="arrêté";
+            $ekp_deux=$coupe3[1];
+            // echo "</br>";
+            // echo "competition :". $comp."</br>";
+            // echo "date :". $date_m."</br>";
+            // echo "equipe 1 :". $ekp_un."</br>";
+            // echo "score :".$score."</br>";
+            // echo "equipe 2 :". $ekp_deux."</br></br></br>";
+          }
+          else{
+            //echo "Le mot n'existe pas!";
+            
+            $coupe1=explode($cutWord,$test);
+            $coupe2=explode(" - ",$coupe1[1],4);
+            $comp=$coupe1[0];
+            $date_m=$coupe2[1]." ".substr($coupe2[2], 0, 5);
+            $ekp_un=substr($coupe2[2], 6, -3);
+            $score=substr($coupe2[2],-2)." - ".substr($coupe2[3], 0, 4);
+            $ekp_deux=substr($coupe2[3], 3, -1);
+            // echo "</br>";
+            // echo "competition :". $comp."</br>";
+            // echo "date :". $date_m."</br>";
+            // echo "equipe 1 :". $ekp_un."</br>";
+            // echo "score :".$score."</br>";
+            // echo "equipe 2 :". $ekp_deux."</br></br></br>";
+            
+          }
         
         //verification que le match est valide (afin d eviter que le site plante si le site FFF change)
         if(isset($comp,$date_m,$ekp_un,$ekp_deux,$score)){
