@@ -21,10 +21,20 @@ function traitement_date(string $var)
     // a finir , affichage de valeur sur article
 }
 
-function rencontre_date($str){
-    //la date s affiche sous la forme annéemoisjour jourdelasemaine heure:minute
-    $m=["janvier"=>"01","février"=>"02","mars"=>"03","avril"=>"04","mai"=>"05","juin"=>"06","juillet"=>"07","aout"=>"08","septembre"=>"09","octobre"=>"10","novembre"=>"11","décembre"=>"12"];
-    $date=explode(" ",$str)[3].$m[explode(" ",$str)[2]].explode(" ",$str)[1]." ".explode(" ",$str)[0]." ".explode(" ",$str)[4];
+function rencontre_date($str,$param='normal'){
+    $m=["janvier"=>"01","février"=>"02","mars"=>"03","avril"=>"04","mai"=>"05","juin"=>"06","juillet"=>"07","aout"=>"08","septembre"=>"09","octobre"=>"10","novembre"=>"11","décembre"=>"12",   
+    "01"=>"janvier","02"=>"février","03"=>"mars","04"=>"avril","05"=>"mai","06"=>"juin","07"=>"juillet","08"=>"aout","09"=>"septembre","10"=>"octobre","11"=>"novembre","12"=>"décembre"];
+    $date="";
+    //cas ajout
+    if($param=='normal'){
+        //la date s affiche sous la forme annéemoisjour jourdelasemaine heure:minute
+        $date=explode(" ",$str)[3].$m[explode(" ",$str)[2]].($a=(strlen(explode(" ",$str)[1])==1)?"0".explode(" ",$str)[1]:explode(" ",$str)[1])." ".explode(" ",$str)[0]." ".explode(" ",$str)[4];
+        
+    }
+    if($param=='reverse'){
+        // jourdelasemaine jour mois heure
+        $date=ucfirst(explode(" ",$str)[1])." ".substr($str,6,2)." ".$m[substr($str,4,2)]." ".explode(" ",$str)[2];
+    }
     return $date;
 }
 //pour generer des noms
@@ -163,7 +173,7 @@ function data_tri($tab,$cutWord){
         //verification que le match est valide (afin d eviter que le site plante si le site FFF change)
         if(isset($comp,$date_m,$ekp_un,$ekp_deux,$score)){
             //la var match contient une ligne pour chaque match decoupé 
-            $match[$i]=['coupe'=>$comp,'date'=>rencontre_date($date_m),'equipe1'=>$ekp_un,'equipe2'=>$ekp_deux,'score'=>$score];
+            $match[$i]=['coupe'=>trim($comp),'date'=>rencontre_date($date_m),'equipe1'=>trim($ekp_un),'equipe2'=>trim($ekp_deux),'score'=>trim($score)];
         }
     }
     return $match;

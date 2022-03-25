@@ -26,9 +26,14 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     <title>Convocation</title>
 </head>
 <body>
-    <button name="action" type="submit" value="add" <?php if(isset($_SESSION["convocation"]["action"])&&$_SESSION["convocation"]["action"]!=="add"){echo "class='grey'";}?>>Ajouter une convocation</button>
-    <button name="action" type="submit" value="del" <?php if(isset($_SESSION["convocation"]["action"])&&$_SESSION["convocation"]["action"]!=="del"){echo "class='grey'";}?>>Supr une convocation</button>
-    <?php 
+    <form id='for' method='post'>
+        <?php 
+        if(isset($_POST["action"])){$_SESSION["convocation"]["action"]=$_POST["action"];}
+        ?>
+        <button name="action" type="submit" value="add" <?php if(isset($_SESSION["convocation"]["action"])&&$_SESSION["convocation"]["action"]!=="add"){echo "class='grey'";}?>>Ajouter une convocation</button>
+        <button name="action" type="submit" value="del" <?php if(isset($_SESSION["convocation"]["action"])&&$_SESSION["convocation"]["action"]!=="del"){echo "class='grey'";}?>>Supr une convocation</button>    
+    </form>
+    <?php
     if(isset($_POST["id_categorie"])){$_SESSION["convocation"]["id_categorie"]=$_POST["id_categorie"];}
     //affichage des categorie
     $cat=$bdd->query("SELECT id,equipe,categorie from categorie")->fetchAll(PDO::FETCH_ASSOC);
@@ -45,21 +50,41 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
             </form>';
     }
 
+    if(isset($_POST["equipe"])){$_SESSION["convocation"]["equipe"]=$_POST["equipe"];}
+    //affichage de tout les joueurs dispo pour ajout / supr
+    if(isset($_SESSION["convocation"]["id_categorie"])&&isset($_SESSION["convocation"]["equipe"])){
+        // cas ajout
+        if($_SESSION["convocation"]["action"]==="add"){
 
-    // if(isset($_POST["equipe"])){
-    //     //$team=$bdd->query("select equipe from categorie where")->fetch();
-    //     $date=$bdd->query("");
-    //     $joueur=$bdd->query("select categorie.id,joueur.id_joueur,joueur.nom,joueur.prenom from (convocation inner join joueur on convocation.joueur = joueur.id_joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
-    //     foreach ($joueur as $key => $value) {
-    //         echo '<div class="player">
-    //         <form action="" method="POST">
-    //             <input id="team" name="team" type="hidden" value="'.$joueur[$key]["id"].'">
-    //             <input type="hidden" name="joueur" value="'.$joueur[$key]["id_joueur"].'">
-    //             <input type="submit" value="'.strtoupper($joueur[$key]["nom"]).' '.ucfirst($joueur[$key]["prenom"]).'">
-    //         </form>
-    //     </div>';
-    //     }   
-    // }
+        }
+        //$team=$bdd->query("select equipe from categorie where")->fetch();
+        $match=$bdd->query("SELECT id_rencontre,`date`,equipe_int,equipe_ext from rencontre where score ='-' AND categorie=".$_SESSION["convocation"]["id_categorie"]." ORDER BY `date` DESC")->fetchAll(PDO::FETCH_ASSOC);
+        $option='';
+        foreach ($match as $key => $value) {
+            //mise en avant des types (uniquement pour la modification)
+            if(isset($_SESSION["rencontre"]["match"])&&$value["id_rencontre"]==$_SESSION["rencontre"]["match"]){
+                $option = '<option value='.$value["id_rencontre"].'>'.ucfirst($value).'</option>'.$option;
+            } else{
+                $option .= '<option value='.$value["id_rencontre"].'>'.rencontre_date($value['date'],'reverse').'</option>';
+            }
+        }
+        $joueur=$bdd->query("SELECT * from joueur where equipe =".$_SESSION["convocation"]["equipe"]."")->fetchAll(PDO::FETCH_ASSOC);
+        
+        echo '
+        <div class="player">
+            <form action="" method="POST">
+                <div> 
+                    <select name="match" id="match">'.$option.'</select>
+                </div>
+                <div> ';
+        foreach ($joueur as $key => $value) {
+        echo'<button type="submit" name="id_joueur" value="'.$value["id_joueur"].'">"'.strtoupper($joueur[$key]["nom"]).' '.ucfirst($joueur[$key]["prenom"]).'"</button>';
+                }
+            echo'</div>
+            </form>
+        </div>';
+          
+    }
     ?>
 </body>
 </html>
