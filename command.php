@@ -20,6 +20,13 @@ function traitement_date(string $var)
 {
     // a finir , affichage de valeur sur article
 }
+
+function rencontre_date($str){
+    //la date s affiche sous la forme annéemoisjour jourdelasemaine heure:minute
+    $m=["janvier"=>"01","février"=>"02","mars"=>"03","avril"=>"04","mai"=>"05","juin"=>"06","juillet"=>"07","aout"=>"08","septembre"=>"09","octobre"=>"10","novembre"=>"11","décembre"=>"12"];
+    $date=explode(" ",$str)[3].$m[explode(" ",$str)[2]].explode(" ",$str)[1]." ".explode(" ",$str)[0]." ".explode(" ",$str)[4];
+    return $date;
+}
 //pour generer des noms
 function nom(){
     $long=rand(15,25);
@@ -89,10 +96,11 @@ function traitement_match($nomEquipe,$lien){
     $tab=$matches[1];
     
     $match=data_tri($tab,$nom_eqp);
-    //echo var_dump($matches)."<br>".var_dump($match);
-    //insertion_Match($match,$nomEquipe);
+    // echo "<br>".var_dump($match);
+    insertion_Match($match,$nomEquipe);
     
-    }
+}
+
 function scraper ($url) {
     //permet de récupérer le contenu d'une page
     // User Agent
@@ -108,12 +116,13 @@ function scraper ($url) {
     curl_close ( $ch );
     return $result;
 }
+
 function data_tri($tab,$cutWord){
     $match=[];
     for ($i = 0; $i < count($tab); $i++) {
         //echo "info : ".strip_tags($tab[$i])."";
         $test=strip_tags($tab[$i]);
-        echo $test;
+        //echo $test;
         //$cutWord="Senior";
         
         $coupe1=explode($cutWord,$test);
@@ -125,26 +134,17 @@ function data_tri($tab,$cutWord){
         //$res_ekp_un=substr($coupe2[2],-2);
         $score=substr($coupe2[2],-2)." - ".substr($coupe2[3], 0, 4);
         $ekp_deux=substr($coupe2[3], 3, -1);
+        //echo $date_m;
         //$res_ekp_deux=substr($coupe2[3], 0, 4);
-        echo "</br>";
-        //var_dump($coupe2);
-        echo "competition :". $comp."</br>";
-        echo "date :". $date_m."</br>";
-        echo "equipe 1 :". $ekp_un."</br>";
-        //echo "score ekp 1 :". $res_ekp_un."</br>";
-        echo "score :".$score."</br>";
-        echo "equipe 2 :". $ekp_deux."</br></br></br>";
-        /*echo "</br>";
-        //var_dump($coupe2);
-        echo "competition :". $comp."</br>";echo "date :". $date_m."</br>";echo "equipe 1 :". $ekp_un."</br>";echo "score ekp 1 :". $res_ekp_un."</br>";echo "score :".$score."</br>";echo "equipe 2 :". $ekp_deux."</br></br></br>";echo "score ekp 2 :". $res_ekp_deux."</br></br></br>";
-        */
-        //la var match contient une ligne pour chaque match decoupé 
-        $match[$i]=['coupe'=>$comp,'date'=>$date_m,'equipe1'=>$ekp_un,'equipe2'=>$ekp_deux,'score'=>$score];
+        
+        //verification que le match est valide (afin d eviter que le site plante si le site FFF change)
+        if(isset($comp,$date_m,$ekp_un,$ekp_deux,$score)){
+            //la var match contient une ligne pour chaque match decoupé 
+            $match[$i]=['coupe'=>$comp,'date'=>rencontre_date($date_m),'equipe1'=>$ekp_un,'equipe2'=>$ekp_deux,'score'=>$score];
+        }
     }
     return $match;
 }
-
-
 
 function insertion_Match(array $match,int $cat){
     $bdd=bdd_connection();
@@ -155,7 +155,7 @@ function insertion_Match(array $match,int $cat){
         $id=$bdd->query("SELECT * from rencontre where categorie = ".$cat." AND nom = '".$value["coupe"]."' AND equipe_int = '".$value["equipe1"]."' AND equipe_ext = '".$value["equipe2"]."' AND date LIKE '".substr($value["date"],0,6)."%'")->fetch();
         if(empty($id)){
             //Ajout de match 
-            if($bdd->query("INSERT INTO rencontre (categorie,nom,`date`,equipe_int,equipe_ext,score) VALUES (".$cat.",'".$value["coupe"]."',".$value["date"].",'".$value["equipe1"]."','".$value["equipe2"]."','".$value["score"]."')")){
+            if($bdd->query("INSERT INTO rencontre (categorie,nom,`date`,equipe_int,equipe_ext,score) VALUES (".$cat.",'".$value["coupe"]."','".$value["date"]."','".$value["equipe1"]."','".$value["equipe2"]."','".$value["score"]."')")){
                 //match ajouté
             }
             //mise a jour du score si celui ci est null (egal a "-") OU qu il faut le mettre a jour         A voir pour match reporté
@@ -163,7 +163,7 @@ function insertion_Match(array $match,int $cat){
             //mise a jour du score
             if($bdd->query("UPDATE rencontre SET score = '".$value["score"]."',date = ".$value["date"]."")){
             //score update
-        } 
+            } 
         //test pour voir si on est remonté assez loin pour arreter d update (test de date , equipeS categorie et score)
         } else if(!empty($id)&&$id["date"]===$value["date"]&&$id["equipe_int"]===$value["equipe1"]&&$id["equipe_ext"]===$value["equipe2"]){
             //le match existe donc 
