@@ -60,7 +60,6 @@ function get_rank(string $rank="entraineur"){
 function update_Match(){
     $bdd=bdd_connection();
     $equipe=$bdd->query("SELECT id,lien from categorie ")->fetchAll(PDO::FETCH_ASSOC);
-    var_dump($equipe);
     foreach ($equipe as $key => $value) {
         traitement_match($value["id"],$value["lien"]);
     }
@@ -74,7 +73,6 @@ function traitement_match($nomEquipe,$lien){
     $url=explode("|",$lien)[0];
     $nom_eqp=explode("|",$lien)[1];
     //appel des fonctions + renvoye bdd
-
 
    
     // A Changer 
@@ -113,10 +111,10 @@ function scraper ($url) {
 function data_tri($tab,$cutWord){
     $match=[];
     for ($i = 0; $i < count($tab); $i++) {
-        echo "info : ".strip_tags($tab[$i])."";
+        //echo "info : ".strip_tags($tab[$i])."";
         $test=strip_tags($tab[$i]);
-        //echo $test;
-        $cutWord="Senior";
+        echo $test;
+        //$cutWord="Senior";
         
         $coupe1=explode($cutWord,$test);
         $coupe2=explode(" - ",$coupe1[1],4);
@@ -128,7 +126,14 @@ function data_tri($tab,$cutWord){
         $score=substr($coupe2[2],-2)." - ".substr($coupe2[3], 0, 4);
         $ekp_deux=substr($coupe2[3], 3, -1);
         //$res_ekp_deux=substr($coupe2[3], 0, 4);
-        
+        echo "</br>";
+        //var_dump($coupe2);
+        echo "competition :". $comp."</br>";
+        echo "date :". $date_m."</br>";
+        echo "equipe 1 :". $ekp_un."</br>";
+        //echo "score ekp 1 :". $res_ekp_un."</br>";
+        echo "score :".$score."</br>";
+        echo "equipe 2 :". $ekp_deux."</br></br></br>";
         /*echo "</br>";
         //var_dump($coupe2);
         echo "competition :". $comp."</br>";echo "date :". $date_m."</br>";echo "equipe 1 :". $ekp_un."</br>";echo "score ekp 1 :". $res_ekp_un."</br>";echo "score :".$score."</br>";echo "equipe 2 :". $ekp_deux."</br></br></br>";echo "score ekp 2 :". $res_ekp_deux."</br></br></br>";
