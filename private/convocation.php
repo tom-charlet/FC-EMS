@@ -15,6 +15,12 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     header("Location: ../html/connect.php");
 }
 
+//traitement ajout
+if(isset($_POST['id_joueur'])&&$_SESSION["convocation"]["action"]==="add"){
+    if($bdd->query("INSERT into convocation (joueur,categorie,id_rencontre) VALUES (".$_POST['id_joueur'].",".$_SESSION["convocation"]["id_categorie"].",".$_POST["match"].")")){
+        //convocation ajoutée
+    }
+}
 
 ?>
 <!DOCTYPE html>
