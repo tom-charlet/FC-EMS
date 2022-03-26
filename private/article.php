@@ -37,14 +37,14 @@ if(isset($_POST["type"])){$_SESSION["article"]["type"]=$_POST["type"];}
 if(isset($_SESSION["article"]["action"])&&isset($_POST['sub'])){
     // cas ajout
     if($_SESSION["article"]["action"]==="add"){
-        $tmp=$bdd->query("select * from article where titre = '".$_SESSION["article"]["titre"]."' AND date = ".intval($_SESSION["article"]["date"])."")->fetch();
+        $tmp=$bdd->query("select * from article where titre = '".$_SESSION["article"]["titre"]."'")->fetch();
         if(empty($tmp)){
             if($bdd->query("INSERT INTO article (`titre`, `keyword`, `sub`, `texte`, `auteur`, `date`, `type`) VALUES ('".$_SESSION["article"]["titre"]."','".$_SESSION["article"]["keyword"]."','".$_SESSION["article"]["sub"]."','".$_SESSION["article"]["texte"]."',".$rep["id_staff"].",'".$_SESSION["article"]["date"]."','".$_SESSION["article"]["type"]."')")){
                 echo '<div id="error">L article a bien ete creer</div>';
             }
             // unset($_SESSION["article"]);
         } else {
-            echo '<div id="error">Un article similaire existe deja</div>';
+            echo '<div id="error">Un article avec le meme nom existe deja</div>';
         }
     } else if($_SESSION["article"]["action"]==="mod"&&isset($_POST["id_article"])){
         if($bdd->query("UPDATE article SET `titre` = '".$_SESSION["article"]["titre"]."', `keyword`= '".$_SESSION["article"]["keyword"]."', `sub`= '".$_SESSION["article"]["sub"]."', `auteur`= ".$rep["id_staff"].", `date`= '".$_SESSION["article"]["date"]."' , `type`= '".$_SESSION["article"]["type"]."' where id_article = ".$_POST["id_article"]."")){
