@@ -74,7 +74,7 @@ if(isset($_POST['id_joueur'])&&$_SESSION["convocation"]["action"]==="add"){
                 $option .= '<option value='.$value["id_rencontre"].'>'.rencontre_date($value['date'],'reverse').'</option>';
             }
         }
-        $joueur=$bdd->query("SELECT * from joueur where equipe =".$_SESSION["convocation"]["equipe"]."")->fetchAll(PDO::FETCH_ASSOC);
+        $joueur=$bdd->query("SELECT * from joueur LEFT JOIN convocation ON joueur.id_joueur = convocation.joueur where joueur.equipe =".$_SESSION["convocation"]["equipe"]." AND convocation.id_convocation IS NULL ")->fetchAll(PDO::FETCH_ASSOC);
         
         echo '
         <div class="player">
