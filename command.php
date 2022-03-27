@@ -137,7 +137,7 @@ function traitement_match($nomEquipe,$lien){
 /*********************************/
 function html_date($date)
 {
-    $date;
+    $date=substr($date,6,2)."/".substr($date,4,2)."/".substr($date,0,4);
     return $date;
 }
 

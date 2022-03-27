@@ -1,7 +1,13 @@
 <?php 
 include "../command.php";
 $bdd=bdd_connection();
-var_dump(__FILE__);
+//les 2 lignes permettent de recup le nom du fichier
+$url=explode("/",$_SERVER["PHP_SELF"]);
+$url=explode(".", end($url))[0];
+
+//un article = nom-de-l-article
+$content=$bdd->query("SELECT * from article LEFT JOIN staff ON article.auteur = staff.id_staff Where article.titre='".str_replace("-"," ",$url)."'")->fetch();
+$image=$bdd->query("SELECT * from article INNER JOIN media on where article.id_article=media.article where article.titre='".str_replace("-"," ",$url)."' ")->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -17,7 +23,7 @@ var_dump(__FILE__);
         rel="stylesheet">
     <link rel="stylesheet" media="screen" href="../css/style.css">
     <link rel="stylesheet" media="screen" href="../css/media-queries.css">
-    <title>FC EMS - Nom Actualité</title> <!-- Modifier nom article en back -->
+    <title>Article <?php echo $content["titre"] ?></title>
 </head>
 
 <body>
@@ -36,32 +42,16 @@ var_dump(__FILE__);
 
             <article class="article-container">
                 <div class="article-full-img">
-                    <img class="img-cover" src="../img/img-test-foot.jpg" alt="Image d'article">
+                    <img class="img-cover" src="../img/<?php echo explode("|",$image["nom"])[0] ?>" alt="<?php echo explode("|",$image["nom"])[1] ?>">
                 </div>
                 <div class="article-content">
                     <div class="article-entete">
                         <h3>Résumé de l'article</h3>
-                        <p>Date article / Auteur</p>
+                        <p>Le <?php echo html_date($content["date"]) ?> par <?php echo $content["prenom"] ?></p>
                     </div>
                     <div class="article-text">
                         <p>
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. In consequuntur ab perferendis
-                            necessitatibus itaque nam aut similique enim esse nobis. Illum, minima fugiat reiciendis
-                            commodi alias omnis non eum ipsum. Nemo doloremque rerum sequi officiis ullam neque eligendi
-                            earum, quia dicta officia ut molestiae possimus, voluptatum praesentium dignissimos dolores
-                            culpa expedita itaque nisi. Quos, est eligendi sunt quae assumenda esse voluptatum, cum
-                            suscipit hic ut mollitia pariatur inventore nostrum fugiat, vero ipsum temporibus. Nam
-                            dolorum, mollitia provident, culpa, id maiores quas reprehenderit nostrum earum labore ut
-                            reiciendis corrupti voluptatem sed iusto quis expedita necessitatibus in. Animi repellendus
-                            dolores illum numquam, totam excepturi similique molestiae labore iusto voluptatibus veniam
-                            laborum, est necessitatibus dolorem aliquam natus. Deserunt sapiente sit pariatur adipisci
-                            modi ipsum deleniti excepturi explicabo natus magni consectetur perspiciatis velit amet
-                            facilis vero laboriosam, obcaecati suscipit nam quisquam provident totam id eos ipsa? Quos
-                            at inventore maxime voluptas culpa minima delectus sequi optio, officia, fugiat animi
-                            reprehenderit quod. Ipsa vel, deleniti magnam aperiam placeat mollitia accusamus repellendus
-                            nam pariatur doloribus tempore ad labore eveniet commodi cumque, error inventore aut minus
-                            in! Libero quo amet illo molestiae? Quaerat tempore aliquid explicabo, voluptate nostrum
-                            obcaecati vitae porro sit minima amet magni quisquam similique.
+                            <?php echo $content["date"] ?>
                         </p>
                     </div>
                 </div>
