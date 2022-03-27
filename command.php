@@ -16,10 +16,6 @@ function bdd_connection(string $user="root",string $pass=""){
     return $dbh;
 }
 
-function traitement_date(string $var)
-{
-    // a finir , affichage de valeur sur article
-}
 //pour generer des noms
 function nom(){
     $long=rand(15,25);
@@ -139,6 +135,11 @@ function traitement_match($nomEquipe,$lien){
 // PARTIE PAGE HTML
 
 /*********************************/
+function html_date($date)
+{
+    $date;
+    return $date;
+}
 
 function html_header(){
     echo'
