@@ -1,4 +1,14 @@
 <?php 
+
+// 
+// 
+// Code a finir
+// 
+// 
+// 
+
+
+// test de validitée de connection
 session_start();
 if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SESSION["token"]["pass"]))&&(isset($_SESSION["token"]["name"]))){
     include "../command.php";
@@ -15,19 +25,12 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     header("Location: ../html/connect.php");
 }
 
-//traitement ajout
-if(isset($_POST['id_joueur'])&&$_SESSION["convocation"]["action"]==="add"){
-    if($bdd->query("INSERT into convocation (joueur,categorie,id_rencontre) VALUES (".$_POST['id_joueur'].",".$_SESSION["convocation"]["id_categorie"].",".$_POST["match"].")")){
-        //convocation ajoutée
-    }
+
+if(isset($_POST["joueur"])){
+    $joueur=$bdd->query("select joueur.id_joueur from (convocation inner join joueur on convocation.joueur = joueur.id_joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
+    $insert=$bdd->query("INSERT INTO `convocation`(`joueur`, `categorie`, `date`) VALUES ('".$joueur["id_joueur"]."','".$_POST["team"]."','[value-4]')");
 }
 
-//traitement supr
-if(isset($_POST['id_joueur'])&&$_SESSION["convocation"]["action"]==="del"){
-    if($bdd->query("DELETE from convocation where joueur =".$_POST['id_joueur']."")){
-        //convocation supr
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,73 +38,37 @@ if(isset($_POST['id_joueur'])&&$_SESSION["convocation"]["action"]==="del"){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convocation</title>
+    <title>Document</title>
 </head>
 <body>
-    <form id='for' method='post'>
-        <?php 
-        if(isset($_POST["action"])){$_SESSION["convocation"]["action"]=$_POST["action"];}
-        ?>
-        <button name="action" type="submit" value="add" <?php if(isset($_SESSION["convocation"]["action"])&&$_SESSION["convocation"]["action"]!=="add"){echo "class='grey'";}?>>Ajouter une convocation</button>
-        <button name="action" type="submit" value="del" <?php if(isset($_SESSION["convocation"]["action"])&&$_SESSION["convocation"]["action"]!=="del"){echo "class='grey'";}?>>Supr une convocation</button>    
-    </form>
-    <?php
-    if(isset($_POST["id_categorie"])){$_SESSION["convocation"]["id_categorie"]=$_POST["id_categorie"];}
-    //affichage des categorie
-    $cat=$bdd->query("SELECT id,equipe,categorie from categorie")->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($cat as $key => $value) {
-        if (isset($_SESSION["convocation"]["id_categorie"])&&$value["id"]==$_SESSION["convocation"]["id_categorie"]) {
-            $select=" class='selected'";
-        } else {
-            $select="";
-        }
-        echo '
-            <form method="POST">
-                <input type="hidden" name="equipe" value="'.$value["equipe"].'">
-                <button type="submit" name="id_categorie" value="'.$value["id"].'" '.$select.'>"'.$value["categorie"].'"</button>
-            </form>';
-    }
-
-    if(isset($_POST["equipe"])){$_SESSION["convocation"]["equipe"]=$_POST["equipe"];}
-    //affichage de tout les joueurs dispo pour ajout / supr
-    if(isset($_SESSION["convocation"]["id_categorie"])&&isset($_SESSION["convocation"]["equipe"])){
-        // cas ajout
-        if($_SESSION["convocation"]["action"]==="add"){
-            $selector='AND convocation.id_convocation IS NULL ';
-            $join='LEFT';
-        }else{
-            $selector='';
-            $join='INNER';
-        }
-        //$team=$bdd->query("select equipe from categorie where")->fetch();
-        $match=$bdd->query("SELECT id_rencontre,`date`,equipe_int,equipe_ext from rencontre where score ='-' AND categorie=".$_SESSION["convocation"]["id_categorie"]." ORDER BY `date` DESC")->fetchAll(PDO::FETCH_ASSOC);
-        $option='';
-        foreach ($match as $key => $value) {
-
-            //A FINIR
-            //mise en avant des match (uniquement pour la modification)
-            if(isset($_SESSION["rencontre"]["match"])&&$value["id_rencontre"]==$_SESSION["rencontre"]["match"]){
-                $option = '<option value='.$value["id_rencontre"].'>'.rencontre_date($value['date'],'reverse').'</option>'.$option;
-            } else{
-                $option .= '<option value='.$value["id_rencontre"].'>'.rencontre_date($value['date'],'reverse').'</option>';
+    <?php 
+        $team=$bdd->query("select equipe.nom,categorie.categorie from categorie INNER JOIN equipe on equipe.id_equipe = categorie.equipe ")->fetchAll();
+        foreach ($team as $key => $value) {
+            if (isset($_POST["equipe"])&&$team[$key]===$_POST["equipe"]) {
+                $select="selected";
+            } else {
+                $select="";
             }
+            echo '<div class="button '.$select.'">
+            <form action="" method="POST">
+                <input type="hidden" name="equipe" value="'.$team[$key]["categorie"].'">
+                <input type="submit" value="'.$team[$key]["categorie"].'">
+            </form>
+        </div>';
         }
-        $joueur=$bdd->query("SELECT * from joueur $join JOIN convocation ON joueur.id_joueur = convocation.joueur where joueur.equipe =".$_SESSION["convocation"]["equipe"]." $selector ")->fetchAll(PDO::FETCH_ASSOC);
-        if(!empty($joueur)){
-            echo '
-            <div class="player">
-                <form action="" method="POST">
-                    <div> 
-                        <select name="match" id="match">'.$option.'</select>
-                    </div>
-                    <div> ';
+        if(isset($_POST["equipe"])){
+            //$team=$bdd->query("select equipe from categorie where")->fetch();
+            $date=$bdd->query("");
+            $joueur=$bdd->query("select categorie.id,joueur.id_joueur,joueur.nom,joueur.prenom from (convocation inner join joueur on convocation.joueur = joueur.id_joueur) Inner join categorie on categorie.id = convocation.categorie where categorie.categorie = ".$_POST["equipe"]."")->fetchAll();
             foreach ($joueur as $key => $value) {
-            echo'<button type="submit" name="id_joueur" value="'.$value["id_joueur"].'">"'.strtoupper($joueur[$key]["nom"]).' '.ucfirst($joueur[$key]["prenom"]).'"</button>';
-                    }
-                echo'</div>
+                echo '<div class="player">
+                <form action="" method="POST">
+                    <input id="team" name="team" type="hidden" value="'.$joueur[$key]["id"].'">
+                    <input type="hidden" name="joueur" value="'.$joueur[$key]["id_joueur"].'">
+                    <input type="submit" value="'.strtoupper($joueur[$key]["nom"]).' '.ucfirst($joueur[$key]["prenom"]).'">
                 </form>
             </div>';
-        }      
+        }
     }
     ?>
 </body>
