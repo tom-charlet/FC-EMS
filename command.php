@@ -299,4 +299,70 @@ function html_header(){
     </header>
     ';
 }
+
+function html_footer()
+{
+    echo"
+    <footer>
+        <div class='footer-container'>
+            <div class='footer-top'>
+                <div class='logo-team-s'>
+                    <img class='img-contain' src='../img/logo-ems.png' alt='logo : football club eure madrie seine'>
+                </div>
+                <h3>Football club eure madrie seine</h3>
+            </div>
+            <nav class='footer-nav'>
+                <ul>
+                    <li><a href='home.html'>Accueil</a></li>
+                    <li><a href='actualite.html'>Actualité</a></li>
+                    <li><a href='resultats.html'>Résultats</a></li>
+                    <li><a href='convocation.html'>Convocations</a></li>
+                </ul>
+                <ul>
+                    <li><a href='histoire.html'>Histoire</a></li>
+                    <li><a href='palmares.html'>Palmarès</a></li>
+                    <li><a href='galerie.html'>Galerie</a></li>
+                    <li><a href='organigramme.html'>Organigramme</a></li>
+                </ul>
+                <ul>
+                    <li><a href='partenaire.html'>Partenaires</a></li>
+                    <li><a href='#'>Boutique</a></li>
+                    <li><a href='#'>Contact</a></li>
+                    <li><a href='#'>Se connecter</a></li>
+                </ul>
+                <ul>
+                    <li>
+                        <a href='#'>
+                            <div class='icon-s'>
+                                <img class='img-contain' src='../img/accueil.svg' title='instagram'
+                                    alt='lien vers l'instagram du club'>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='#'>
+                            <div class='icon-s'>
+                                <img class='img-contain' src='../img/accueil.svg' title='facebook'
+                                    alt='lien vers le facebook du club'>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='#'>
+                            <div class='icon-s'>
+                                <img class='img-contain' src='../img/accueil.svg' title='email'
+                                    alt='lien vers le mail du club'>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class='footer-legal'>
+                <span>@ 2022 EMS</span>
+                <a href='#'>mentions légales</a>
+            </div>
+        </div>
+    </footer>
+    ";
+}
 ?>
