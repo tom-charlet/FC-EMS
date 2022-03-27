@@ -1,13 +1,13 @@
 <?php 
 include "../command.php";
 $bdd=bdd_connection();
-//les 2 lignes permettent de recup le nom du fichier
-$url=explode("/",$_SERVER["PHP_SELF"]);
-$url=explode(".", end($url))[0];
-
+// //les 2 lignes permettent de recup le nom du fichier
+// $url=explode("/",$_SERVER["PHP_SELF"]);
+//$url=explode(".", end($url))[0];
+$url="machin";
 //un article = nom-de-l-article
 $content=$bdd->query("SELECT * from article LEFT JOIN staff ON article.auteur = staff.id_staff Where article.titre='".str_replace("-"," ",$url)."'")->fetch();
-$image=$bdd->query("SELECT * from article INNER JOIN media on where article.id_article=media.article where article.titre='".str_replace("-"," ",$url)."' ")->fetch();
+$image=$bdd->query("SELECT * from article INNER JOIN media ON article.id_article=media.article where article.titre='".str_replace("-"," ",$url)."' ")->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -42,7 +42,7 @@ $image=$bdd->query("SELECT * from article INNER JOIN media on where article.id_a
 
             <article class="article-container">
                 <div class="article-full-img">
-                    <img class="img-cover" src="../img/<?php echo explode("|",$image["nom"])[0] ?>" alt="<?php echo explode("|",$image["nom"])[1] ?>">
+                    <img class="img-cover" src="<?php /*test si il n y a pas de photo*/ if(isset($image["nom"])){echo "../img/".explode("|",$image["nom"])[0];}/*else{echo "../assets/placeholder.png";}*/ ?>" alt="<?php echo explode("|",$image["nom"])[1] ?>">
                 </div>
                 <div class="article-content">
                     <div class="article-entete">
@@ -51,7 +51,7 @@ $image=$bdd->query("SELECT * from article INNER JOIN media on where article.id_a
                     </div>
                     <div class="article-text">
                         <p>
-                            <?php echo $content["date"] ?>
+                            <?php echo $content["texte"] ?>
                         </p>
                     </div>
                 </div>
