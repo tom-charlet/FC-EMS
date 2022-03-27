@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 25 mars 2022 à 14:50
--- Version du serveur : 10.4.22-MariaDB
--- Version de PHP : 8.1.2
+-- Généré le : mar. 22 mars 2022 à 17:43
+-- Version du serveur : 10.4.21-MariaDB
+-- Version de PHP : 8.0.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,8 +34,8 @@ CREATE TABLE `article` (
   `sub` varchar(500) NOT NULL,
   `texte` text NOT NULL,
   `auteur` int(10) UNSIGNED NOT NULL,
-  `date` varchar(14) NOT NULL,
-  `type` tinyint(2) UNSIGNED NOT NULL DEFAULT 2
+  `date` varchar(20) NOT NULL,
+  `type` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -43,8 +43,7 @@ CREATE TABLE `article` (
 --
 
 INSERT INTO `article` (`id_article`, `titre`, `keyword`, `sub`, `texte`, `auteur`, `date`, `type`) VALUES
-(1, 'Article victoire senior', 'senior;victoire', 'SISI ipsum dolor sit amet. Et assumenda illo ut rerum dolorem non sunt impedit ut amet expedita vel ipsam ratione! Aut voluptatem ipsam sit dolorum consequatur eos fugiat exercitationem qui modi dolorem.', 'Lorem ipsum dolor sit amet. Et assumenda illo ut rerum dolorem non sunt impedit ut amet expedita vel ipsam ratione! Aut voluptatem ipsam sit dolorum consequatur eos fugiat exercitationem qui modi dolorem. Cum omnis amet id incidunt sint est totam dignissimos ut dolores nihil est voluptatem recusandae in unde odit.\r\n\r\nEa galisum vero aut officiis enim ad deleniti voluptates nam quas itaque ad Quis incidunt. Est nihil harum quo rerum enim qui ipsam velit eum recusandae sint ab autem temporibus et temporibus amet. Et voluptas alias et omnis nemo hic ipsum rerum non provident nulla.\r\n\r\nEst rerum accusantium et perspiciatis quisquam hic iste necessitatibus est velit galisum ea nesciunt inventore in officia laborum aut dolor nisi? Eum quasi quam non aspernatur voluptas qui commodi excepturi non aspernatur maxime et tenetur veritatis eos ducimus consequatur. Eum sunt corporis est ducimus voluptate sed aliquam illum sit vero molestias et quos asperiores quo neque vitae. In quaerat sint eum deleniti saepe sed dicta neque 33 quod veritatis eos fuga nihil?', 1, '20220130', 1),
-(2, 'machin', 'dsqdqsd;dsqsqds;sdsqd', 'sqdqsdq', 'dzqdqsdqdzd', 1, '20220324', 2);
+(1, 'Article victoire senior', 'senior;victoire', 'Lorem ipsum dolor sit amet. Et assumenda illo ut rerum dolorem non sunt impedit ut amet expedita vel ipsam ratione! Aut voluptatem ipsam sit dolorum consequatur eos fugiat exercitationem qui modi dolorem.', 'Lorem ipsum dolor sit amet. Et assumenda illo ut rerum dolorem non sunt impedit ut amet expedita vel ipsam ratione! Aut voluptatem ipsam sit dolorum consequatur eos fugiat exercitationem qui modi dolorem. Cum omnis amet id incidunt sint est totam dignissimos ut dolores nihil est voluptatem recusandae in unde odit.\r\n\r\nEa galisum vero aut officiis enim ad deleniti voluptates nam quas itaque ad Quis incidunt. Est nihil harum quo rerum enim qui ipsam velit eum recusandae sint ab autem temporibus et temporibus amet. Et voluptas alias et omnis nemo hic ipsum rerum non provident nulla.\r\n\r\nEst rerum accusantium et perspiciatis quisquam hic iste necessitatibus est velit galisum ea nesciunt inventore in officia laborum aut dolor nisi? Eum quasi quam non aspernatur voluptas qui commodi excepturi non aspernatur maxime et tenetur veritatis eos ducimus consequatur. Eum sunt corporis est ducimus voluptate sed aliquam illum sit vero molestias et quos asperiores quo neque vitae. In quaerat sint eum deleniti saepe sed dicta neque 33 quod veritatis eos fuga nihil?', 1, '20220130', 'type1');
 
 -- --------------------------------------------------------
 
@@ -65,8 +64,9 @@ CREATE TABLE `categorie` (
 --
 
 INSERT INTO `categorie` (`id`, `equipe`, `categorie`, `lien`, `photo`) VALUES
-(4, 1, 'U13 B', 'https://www.fff.fr/competition/club/552519-f-c-eure-madrie-seine/equipe/2021121182U138/resultats-et-calendrier.html|U13 - U12 2', NULL),
-(6, 3, 'U15 A', 'https://www.fff.fr/competition/club/552519-f-c-eure-madrie-seine/equipe/2021121182U155/resultats-et-calendrier.html|U15 - U14', NULL);
+(4, 1, 'U13 B', '', NULL),
+(6, 3, 'U15 A', '', NULL),
+(7, 3, 'U15 B', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -171,7 +171,7 @@ CREATE TABLE `rencontre` (
   `date` varchar(40) NOT NULL,
   `equipe_int` varchar(100) NOT NULL,
   `equipe_ext` varchar(100) NOT NULL,
-  `score` varchar(12) DEFAULT NULL
+  `score` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -329,7 +329,7 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT pour la table `article`
 --
 ALTER TABLE `article`
-  MODIFY `id_article` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_article` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `categorie`
@@ -359,7 +359,7 @@ ALTER TABLE `joueur`
 -- AUTO_INCREMENT pour la table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id_media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pour la table `palmares`
@@ -371,7 +371,7 @@ ALTER TABLE `palmares`
 -- AUTO_INCREMENT pour la table `rencontre`
 --
 ALTER TABLE `rencontre`
-  MODIFY `id_rencontre` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `id_rencontre` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `settings`
