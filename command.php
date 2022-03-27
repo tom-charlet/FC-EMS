@@ -208,7 +208,7 @@ function insertion_Match(array $match,int $cat){
         }
     }
 }
-}
+
 
 /*********************************/
 
@@ -373,5 +373,5 @@ function html_header(){
         </nav>
     </header>
     ';
-
+}
 ?>
