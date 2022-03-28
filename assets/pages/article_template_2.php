@@ -1,10 +1,9 @@
 <?php 
 include "../command.php";
 $bdd=bdd_connection();
-// //les 2 lignes permettent de recup le nom du fichier
-// $url=explode("/",$_SERVER["PHP_SELF"]);
-//$url=explode(".", end($url))[0];
-$url="machin";
+//les 2 lignes permettent de recup le nom du fichier
+$url=explode("/",$_SERVER["PHP_SELF"]);
+$url=explode(".", end($url))[0];
 //un article = nom-de-l-article
 $content=$bdd->query("SELECT * from article LEFT JOIN staff ON article.auteur = staff.id_staff Where article.titre='".str_replace("-"," ",$url)."'")->fetch();
 $images=$bdd->query("SELECT * from article INNER JOIN media ON article.id_article=media.article where article.titre='".str_replace("-"," ",$url)."' ")->fetchAll(PDO::FETCH_ASSOC);
