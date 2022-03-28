@@ -91,7 +91,7 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
             if($_SESSION["article"]["action"]==="mod"){
                 $id=$_POST["id_article"];
             } else if ($_SESSION["article"]["action"]==="add"){
-                $id=$bdd->query("SELECT id_article where `date` = '".$_SESSION["article"]["date"]."' AND titre = '".$_SESSION["article"]["titre"]."'")->fetch();
+                $id=$bdd->query("SELECT id_article from article where `date` = '".$_SESSION["article"]["date"]."' AND titre = '".$_SESSION["article"]["titre"]."'")->fetch();
                 $id=$id['id_article'];
             }
             
@@ -115,6 +115,7 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     //traitement supr
     if(isset($_POST["delete"])){
         $supr=$bdd->query("SELECT nom from media where article = ".$_POST["delete"]."")->fetchAll(PDO::FETCH_ASSOC);
+        $article=$bdd->query("SELECT titre from article where id_article= ".$_POST["delete"]."")->fetch();
         foreach ($supr as $key => $value) {
             if(unlink("../img/".explode("|",$value["nom"])[0])){
                 echo "image supprimer sur le serveur" ;
@@ -125,6 +126,9 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
         }
         if($bdd->query("DELETE from article where id_article = ".$_POST["delete"]."")){
             //article supr de la bdd
+        }
+        if(unlink("../article/".$article["titre"].".php")){
+            //page article supr
         }
     }
     ?>
