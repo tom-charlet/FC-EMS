@@ -141,7 +141,7 @@ function html_date($date)
     return $date;
 }
 
-function html_header(){
+function html_header($active="none"){
     echo'
     <header>
 
@@ -166,7 +166,7 @@ function html_header(){
 
                 <!-- ACCEUIL -->
 
-                <li>
+                <li '.($a=($active="acceuil")?"class=header-nav-active":"").'>
                     <a href="../index.html">
                         <div class="bloc-icon">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -183,7 +183,7 @@ function html_header(){
 
                 <!-- RESULTATS -->
 
-                <li class="header-nav-active">
+                <li '.($a=($active="resultat")?"class=header-nav-active":"").'>
                     <a href="resultats.html">
                         <div class="bloc-icon">
                             <svg width="16" height="15" viewBox="0 0 16 15" fill="none"
@@ -200,7 +200,7 @@ function html_header(){
 
                 <!-- CONVOCATIONS -->
 
-                <li>
+                <li '.($a=($active="convocation")?"class=header-nav-active":"").'>
                     <a href="#">
                         <div class="bloc-icon">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -217,7 +217,7 @@ function html_header(){
 
                 <!-- CLUB -->
 
-                <li class="dropdown-menu">
+                <li class="dropdown-menu '.($a=($active="index")?"header-nav-active":"").'">
                     <a href="#">
                         <div class="dropdown-link">
                             <div class="bloc-icon">
@@ -248,7 +248,7 @@ function html_header(){
 
                 <!-- GALERIE -->
 
-                <li class="dropdown-menu">
+                <li class="dropdown-menu '.($a=($active="galerie")?"header-nav-active":"").'">
                     <a href="#">
                         <div class="dropdown-link">
                             <div class="bloc-icon">
@@ -278,7 +278,7 @@ function html_header(){
 
                 <!-- PARTENAIRES -->
 
-                <li>
+                <li '.($a=($active="partenaire")?"class=header-nav-active":"").'>
                     <a href="#">
                         <div class="bloc-icon">
                             <svg width="16" height="12" viewBox="0 0 16 12" fill="none"
