@@ -224,10 +224,10 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'
         '<p><input type="text" name="nom" id ="nom" maxlength="80" size="25" placeholder="Nom" '.$sponsor["nomform"].' autofocus > OU 
         <select name="name" id="name">'.$option.'</select></p>
         <select name="type" id="type">'.$a.'</select>
-        <label for="date">Date du sponsor</label><input type="number" name="date" id="date" min="2010" max="2030" value="'.$sponsor["dateform"].'" >
+        <label for="date">Date du sponsor</label><input type="number" name="date" id="date" min="2010" max="2030" value="'.$sponsor["dateform"].'" required>
         <label for="texte">Texte</label>
         <label for="upload">Photo</label>
-            <input type="file" name="upload" id="upload" >
+            <input type="file" name="upload" id="upload" required>
         <textarea id="texte" name="texte" rows="10" cols="33" required>'.($a=(isset($sponsor["texte"]))?$sponsor["texte"]:"").'</textarea>
         
         <button type="submit" form="add">Valider</button>
