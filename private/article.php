@@ -57,7 +57,7 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
                 echo '<div id="error">Un article avec le meme nom existe deja</div>';
             }
             if(isset($_SESSION["article"]["type"])){
-                if(copy("../assets/pages/article_template_".$_SESSION["article"]["type"],"../article/".$_SESSION["article"]["titre"].".php")){
+                if(copy("../assets/pages/article_template_".$_SESSION["article"]["type"].".php","../article/".$_SESSION["article"]["titre"].".php")){
                     //page créé
                 }
             }
@@ -77,12 +77,12 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
         }
     
         //test si il y a des photos
-        if($_FILES["upload"]["size"][0]!=0){
+        if($_FILES["upload"]["size"][0]!=0&&$_FILES["upload"]["error"][0]==0){
             //traitement des images (creer un tableau ou chaque index est une photo valide)
             $photo=[];
             foreach ($_FILES["upload"]["name"] as $key => $value) {
                 if($_FILES["upload"]["error"][$key]==0&&explode("/",$_FILES["upload"]["type"][$key])[0]=="image"){
-                    $photo[]=["name"=>(nom().".".explode("/",$_FILES["upload"]["type"][$key])[1]),"full_path"=>$_FILES["upload"]["full_path"][$key],"type"=>$_FILES["upload"]["type"][$key],"tmp_name"=>$_FILES["upload"]["tmp_name"][$key],"error"=>$_FILES["upload"]["error"][$key],"size"=>$_FILES["upload"]["size"][$key]];
+                    $photo[]=["name"=>(nom().".".explode("/",$_FILES["upload"]["type"][$key])[1]),"type"=>$_FILES["upload"]["type"][$key],"tmp_name"=>$_FILES["upload"]["tmp_name"][$key],"error"=>$_FILES["upload"]["error"][$key],"size"=>$_FILES["upload"]["size"][$key]];
                 }
             }
         
@@ -149,11 +149,11 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
         <td>
         <form id='form".$article[$key]["id_article"]."-delete' method='post'>
             <input type='hidden' name='delete' value=".$article[$key]["id_article"].">
-            <button type='submit' form='form".$article[$key]["id_article"]."-delete'><img src='../assets/bin.svg' alt='poubelle'></button>
+            <button type='submit' form='form".$article[$key]["id_article"]."-delete'><img src='../assets/icons/bin.svg' alt='poubelle'></button>
         </form>
         <form id='form".$article[$key]["id_article"]."-edit' method='post'>
             <input type='hidden' name='edit' value=".$article[$key]["id_article"].">
-            <button type='submit' form='form".$article[$key]["id_article"]."-edit'><img src='../assets/edit.svg' alt=''></button>
+            <button type='submit' form='form".$article[$key]["id_article"]."-edit'><img src='../assets/icons/edit.svg' alt='edition'></button>
         </form>
         </td>
         </tr>";
@@ -175,9 +175,9 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
         <form action="" method="post" enctype="multipart/form-data">
             <div id="part1">
                 <label for="type1"><img src="../icon/form1.jpg" alt="template d article 1" srcset=""></label>
-                <input type="radio" name="type" id="type1" value="1" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]===1)?'checked="checked"':'').'>
+                <input type="radio" name="type" id="type1" value="1" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==1)?'checked="checked"':'').' required>
                 <label for="type2"><img src="../icon/form2.jpg" alt="template d article 2" srcset=""></label>
-                <input type="radio" name="type" id="type2" value="2" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]===2)?'checked="checked"':'') .'>
+                <input type="radio" name="type" id="type2" value="2" '.($a=(isset($_SESSION["article"]["type"])&&$_SESSION["article"]["type"]==2)?'checked="checked"':'') .'>
             </div>
             <div id="part2">
                 './*Transimssion id pour modification*/($a=(isset($_SESSION["article"]["id_article"]))?'<input type="hidden" name="id_article" value="'.$_SESSION["article"]["id_article"].'">':"").'
