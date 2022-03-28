@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 25 mars 2022 à 14:50
--- Version du serveur : 10.4.22-MariaDB
--- Version de PHP : 8.1.2
+-- Généré le : lun. 28 mars 2022 à 15:58
+-- Version du serveur : 10.4.21-MariaDB
+-- Version de PHP : 8.0.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -43,8 +43,7 @@ CREATE TABLE `article` (
 --
 
 INSERT INTO `article` (`id_article`, `titre`, `keyword`, `sub`, `texte`, `auteur`, `date`, `type`) VALUES
-(1, 'Article victoire senior', 'senior;victoire', 'SISI ipsum dolor sit amet. Et assumenda illo ut rerum dolorem non sunt impedit ut amet expedita vel ipsam ratione! Aut voluptatem ipsam sit dolorum consequatur eos fugiat exercitationem qui modi dolorem.', 'Lorem ipsum dolor sit amet. Et assumenda illo ut rerum dolorem non sunt impedit ut amet expedita vel ipsam ratione! Aut voluptatem ipsam sit dolorum consequatur eos fugiat exercitationem qui modi dolorem. Cum omnis amet id incidunt sint est totam dignissimos ut dolores nihil est voluptatem recusandae in unde odit.\r\n\r\nEa galisum vero aut officiis enim ad deleniti voluptates nam quas itaque ad Quis incidunt. Est nihil harum quo rerum enim qui ipsam velit eum recusandae sint ab autem temporibus et temporibus amet. Et voluptas alias et omnis nemo hic ipsum rerum non provident nulla.\r\n\r\nEst rerum accusantium et perspiciatis quisquam hic iste necessitatibus est velit galisum ea nesciunt inventore in officia laborum aut dolor nisi? Eum quasi quam non aspernatur voluptas qui commodi excepturi non aspernatur maxime et tenetur veritatis eos ducimus consequatur. Eum sunt corporis est ducimus voluptate sed aliquam illum sit vero molestias et quos asperiores quo neque vitae. In quaerat sint eum deleniti saepe sed dicta neque 33 quod veritatis eos fuga nihil?', 1, '20220130', 1),
-(2, 'machin', 'dsqdqsd;dsqsqds;sdsqd', 'sqdqsdq', 'dzqdqsdqdzd', 1, '20220324', 2);
+(10, 'machi', 'dsqdqsd;dsqsqds;sdsqd', 'cgdgsqcgqcs', 'cgsdcgfqcds', 1, '20220328', 1);
 
 -- --------------------------------------------------------
 
@@ -142,8 +141,9 @@ CREATE TABLE `media` (
 
 INSERT INTO `media` (`id_media`, `nom`, `equipe`, `type`, `article`) VALUES
 (1, 'chat.jpg|une photo de chat', NULL, 'photo', NULL),
-(2, 'femme.jpg|une jolie photo de femme', 4, 'photo', 1),
-(3, 'loupe.jpg|une image de loupe', 1, 'photo', NULL);
+(3, 'loupe.jpg|une image de loupe', 1, 'photo', NULL),
+(39, 'match ems.png|photo de vsdvxvxcv', NULL, 'sponsor', NULL),
+(40, 'bF8N5fTogu7c46U.png|', NULL, 'image', 10);
 
 -- --------------------------------------------------------
 
@@ -174,6 +174,71 @@ CREATE TABLE `rencontre` (
   `score` varchar(12) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Déchargement des données de la table `rencontre`
+--
+
+INSERT INTO `rencontre` (`id_rencontre`, `categorie`, `nom`, `date`, `equipe_int`, `equipe_ext`, `score`) VALUES
+(1, 4, 'U13 DEPARTEMENTAL 4 - 1', '20210925 samedi 13:30', 'PACY MENILLES RC 4', 'EURE MADRIE SEINE FC 3', '3 - 0'),
+(2, 4, 'U13 DEPARTEMENTAL 4 - 1', '20210925 samedi 14:00', 'EURE MADRIE SEINE FC 2', 'ENT MUIDS/IGOVILLE', '7 - 1'),
+(3, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211002 samedi 13:30', 'EURE MADRIE SEINE FC 3', 'MADRIE F.C.', '1 - 6'),
+(4, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211002 samedi 14:30', 'CHARLEVAL FC', 'EURE MADRIE SEINE FC 2', '5 - 1'),
+(5, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211009 samedi 14:00', 'EURE MADRIE SEINE FC 2', 'FC HENNEZIS VEXIN', '2 - 3'),
+(6, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211009 samedi 14:30', 'AILLY FONTAIN', 'EURE MADRIE SEINE FC 3', '14 - 3'),
+(7, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211016 samedi 13:30', 'EURE MADRIE SEINE FC 3', 'GRPT JEUNES EPIS FC 2', '2 - 1'),
+(8, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211016 samedi 14:30', 'AS VALLEE D&#039;ANDELLE 2', 'EURE MADRIE SEINE FC 2', '0 - 15'),
+(9, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20211023 samedi 14:00', 'EURE MADRIE SEINE FC', 'LA CROIX VALLEE EURE', '6 - 0'),
+(10, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20211023 samedi 14:00', 'EURE MADRIE SEINE FC', 'LOUVIERS FC 2', '7 - 1'),
+(11, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20211023 samedi 14:00', 'VERNON SPN 3', 'EURE MADRIE SEINE FC 2', '1 - 0'),
+(12, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20211023 samedi 14:00', 'AILLY FONTAIN', 'EURE MADRIE SEINE FC 2', '1 - 0'),
+(13, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20211023 samedi 14:00', 'MADRIE F.C.', 'EURE MADRIE SEINE FC 2', '0 - 3'),
+(14, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20211023 samedi 14:00', 'GASNY-U.S.', 'EURE MADRIE SEINE FC 3', '4 - 0'),
+(15, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20211023 samedi 14:00', 'FC HENNEZIS VEXIN', 'EURE MADRIE SEINE FC 3', '2 - 1'),
+(16, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211106 samedi 13:30', 'LOUVIERS FC 2', 'EURE MADRIE SEINE FC 2', '5 - 1'),
+(17, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211106 samedi 13:30', 'EURE MADRIE SEINE FC 3', 'GJACMIE 3', '8 - 2'),
+(18, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211113 samedi 14:00', 'EURE MADRIE SEINE FC 2', 'CS LES ANDELYS 2', '6 - 2'),
+(19, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211113 samedi 14:30', 'ST MARCEL F 3', 'EURE MADRIE SEINE FC 3', '2 - 3'),
+(20, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211120 samedi 14:00', 'EURE MADRIE SEINE FC 2', 'A.F. DE BOUAFLES', '3 - 3'),
+(21, 4, 'U13 DEPARTEMENTAL 4 - 1', '20211120 samedi 14:30', 'C.F. DOUAINS', 'EURE MADRIE SEINE FC 3', '7 - 3'),
+(22, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20211211 samedi 14:00', 'LERY RC', 'EURE MADRIE SEINE FC', '0 - 1'),
+(23, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20211211 samedi 14:00', 'AILLY FONTAIN', 'EURE MADRIE SEINE FC', '0 - 3'),
+(24, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20211211 samedi 14:00', 'EURE MADRIE SEINE FC', 'FC SEINE-EURE', '0 - 0'),
+(25, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20220129 samedi 14:00', 'FC VAL DE REUIL 2', 'EURE MADRIE SEINE FC', '2 - 1'),
+(26, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20220129 samedi 14:00', 'GASNY-U.S.', 'EURE MADRIE SEINE FC', '1 - 0'),
+(27, 4, 'FESTIVAL FOOT U13 - QUALIFICATIONS', '20220129 samedi 14:00', 'EURE MADRIE SEINE FC', 'GISORS F.C.G.V.N. 27 2', '1 - 1'),
+(28, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220226 samedi 13:30', 'EURE MADRIE SEINE FC 3', 'PACY MENILLES RC 4', '1 - 0'),
+(29, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220226 samedi 14:30', 'A.F. DE BOUAFLES', 'EURE MADRIE SEINE FC 2', '5 - 1'),
+(30, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220305 samedi 14:00', 'EURE MADRIE SEINE FC 2', 'FC SEINE EURE 3', '8 - 1'),
+(31, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220305 samedi 14:30', 'MADRIE F.C.', 'EURE MADRIE SEINE FC 3', '4 - 0'),
+(32, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220312 samedi 13:30', 'EURE MADRIE SEINE FC 3', 'VERNON SPN 4', '3 - 4'),
+(33, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220312 samedi 14:30', 'CS LES ANDELYS 2', 'EURE MADRIE SEINE FC 2', '0 - 4'),
+(34, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220319 samedi 14:00', 'EURE MADRIE SEINE FC 2', 'VERNON SPN 5', '2 - 2'),
+(35, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220319 samedi 14:30', 'AILLY FONTAIN', 'EURE MADRIE SEINE FC 3', '5 - 1'),
+(36, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220326 samedi 13:30', 'EURE MADRIE SEINE FC 3', 'ST MARCEL F 3', '2 - 3'),
+(37, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220326 samedi 14:30', 'FC HENNEZIS VEXIN', 'EURE MADRIE SEINE FC 2', '2 - 1'),
+(38, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220514 samedi 13:30', 'EURE MADRIE SEINE FC 3', 'C.F. DOUAINS', '-'),
+(39, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220514 samedi 14:30', 'ST MARCEL AS 2', 'EURE MADRIE SEINE FC 2', '-'),
+(40, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220521 samedi 13:30', 'LOUVIERS FC 2', 'EURE MADRIE SEINE FC 3', '-'),
+(41, 4, 'U13 DEPARTEMENTAL 4 - 1', '20220521 samedi 14:00', 'EURE MADRIE SEINE FC 2', 'US ETREPAGNY 2', '-'),
+(42, 6, 'U15 DEPARTEMENTAL 1 - 1', '20210925 samedi 15:30', 'EURE MADRIE SEINE FC', 'ANDELYS CS', '13 - 1'),
+(43, 6, 'COUPE DE NORMANDIE U15-ORANGE - 1', '20211002 samedi 15:00', 'US ETREPAGNY', 'FC EURE MADRIE SEINE', '3 - 5'),
+(44, 6, 'U15 DEPARTEMENTAL 1 - 1', '20211009 samedi 15:30', 'EURE MADRIE SEINE FC', 'FA DU ROUMOIS', '3 - 2'),
+(45, 6, 'COUPE DE NORMANDIE U15-ORANGE - 1', '20211016 samedi 15:00', 'STADE VERNOLIEN', 'FC EURE MADRIE SEINE', '0 - 2'),
+(46, 6, 'U15 DEPARTEMENTAL 1 - 1', '20211023 samedi 16:00', 'VERNON SPN', 'EURE MADRIE SEINE FC', '4 - 1'),
+(47, 6, 'U15 DEPARTEMENTAL 1 - 1', '20211106 samedi 16:00', 'FC SEINE-EURE', 'EURE MADRIE SEINE FC', '5 - 3'),
+(48, 6, 'U15 DEPARTEMENTAL 1 - 1', '20211113 samedi 15:00', 'EURE MADRIE SEINE FC', 'PT AUDEMER CA', '1 - 1'),
+(49, 6, 'U15 DEPARTEMENTAL 1 - 1', '20211120 samedi 15:00', 'EURE MADRIE SEINE FC', 'NORMANVIL.ES', '2 - 4'),
+(50, 6, 'U15 DEPARTEMENTAL 1 - 1', '20220129 samedi 15:00', 'LA CROIX VALLEE EURE', 'EURE MADRIE SEINE FC', '2 - 2'),
+(51, 6, 'COUPE DE NORMANDIE U15-ORANGE - 1', '20220219 samedi 15:00', 'FC DU PAYS AIGLON', 'FC EURE MADRIE SEINE', '4 - 1'),
+(52, 6, 'U15 DEPARTEMENTAL 2 - 2', '20220226 samedi 15:00', 'EURE MADRIE SEINE FC', 'GJACMIE', '2 - 0'),
+(53, 6, 'U15 DEPARTEMENTAL 2 - 2', '20220305 samedi 15:00', 'US GASNY 2', 'EURE MADRIE SEINE FC', '0 - 5'),
+(54, 6, 'U15 DEPARTEMENTAL 2 - 2', '20220312 samedi 15:00', 'EURE MADRIE SEINE FC', 'ANDELYS CS', 'arrêté'),
+(55, 6, 'U15 DEPARTEMENTAL 2 - 2', '20220319 samedi 15:30', 'ABPV ES', 'EURE MADRIE SEINE FC', '0 - 3'),
+(56, 6, 'U15 DEPARTEMENTAL 2 - 2', '20220402 samedi 15:30', 'EURE MADRIE SEINE FC', 'ROMIL.PT ST P', '-'),
+(57, 6, 'COUPE U15 A.LEDUC', '20220409 samedi 15:00', 'ENT CONCHES/RUGLES', 'EURE MADRIE SEINE FC', '-'),
+(58, 6, 'U15 DEPARTEMENTAL 2 - 2', '20220514 samedi 15:30', 'EURE MADRIE SEINE FC', 'EPIS FC', '-'),
+(59, 6, 'U15 DEPARTEMENTAL 2 - 2', '20220521 samedi 15:30', 'PITRES CA', 'EURE MADRIE SEINE FC', '-');
+
 -- --------------------------------------------------------
 
 --
@@ -203,16 +268,17 @@ CREATE TABLE `sponsor` (
   `id_sponsor` int(10) UNSIGNED NOT NULL,
   `nom` varchar(80) NOT NULL,
   `date` tinytext NOT NULL,
-  `type` varchar(40) NOT NULL
+  `type` varchar(40) NOT NULL,
+  `texte` text NOT NULL,
+  `photo` smallint(5) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `sponsor`
 --
 
-INSERT INTO `sponsor` (`id_sponsor`, `nom`, `date`, `type`) VALUES
-(1, 'nike', '2018', 'materiel'),
-(2, 'nike', '2023', 'materiel');
+INSERT INTO `sponsor` (`id_sponsor`, `nom`, `date`, `type`, `texte`, `photo`) VALUES
+(6, 'vsdvxvxcv', '2022', 'materiel', 'vsvxcvxvd', 39);
 
 -- --------------------------------------------------------
 
@@ -329,7 +395,7 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT pour la table `article`
 --
 ALTER TABLE `article`
-  MODIFY `id_article` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_article` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `categorie`
@@ -359,7 +425,7 @@ ALTER TABLE `joueur`
 -- AUTO_INCREMENT pour la table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id_media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_media` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT pour la table `palmares`
@@ -371,7 +437,7 @@ ALTER TABLE `palmares`
 -- AUTO_INCREMENT pour la table `rencontre`
 --
 ALTER TABLE `rencontre`
-  MODIFY `id_rencontre` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `id_rencontre` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT pour la table `settings`
@@ -383,7 +449,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT pour la table `sponsor`
 --
 ALTER TABLE `sponsor`
-  MODIFY `id_sponsor` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_sponsor` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `staff`
