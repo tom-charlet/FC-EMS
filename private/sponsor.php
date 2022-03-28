@@ -94,6 +94,23 @@ if(isset($_SESSION["sponsor"]["action"])&&(($_SESSION["sponsor"]["action"]==="ad
     
 }
 
+//traitement ajout 
+if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='add'&&isset($_POST["date"])){
+    if($_POST["nom"]!==""){
+        $name=$_POST["nom"];
+    } else if($_POST["name"]!==""){
+        $name=$_POST["name"];
+    }
+    if(empty($bdd->query("SELECT * from sponsor where `date`= ".$_POST["date"]." AND nom='".$name."'")->fetch())){
+        //traitement photo
+        
+        
+        if($bdd->query("INSERT INTO")){
+
+        }
+    }
+}
+
 //traitement sup
 if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'&&isset($_POST["id_sponsor"])){
     if($bdd->query("DELETE from sponsor where id_sponsor = ".$_POST["id_sponsor"])){
