@@ -468,7 +468,22 @@ $bdd=bdd_connection();
             <div class="container">
                 <h2 class="sec-title">Partenaires</h2>
             </div>
+            
             <div class="partenaire-promo">
+                <?php 
+                $tmp=$bdd->query("SELECT * from sponsor  where date ='".date("Y")."'")->fetchAll(PDO::FETCH_ASSOC);
+                $option='';
+                foreach ($tmp as $key => $value) {
+                    $img=$bdd->query("SELECT * from media where id_media =".$value["photo"]."")->fetch();
+                    $option.="
+                    <a href='private/partenaires.html'>
+                    <div class='partenaire-items'>
+                        <img class='img-contain' src='../img/".explode("|",$value["nom"])[0]."' alt='".explode("|",$value["nom"])[1]."' title='partenaire'>
+                    </div>
+                    </a>
+                    ";
+                }
+                ?>
                 <a href="private/partenaires.html">
                     <div class="partenaire-items">
                         <img class="img-contain" src="../img/logo-ems.png" alt="nom de partenaire" title="partenaire">
