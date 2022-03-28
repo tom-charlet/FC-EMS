@@ -15,55 +15,149 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     header("Location: ../html/connect.php");
 }
 
-// traitement ajout
-if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==="add"&&isset($_POST["date"])){
+// traitement ajout / mod
+if(isset($_SESSION["sponsor"]["action"])&&(($_SESSION["sponsor"]["action"]==="add"&&isset($_POST["date"]))||$_SESSION["sponsor"]["action"]==='mod'&&isset($_POST["id"]))){
+    // //traitement photo mod
+    // if($_FILES["upload"]["size"]!=0&&$_FILES["upload"]["error"]==0&&$_SESSION["sponsor"]["action"]==="mod"){
+    //     $photo=$bdd->query("SELECT sponsor.photo,media.nom from sponsor INNER JOIN media ON sponsor.photo =media.id_media where id_sponsor =".$_POST["id"]."")->fetch();
+    //     if(!empty($photo)){
+    //         if($bdd->query("DELETE from media where id_media = ".$photo["photo"]."")){
+    //             //image del de la bdd
+    //         }
+    //     }
+    //     if(unlink("../img/".explode("|",$photo["nom"])[0])){
+    //         //image supprimer sur le serveur
+    //     }
+    // }
+    // //traitement photo
+    // if($_FILES["upload"]["size"]!=0&&$_FILES["upload"]["error"]==0){
+    //     // while(file_exists("../img/".$value["name"])){
+    //     //     //$value["name"]=nom().".".explode("/",$_FILES["upload"]["type"])[1]; // permet d'eviter qu'un fichier n existe pas 2 fois
+    //     // }
+    //     $value["name"]="ydfqsvqshgdcvqhsd".".".explode("/",$_FILES["upload"]["type"])[1];
+    //     if (move_uploaded_file($value["tmp_name"],"../img/".$value["name"])) {
+    //         //Le média a été ajouté dans le serveur
+    //         unset($_SESSION["media"]);
+    //     }
+    //     if($bdd->query("insert into media (nom, type) VALUES ('".$value["name"]."|Logo de ".$name."','sponsor')")){
+    //         //media ajouté a la bdd
+    //         $pho=$bdd->query("SELECT * from media where nom ='".$value["name"]."|Logo de ".$name."'")->fetch();
+    //         $bdd->query("UPDATE sponsor set photo = ".$pho["id_media"]." where id_sponsor = ".$_POST["id"]."");
+    //     }
+    // }else{
+    // }
+    // //modification
+    // if($_SESSION["sponsor"]["action"]==="mod"){
+    //     if($_POST["nom"]!==""){
+    //         $name=$_POST["nom"];
+    //     } else if($_POST["name"]!==""){
+    //         $name=$_POST["name"];
+    //     } else {
+    //         echo "Erreur nom";
+    //     }
+    //     if(!empty($spon)&&$spon=$bdd->query("SELECT * from sponsor where nom LIKE '".$name."%'")->fetch()){
+
+    //     }
+    //     if(isset($name)&&empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
+            
+    //     } else {
+    //         echo "Le sponsor existe deja";
+    //     }
+    //     if($bdd->query("UPDATE sponsor set nom = '".$_POST["nom"]."',date = ".$_POST["date"].",`type` = '".$_POST["type"]."',texte='".$_POST["type"]."', where id_sponsor = ".$_POST["id"]."")){
+    //         echo "staff update";
+    //         unset($_POST["id_sponsor"]);
+    //     } else {
+    //         echo "Probleme requete";
+    //     }
+        
+        
+    // }
+    // //ajout
+    // if($_SESSION["sponsor"]["action"]==="add"){
+    //     if($_POST["nom"]!==""){
+    //         $name=$_POST["nom"];
+    //     } else if($_POST["name"]!==""){
+    //         $name=$_POST["name"];
+    //     } else {
+    //         echo "Erreur nom";
+    //     }
+    //     if(isset($name)){
+    //         if(empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
+    //             //partie ajout 
+    //             $bdd->query("INSERT INTO sponsor (nom,`date`,`type`,texte,photo) VALUES ('".$name."',".$_POST["date"].",'".$_POST["type"]."','".$_POST["texte"]."',".($a=(isset($pho))?$pho["id_media"]:$spon["photo"]).")")->fetch();
+    //             echo "sponsor ajouté";
+    //         } else {
+    //             echo "le sponsor existe deja";
+    //         }
+    //     }
+    // }
+    
+}
+
+//traitement ajout 
+if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='add'&&isset($_POST["date"])){
     if($_POST["nom"]!==""){
         $name=$_POST["nom"];
     } else if($_POST["name"]!==""){
         $name=$_POST["name"];
-    } else {
-        echo "Erreur nom";
     }
-    if(isset($name)){
-        if(empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
-            //partie ajout 
-            $bdd->query("INSERT INTO sponsor (nom,`date`,`type`) VALUES ('".$name."',".$_POST["date"].",'".$_POST["type"]."')")->fetch();
-            echo "sponsor ajouté";
-        } else {
-            echo "le sponsor existe deja";
+    if(empty($bdd->query("SELECT * from sponsor where `date`= ".$_POST["date"]." AND nom='".$name."'")->fetch())){
+        //traitement photo
+        while(file_exists("../img/".$_FILES["upload"]["name"])){
+            $_FILES["upload"]["name"]=nom().".".explode("/",$_FILES["upload"]["type"])[1]; // permet d'eviter qu'un fichier n existe pas 2 fois
+        }
+        //ajout photo
+        if(move_uploaded_file($_FILES["upload"]["tmp_name"],"../img/".$_FILES["upload"]["name"])){
+            //photo ajoutée sur serveur
+        }
+        if($bdd->query("INSERT into media (nom,`type`) VALUES ('".$_FILES["upload"]["name"]."|photo de ".$name."','sponsor')")){
+            //photo ajoutée dans bdd
+            $photo =$bdd->query("SELECT id_media from media where nom = '".$_FILES["upload"]["name"]."|photo de ".$name."'")->fetch();
+        }
+        //insertion sponsor
+        if($bdd->query("INSERT INTO sponsor (nom,`date`,`type`,`texte`,`photo`) VALUES ('".$name."','".$_POST["date"]."','".$_POST["type"]."','".$_POST["texte"]."',".$photo["id_media"].")")){
+            //sponsor ajouté a la bdd
         }
     }
 }
-
-//traitement sup
-if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'&&isset($_POST["id_sponsor"])){
-    if($bdd->query("DELETE from sponsor where id_sponsor = ".$_POST["id_sponsor"])){
-        echo "Sponsor del de la bdd";
-    } else {
-        echo "Sponsor NON del de la bdd";
-    }
-}
-
 //traitement mod
 if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'&&isset($_POST["id"])){
     if($_POST["nom"]!==""){
         $name=$_POST["nom"];
     } else if($_POST["name"]!==""){
         $name=$_POST["name"];
-    } else {
-        echo "Erreur nom";
     }
-    if(isset($name)&&empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
-        
-    } else {
-        echo "Le sponsor existe deja";
+    if(isset($_FILES["upload"])&&$_FILES["upload"]["error"]==0){
+        $photo=$bdd->query("SELECT sponsor.photo,media.* from sponsor INNER JOIN media ON sponsor.photo=media.id_media where id_sponsor=".$_POST["id"]."")->fetch();
+        //ajout photo
+        if(move_uploaded_file($_FILES["upload"]["tmp_name"],"../img/".explode("|",$photo["nom"])[0])){
+            //photo ajoutée sur serveur
+        }
+        if($bdd->query("INSERT into media (nom,`type`) VALUES ('".$_FILES["upload"]["name"]."|photo de ".$name."','sponsor')")){
+            //photo ajoutée dans bdd
+            $photo =$bdd->query("SELECT id_media from media where nom = '".$_FILES["upload"]["name"]."|photo de ".$name."'")->fetch();
+            $bdd->query("UPDATE sponsor set photo =".$photo["id_media"]." where id_sponsor=".$_POST["id"]."");
+        }
     }
-    if($bdd->query("UPDATE sponsor set nom = '".$_POST["nom"]."',date = ".$_POST["date"].",`type` = '".$_POST["type"]."' where id_sponsor = ".$_POST["id"]."")){
-        echo "staff update";
-        unset($_POST["id_sponsor"]);
-    } else {
-        echo "Probleme requete";
+    //update sponsor
+    if($bdd->query("UPDATE sponsor set nom ='".$name."',`date`='".$_POST["date"]."',`type`='".$_POST["type"]."',`texte`='".$_POST["texte"]."' where id_sponsor=".$_POST["id"]."")){
+        echo "sponsor update a la bdd";
     }
+}
+
+//traitement sup
+if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'&&isset($_POST["id_sponsor"])){
+    $supr=$bdd->query("SELECT media.id_media,media.nom,sponsor.id_sponsor from sponsor INNER join media on sponsor.photo = media.id_media where sponsor.id_sponsor=".$_POST["id_sponsor"]."")->fetch();
+    if($bdd->query("DELETE from sponsor where id_sponsor = ".$supr["id_sponsor"])){
+        echo "Sponsor del de la bdd";
+    }
+    if($bdd->query("DELETE from media where id_media=".$supr["id_media"]."")){
+        //media del de la bdd
+    }
+    if(unlink("../img/".explode("|",$supr["nom"])[0])){
+        //image del de la bdd
+    }
+
 }
 
 ?>
@@ -136,7 +230,12 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
         '<p><input type="text" name="nom" id ="nom" maxlength="80" size="25" placeholder="Nom" '.$sponsor["nomform"].' autofocus > OU 
         <select name="name" id="name">'.$option.'</select></p>
         <select name="type" id="type">'.$a.'</select>
-        <label for="date">Date du sponsor</label><input type="number" name="date" id="date" min="2010" max="2030" value="'.$sponsor["dateform"].'" >
+        <label for="date">Date du sponsor</label><input type="number" name="date" id="date" min="2010" max="2030" value="'.$sponsor["dateform"].'" required>
+        <label for="texte">Texte</label>
+        <label for="upload">Photo</label>
+            <input type="file" name="upload" id="upload" required>
+        <textarea id="texte" name="texte" rows="10" cols="33" required>'.($a=(isset($sponsor["texte"]))?$sponsor["texte"]:"").'</textarea>
+        
         <button type="submit" form="add">Valider</button>
         ';
     }
