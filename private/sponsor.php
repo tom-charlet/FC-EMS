@@ -147,11 +147,17 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
 
 //traitement sup
 if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'&&isset($_POST["id_sponsor"])){
-    if($bdd->query("DELETE from sponsor where id_sponsor = ".$_POST["id_sponsor"])){
+    $supr=$bdd->query("SELECT media.id_media,media.nom,sponsor.id_sponsor from sponsor INNER join media on sponsor.photo = media.id_media where sponsor.id_sponsor=".$_POST["id_sponsor"]."")->fetch();
+    if($bdd->query("DELETE from sponsor where id_sponsor = ".$supr["id_sponsor"])){
         echo "Sponsor del de la bdd";
-    } else {
-        echo "Sponsor NON del de la bdd";
     }
+    if($bdd->query("DELETE from media where id_media=".$supr["id_media"]."")){
+        //media del de la bdd
+    }
+    if(unlink("../img/".explode("|",$supr["nom"])[0])){
+        //image del de la bdd
+    }
+
 }
 
 ?>
