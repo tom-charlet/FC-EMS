@@ -13,6 +13,7 @@ function bdd_connection(string $user="root",string $pass=""){
     echo "<script language=javascript>
         console.log('Page bien connectée à la base de données');
     </script>";
+    $dbh->exec('SET NAMES utf8');
     return $dbh;
 }
 
@@ -29,6 +30,10 @@ function rencontre_date($str,$param='normal'){
     if($param=='reverse'){
         // jourdelasemaine jour mois heure
         $date=ucfirst(explode(" ",$str)[1])." ".substr($str,6,2)." ".$m[substr($str,4,2)]." ".explode(" ",$str)[2];
+    }
+    if($param=='front'){
+        $date=ucfirst(explode(" ",$str)[1])." ".substr($str,6,2)." ".$m[substr($str,4,2)]." ".substr($str,0,4)." ".explode(" ",$str)[2];
+
     }
     return $date;
 }
