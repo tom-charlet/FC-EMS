@@ -137,6 +137,11 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
         <select name="name" id="name">'.$option.'</select></p>
         <select name="type" id="type">'.$a.'</select>
         <label for="date">Date du sponsor</label><input type="number" name="date" id="date" min="2010" max="2030" value="'.$sponsor["dateform"].'" >
+        <label for="texte">Texte</label>
+        <textarea id="texte" name="texte" rows="10" cols="33" required>
+            '.($a=(isset($_SESSION["sponsor"]["texte"]))?$_SESSION["article"]["texte"]:"").'
+        </textarea>
+        
         <button type="submit" form="add">Valider</button>
         ';
     }
