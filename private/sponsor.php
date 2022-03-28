@@ -138,6 +138,8 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'
         <select name="type" id="type">'.$a.'</select>
         <label for="date">Date du sponsor</label><input type="number" name="date" id="date" min="2010" max="2030" value="'.$sponsor["dateform"].'" >
         <label for="texte">Texte</label>
+        <label for="upload">Photo</label>
+            <input type="file" name="upload" id="upload" >
         <textarea id="texte" name="texte" rows="10" cols="33" required>
             '.($a=(isset($_SESSION["sponsor"]["texte"]))?$_SESSION["article"]["texte"]:"").'
         </textarea>
