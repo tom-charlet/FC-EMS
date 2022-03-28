@@ -120,6 +120,30 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='add'
         }
     }
 }
+//traitement mod
+if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'&&isset($_POST["id"])){
+    if($_POST["nom"]!==""){
+        $name=$_POST["nom"];
+    } else if($_POST["name"]!==""){
+        $name=$_POST["name"];
+    }
+    if(isset($_FILES["upload"])&&$_FILES["upload"]["error"]==0){
+        $photo=$bdd->query("SELECT sponsor.photo,media.* from sponsor INNER JOIN media ON sponsor.photo=media.id_media where id_sponsor=".$_POST["id"]."")->fetch();
+        //ajout photo
+        if(move_uploaded_file($_FILES["upload"]["tmp_name"],"../img/".explode("|",$photo["nom"])[0])){
+            //photo ajoutée sur serveur
+        }
+        if($bdd->query("INSERT into media (nom,`type`) VALUES ('".$_FILES["upload"]["name"]."|photo de ".$name."','sponsor')")){
+            //photo ajoutée dans bdd
+            $photo =$bdd->query("SELECT id_media from media where nom = '".$_FILES["upload"]["name"]."|photo de ".$name."'")->fetch();
+            $bdd->query("UPDATE sponsor set photo =".$photo["id_media"]." where id_sponsor=".$_POST["id"]."");
+        }
+    }
+    //update sponsor
+    if($bdd->query("UPDATE sponsor set nom ='".$name."',`date`='".$_POST["date"]."',`type`='".$_POST["type"]."',`texte`='".$_POST["texte"]."' where id_sponsor=".$_POST["id"]."")){
+        echo "sponsor update a la bdd";
+    }
+}
 
 //traitement sup
 if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'&&isset($_POST["id_sponsor"])){
@@ -204,7 +228,7 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'
         <label for="texte">Texte</label>
         <label for="upload">Photo</label>
             <input type="file" name="upload" id="upload" >
-        <textarea id="texte" name="texte" rows="10" cols="33" required>'.($a=(isset($_SESSION["sponsor"]["texte"]))?$_SESSION["article"]["texte"]:"").'</textarea>
+        <textarea id="texte" name="texte" rows="10" cols="33" required>'.($a=(isset($sponsor["texte"]))?$sponsor["texte"]:"").'</textarea>
         
         <button type="submit" form="add">Valider</button>
         ';
