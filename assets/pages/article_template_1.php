@@ -1,4 +1,6 @@
 <?php 
+session_start();
+session_destroy();
 include "../command.php";
 $bdd=bdd_connection();
 //les 2 lignes permettent de recup le nom du fichier
