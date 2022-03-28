@@ -103,10 +103,20 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='add'
     }
     if(empty($bdd->query("SELECT * from sponsor where `date`= ".$_POST["date"]." AND nom='".$name."'")->fetch())){
         //traitement photo
-        
-        
-        if($bdd->query("INSERT INTO")){
-
+        while(file_exists("../img/".$_FILES["upload"]["name"])){
+            $_FILES["upload"]["name"]=nom().".".explode("/",$_FILES["upload"]["type"])[1]; // permet d'eviter qu'un fichier n existe pas 2 fois
+        }
+        //ajout photo
+        if(move_uploaded_file($_FILES["upload"]["tmp_name"],"../img/".$_FILES["upload"]["name"])){
+            //photo ajoutée sur serveur
+        }
+        if($bdd->query("INSERT into media (nom,`type`) VALUES ('".$_FILES["upload"]["name"]."|photo de ".$name."','sponsor')")){
+            //photo ajoutée dans bdd
+            $photo =$bdd->query("SELECT id_media from media where nom = '".$_FILES["upload"]["name"]."|photo de ".$name."'")->fetch();
+        }
+        //insertion sponsor
+        if($bdd->query("INSERT INTO sponsor (nom,`date`,`type`,`texte`,`photo`) VALUES ('".$name."','".$_POST["date"]."','".$_POST["type"]."','".$_POST["texte"]."',".$photo["id_media"].")")){
+            //sponsor ajouté a la bdd
         }
     }
 }
