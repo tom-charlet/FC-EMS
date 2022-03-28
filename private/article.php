@@ -56,6 +56,7 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
             } else {
                 echo '<div id="error">Un article avec le meme nom existe deja</div>';
             }
+            //creation page
             if(isset($_SESSION["article"]["type"])){
                 if(copy("../assets/pages/article_template_".$_SESSION["article"]["type"].".php","../article/".$_SESSION["article"]["titre"].".php")){
                     //page créé
