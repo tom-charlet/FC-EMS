@@ -15,24 +15,47 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
     header("Location: ../html/connect.php");
 }
 
-// traitement ajout
-if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==="add"&&isset($_POST["date"])){
-    if($_POST["nom"]!==""){
-        $name=$_POST["nom"];
-    } else if($_POST["name"]!==""){
-        $name=$_POST["name"];
-    } else {
-        echo "Erreur nom";
-    }
-    if(isset($name)){
-        if(empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
-            //partie ajout 
-            $bdd->query("INSERT INTO sponsor (nom,`date`,`type`) VALUES ('".$name."',".$_POST["date"].",'".$_POST["type"]."')")->fetch();
-            echo "sponsor ajouté";
+// traitement ajout / mod
+if(isset($_SESSION["sponsor"]["action"])&&(($_SESSION["sponsor"]["action"]==="add"&&isset($_POST["date"]))||$_SESSION["sponsor"]["action"]==='mod'&&isset($_POST["id"]))){
+    if($_SESSION["sponsor"]["action"]==="add"){
+        if($_POST["nom"]!==""){
+            $name=$_POST["nom"];
+        } else if($_POST["name"]!==""){
+            $name=$_POST["name"];
         } else {
-            echo "le sponsor existe deja";
+            echo "Erreur nom";
+        }
+        if(isset($name)){
+            if(empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
+                //partie ajout 
+                $bdd->query("INSERT INTO sponsor (nom,`date`,`type`) VALUES ('".$name."',".$_POST["date"].",'".$_POST["type"]."')")->fetch();
+                echo "sponsor ajouté";
+            } else {
+                echo "le sponsor existe deja";
+            }
         }
     }
+    if($_SESSION["sponsor"]["action"]==="mod"){
+        if($_POST["nom"]!==""){
+            $name=$_POST["nom"];
+        } else if($_POST["name"]!==""){
+            $name=$_POST["name"];
+        } else {
+            echo "Erreur nom";
+        }
+        if(isset($name)&&empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
+            
+        } else {
+            echo "Le sponsor existe deja";
+        }
+        if($bdd->query("UPDATE sponsor set nom = '".$_POST["nom"]."',date = ".$_POST["date"].",`type` = '".$_POST["type"]."' where id_sponsor = ".$_POST["id"]."")){
+            echo "staff update";
+            unset($_POST["id_sponsor"]);
+        } else {
+            echo "Probleme requete";
+        }
+    }
+    
 }
 
 //traitement sup
@@ -41,28 +64,6 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'
         echo "Sponsor del de la bdd";
     } else {
         echo "Sponsor NON del de la bdd";
-    }
-}
-
-//traitement mod
-if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='mod'&&isset($_POST["id"])){
-    if($_POST["nom"]!==""){
-        $name=$_POST["nom"];
-    } else if($_POST["name"]!==""){
-        $name=$_POST["name"];
-    } else {
-        echo "Erreur nom";
-    }
-    if(isset($name)&&empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
-        
-    } else {
-        echo "Le sponsor existe deja";
-    }
-    if($bdd->query("UPDATE sponsor set nom = '".$_POST["nom"]."',date = ".$_POST["date"].",`type` = '".$_POST["type"]."' where id_sponsor = ".$_POST["id"]."")){
-        echo "staff update";
-        unset($_POST["id_sponsor"]);
-    } else {
-        echo "Probleme requete";
     }
 }
 
