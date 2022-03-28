@@ -20,8 +20,8 @@ $url=explode('.', end($url))[0];
     <link
         href='https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap'
         rel='stylesheet'>
-    <link rel='stylesheet' media='screen' href='..css/style.css'>
-    <link rel='stylesheet' media='screen' href='..css/media-queries.css'>
+    <link rel='stylesheet' media='screen' href='../css/style.css'>
+    <link rel='stylesheet' media='screen' href='../css/media-queries.css'>
     <title>FC EMS - Homepage</title>
 </head>
 
