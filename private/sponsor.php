@@ -17,44 +17,80 @@ if(isset($_SESSION["connection"])&&($_SESSION["connection"]===true)&&(isset($_SE
 
 // traitement ajout / mod
 if(isset($_SESSION["sponsor"]["action"])&&(($_SESSION["sponsor"]["action"]==="add"&&isset($_POST["date"]))||$_SESSION["sponsor"]["action"]==='mod'&&isset($_POST["id"]))){
-    if($_SESSION["sponsor"]["action"]==="add"){
-        if($_POST["nom"]!==""){
-            $name=$_POST["nom"];
-        } else if($_POST["name"]!==""){
-            $name=$_POST["name"];
-        } else {
-            echo "Erreur nom";
-        }
-        if(isset($name)){
-            if(empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
-                //partie ajout 
-                $bdd->query("INSERT INTO sponsor (nom,`date`,`type`) VALUES ('".$name."',".$_POST["date"].",'".$_POST["type"]."')")->fetch();
-                echo "sponsor ajouté";
-            } else {
-                echo "le sponsor existe deja";
-            }
-        }
-    }
-    if($_SESSION["sponsor"]["action"]==="mod"){
-        if($_POST["nom"]!==""){
-            $name=$_POST["nom"];
-        } else if($_POST["name"]!==""){
-            $name=$_POST["name"];
-        } else {
-            echo "Erreur nom";
-        }
-        if(isset($name)&&empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
+    // //traitement photo mod
+    // if($_FILES["upload"]["size"]!=0&&$_FILES["upload"]["error"]==0&&$_SESSION["sponsor"]["action"]==="mod"){
+    //     $photo=$bdd->query("SELECT sponsor.photo,media.nom from sponsor INNER JOIN media ON sponsor.photo =media.id_media where id_sponsor =".$_POST["id"]."")->fetch();
+    //     if(!empty($photo)){
+    //         if($bdd->query("DELETE from media where id_media = ".$photo["photo"]."")){
+    //             //image del de la bdd
+    //         }
+    //     }
+    //     if(unlink("../img/".explode("|",$photo["nom"])[0])){
+    //         //image supprimer sur le serveur
+    //     }
+    // }
+    // //traitement photo
+    // if($_FILES["upload"]["size"]!=0&&$_FILES["upload"]["error"]==0){
+    //     // while(file_exists("../img/".$value["name"])){
+    //     //     //$value["name"]=nom().".".explode("/",$_FILES["upload"]["type"])[1]; // permet d'eviter qu'un fichier n existe pas 2 fois
+    //     // }
+    //     $value["name"]="ydfqsvqshgdcvqhsd".".".explode("/",$_FILES["upload"]["type"])[1];
+    //     if (move_uploaded_file($value["tmp_name"],"../img/".$value["name"])) {
+    //         //Le média a été ajouté dans le serveur
+    //         unset($_SESSION["media"]);
+    //     }
+    //     if($bdd->query("insert into media (nom, type) VALUES ('".$value["name"]."|Logo de ".$name."','sponsor')")){
+    //         //media ajouté a la bdd
+    //         $pho=$bdd->query("SELECT * from media where nom ='".$value["name"]."|Logo de ".$name."'")->fetch();
+    //         $bdd->query("UPDATE sponsor set photo = ".$pho["id_media"]." where id_sponsor = ".$_POST["id"]."");
+    //     }
+    // }else{
+    // }
+    // //modification
+    // if($_SESSION["sponsor"]["action"]==="mod"){
+    //     if($_POST["nom"]!==""){
+    //         $name=$_POST["nom"];
+    //     } else if($_POST["name"]!==""){
+    //         $name=$_POST["name"];
+    //     } else {
+    //         echo "Erreur nom";
+    //     }
+    //     if(!empty($spon)&&$spon=$bdd->query("SELECT * from sponsor where nom LIKE '".$name."%'")->fetch()){
+
+    //     }
+    //     if(isset($name)&&empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
             
-        } else {
-            echo "Le sponsor existe deja";
-        }
-        if($bdd->query("UPDATE sponsor set nom = '".$_POST["nom"]."',date = ".$_POST["date"].",`type` = '".$_POST["type"]."' where id_sponsor = ".$_POST["id"]."")){
-            echo "staff update";
-            unset($_POST["id_sponsor"]);
-        } else {
-            echo "Probleme requete";
-        }
-    }
+    //     } else {
+    //         echo "Le sponsor existe deja";
+    //     }
+    //     if($bdd->query("UPDATE sponsor set nom = '".$_POST["nom"]."',date = ".$_POST["date"].",`type` = '".$_POST["type"]."',texte='".$_POST["type"]."', where id_sponsor = ".$_POST["id"]."")){
+    //         echo "staff update";
+    //         unset($_POST["id_sponsor"]);
+    //     } else {
+    //         echo "Probleme requete";
+    //     }
+        
+        
+    // }
+    // //ajout
+    // if($_SESSION["sponsor"]["action"]==="add"){
+    //     if($_POST["nom"]!==""){
+    //         $name=$_POST["nom"];
+    //     } else if($_POST["name"]!==""){
+    //         $name=$_POST["name"];
+    //     } else {
+    //         echo "Erreur nom";
+    //     }
+    //     if(isset($name)){
+    //         if(empty($bdd->query("SELECT * from sponsor where nom='".$name."' AND date = ".$_POST["date"]."")->fetch())){
+    //             //partie ajout 
+    //             $bdd->query("INSERT INTO sponsor (nom,`date`,`type`,texte,photo) VALUES ('".$name."',".$_POST["date"].",'".$_POST["type"]."','".$_POST["texte"]."',".($a=(isset($pho))?$pho["id_media"]:$spon["photo"]).")")->fetch();
+    //             echo "sponsor ajouté";
+    //         } else {
+    //             echo "le sponsor existe deja";
+    //         }
+    //     }
+    // }
     
 }
 
@@ -141,9 +177,7 @@ if(isset($_SESSION["sponsor"]["action"])&&$_SESSION["sponsor"]["action"]==='del'
         <label for="texte">Texte</label>
         <label for="upload">Photo</label>
             <input type="file" name="upload" id="upload" >
-        <textarea id="texte" name="texte" rows="10" cols="33" required>
-            '.($a=(isset($_SESSION["sponsor"]["texte"]))?$_SESSION["article"]["texte"]:"").'
-        </textarea>
+        <textarea id="texte" name="texte" rows="10" cols="33" required>'.($a=(isset($_SESSION["sponsor"]["texte"]))?$_SESSION["article"]["texte"]:"").'</textarea>
         
         <button type="submit" form="add">Valider</button>
         ';
